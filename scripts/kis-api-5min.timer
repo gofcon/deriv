@@ -1,0 +1,16 @@
+[Unit]
+Description=Timer for KIS API 5-Minute Execution
+
+[Timer]
+# Example: Run every 5 minutes from 08:30 to 16:00 on weekdays (Mon-Fri)
+# Syntax: DayOfWeek Year-Month-Day Hour:Minute:Second
+OnCalendar=Mon..Fri *-*-* 08:30..16:00/5:00
+
+# To run continuously every 5 minutes regardless of time:
+# OnBootSec=5min
+# OnUnitActiveSec=5min
+
+Persistent=true
+
+[Install]
+WantedBy=timers.target

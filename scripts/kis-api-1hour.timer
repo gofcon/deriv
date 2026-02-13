@@ -1,0 +1,15 @@
+[Unit]
+Description=Timer for KIS API 1-Hour Execution
+
+[Timer]
+# Example: Run every hour from 09:00 to 16:00 on weekdays
+OnCalendar=Mon..Fri *-*-* 09..16:00:00
+
+# To run continuously every hour:
+# OnBootSec=1h
+# OnUnitActiveSec=1h
+
+Persistent=true
+
+[Install]
+WantedBy=timers.target

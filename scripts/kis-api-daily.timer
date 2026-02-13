@@ -1,0 +1,10 @@
+[Unit]
+Description=Timer for KIS API Daily Execution
+
+[Timer]
+# Run daily at 05:00 AM
+OnCalendar=*-*-* 05:00:00
+Persistent=true
+
+[Install]
+WantedBy=timers.target

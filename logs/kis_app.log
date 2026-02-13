@@ -1,0 +1,1346 @@
+log_setup.py:41: 2026-02-12 23:32:04,483 - INFO - Logging initialized. Log file: D:\Python\deriv\logs\kis_app.log
+main.py:131: 2026-02-12 23:32:06,070 - INFO - ============================================================
+main.py:132: 2026-02-12 23:32:06,071 - INFO - 파라미터 사전 검증 (3개)
+main.py:133: 2026-02-12 23:32:06,071 - INFO - ============================================================
+main.py:146: 2026-02-12 23:32:06,085 - INFO - ✓ [stock_price] 검증 통과
+main.py:146: 2026-02-12 23:32:06,090 - INFO - ✓ [daily_price] 검증 통과
+main.py:146: 2026-02-12 23:32:06,095 - INFO - ✓ [display_board_top] 검증 통과
+main.py:276: 2026-02-12 23:32:06,096 - INFO - 모든 파라미터 검증 완료. API 실행을 시작합니다.
+kis_auth.py:88: 2026-02-12 23:32:06,098 - INFO - 기존 토큰 사용 (만료: 2026-02-13 12:26:37)
+main.py:162: 2026-02-12 23:32:06,100 - INFO - ============================================================
+main.py:163: 2026-02-12 23:32:06,101 - INFO - 일괄 실행 시작 (3개)
+main.py:164: 2026-02-12 23:32:06,101 - INFO - ============================================================
+main.py:174: 2026-02-12 23:32:06,103 - INFO - ▶ 실행: stock_price
+database.py:377: 2026-02-12 23:32:06,755 - ERROR - Error inserting output data: 'APIMst' object has no attribute 'save_mode'
+database.py:379: 2026-02-12 23:32:06,759 - ERROR - Traceback (most recent call last):
+  File "D:\Python\deriv\app\database.py", line 341, in insert_output_data
+    if api_def.save_mode == "overwrite":
+       ^^^^^^^^^^^^^^^^^
+  File "D:\Python\deriv\.venv\Lib\site-packages\pydantic\main.py", line 1026, in __getattr__
+    raise AttributeError(f'{type(self).__name__!r} object has no attribute {item!r}')
+AttributeError: 'APIMst' object has no attribute 'save_mode'
+
+main.py:220: 2026-02-12 23:32:06,760 - INFO -   ✓ 성공: 1건 (DB 저장: 0건)
+main.py:174: 2026-02-12 23:32:06,761 - INFO - ▶ 실행: daily_price
+database.py:377: 2026-02-12 23:32:07,584 - ERROR - Error inserting output data: 'APIMst' object has no attribute 'save_mode'
+database.py:379: 2026-02-12 23:32:07,586 - ERROR - Traceback (most recent call last):
+  File "D:\Python\deriv\app\database.py", line 341, in insert_output_data
+    if api_def.save_mode == "overwrite":
+       ^^^^^^^^^^^^^^^^^
+  File "D:\Python\deriv\.venv\Lib\site-packages\pydantic\main.py", line 1026, in __getattr__
+    raise AttributeError(f'{type(self).__name__!r} object has no attribute {item!r}')
+AttributeError: 'APIMst' object has no attribute 'save_mode'
+
+main.py:220: 2026-02-12 23:32:07,587 - INFO -   ✓ 성공: 30건 (DB 저장: 0건)
+main.py:174: 2026-02-12 23:32:07,587 - INFO - ▶ 실행: display_board_top
+main.py:223: 2026-02-12 23:32:08,258 - ERROR -   ✗ API 호출 실패
+main.py:225: 2026-02-12 23:32:08,260 - ERROR -   Status code: 200
+main.py:233: 2026-02-12 23:32:08,261 - INFO - ================================================================================
+main.py:234: 2026-02-12 23:32:08,261 - INFO - 실행 완료: 성공 2, 실패 1
+main.py:235: 2026-02-12 23:32:08,261 - INFO - ================================================================================
+log_setup.py:41: 2026-02-12 23:35:47,998 - INFO - Logging initialized. Log file: D:\Python\deriv\logs\kis_app.log
+main.py:131: 2026-02-12 23:35:49,553 - INFO - ============================================================
+main.py:132: 2026-02-12 23:35:49,554 - INFO - 파라미터 사전 검증 (3개)
+main.py:133: 2026-02-12 23:35:49,554 - INFO - ============================================================
+main.py:146: 2026-02-12 23:35:49,563 - INFO - ✓ [stock_price] 검증 통과
+main.py:146: 2026-02-12 23:35:49,568 - INFO - ✓ [daily_price] 검증 통과
+main.py:146: 2026-02-12 23:35:49,572 - INFO - ✓ [display_board_top] 검증 통과
+main.py:276: 2026-02-12 23:35:49,572 - INFO - 모든 파라미터 검증 완료. API 실행을 시작합니다.
+kis_auth.py:88: 2026-02-12 23:35:49,577 - INFO - 기존 토큰 사용 (만료: 2026-02-13 12:26:37)
+main.py:162: 2026-02-12 23:35:49,579 - INFO - ============================================================
+main.py:163: 2026-02-12 23:35:49,580 - INFO - 일괄 실행 시작 (3개)
+main.py:164: 2026-02-12 23:35:49,580 - INFO - ============================================================
+main.py:174: 2026-02-12 23:35:49,580 - INFO - ▶ 실행: stock_price
+main.py:220: 2026-02-12 23:35:50,159 - INFO -   ✓ 성공: 1건 (DB 저장: 1건)
+main.py:174: 2026-02-12 23:35:50,160 - INFO - ▶ 실행: daily_price
+main.py:220: 2026-02-12 23:35:50,703 - INFO -   ✓ 성공: 30건 (DB 저장: 30건)
+main.py:174: 2026-02-12 23:35:50,703 - INFO - ▶ 실행: display_board_top
+main.py:223: 2026-02-12 23:35:51,190 - ERROR -   ✗ API 호출 실패
+main.py:225: 2026-02-12 23:35:51,191 - ERROR -   Status code: 200
+main.py:233: 2026-02-12 23:35:51,191 - INFO - ================================================================================
+main.py:234: 2026-02-12 23:35:51,191 - INFO - 실행 완료: 성공 2, 실패 1
+main.py:235: 2026-02-12 23:35:51,192 - INFO - ================================================================================
+log_setup.py:41: 2026-02-12 23:36:14,382 - INFO - Logging initialized. Log file: D:\Python\deriv\logs\kis_app.log
+main.py:131: 2026-02-12 23:36:15,766 - INFO - ============================================================
+main.py:132: 2026-02-12 23:36:15,766 - INFO - 파라미터 사전 검증 (3개)
+main.py:133: 2026-02-12 23:36:15,766 - INFO - ============================================================
+main.py:146: 2026-02-12 23:36:15,775 - INFO - ✓ [stock_price] 검증 통과
+main.py:146: 2026-02-12 23:36:15,779 - INFO - ✓ [daily_price] 검증 통과
+main.py:146: 2026-02-12 23:36:15,782 - INFO - ✓ [display_board_top] 검증 통과
+main.py:276: 2026-02-12 23:36:15,783 - INFO - 모든 파라미터 검증 완료. API 실행을 시작합니다.
+kis_auth.py:88: 2026-02-12 23:36:15,784 - INFO - 기존 토큰 사용 (만료: 2026-02-13 12:26:37)
+main.py:162: 2026-02-12 23:36:15,786 - INFO - ============================================================
+main.py:163: 2026-02-12 23:36:15,787 - INFO - 일괄 실행 시작 (3개)
+main.py:164: 2026-02-12 23:36:15,788 - INFO - ============================================================
+main.py:174: 2026-02-12 23:36:15,790 - INFO - ▶ 실행: stock_price
+database.py:350: 2026-02-12 23:36:16,366 - INFO - Overwrote existing data for stock_price (1 rows deleted)
+main.py:220: 2026-02-12 23:36:16,389 - INFO -   ✓ 성공: 1건 (DB 저장: 1건)
+main.py:174: 2026-02-12 23:36:16,389 - INFO - ▶ 실행: daily_price
+database.py:350: 2026-02-12 23:36:17,055 - INFO - Overwrote existing data for daily_price (30 rows deleted)
+main.py:220: 2026-02-12 23:36:17,111 - INFO -   ✓ 성공: 30건 (DB 저장: 30건)
+main.py:174: 2026-02-12 23:36:17,111 - INFO - ▶ 실행: display_board_top
+main.py:223: 2026-02-12 23:36:17,750 - ERROR -   ✗ API 호출 실패
+main.py:225: 2026-02-12 23:36:17,751 - ERROR -   Status code: 200
+main.py:233: 2026-02-12 23:36:17,751 - INFO - ================================================================================
+main.py:234: 2026-02-12 23:36:17,752 - INFO - 실행 완료: 성공 2, 실패 1
+main.py:235: 2026-02-12 23:36:17,752 - INFO - ================================================================================
+log_setup.py:41: 2026-02-13 00:02:07,510 - INFO - Logging initialized. Log file: D:\Python\deriv\logs\kis_app.log
+log_setup.py:41: 2026-02-13 00:10:56,367 - INFO - Logging initialized. Log file: D:\Python\deriv\logs\kis_app.log
+database.py:85: 2026-02-13 00:10:58,067 - INFO - ✓ API 정의 추가: stock_price
+database.py:145: 2026-02-13 00:10:58,089 - INFO - ✓ 파라미터 정의: stock_price.FID_COND_MRKT_DIV_CODE
+database.py:145: 2026-02-13 00:10:58,105 - INFO - ✓ 파라미터 정의: stock_price.FID_INPUT_ISCD
+database.py:206: 2026-02-13 00:10:58,129 - INFO - ✓ 사용자 입력 추가: stock_price (2개, Active=True)
+database.py:85: 2026-02-13 00:10:58,148 - INFO - ✓ API 정의 추가: daily_price
+database.py:145: 2026-02-13 00:10:58,169 - INFO - ✓ 파라미터 정의: daily_price.FID_COND_MRKT_DIV_CODE
+database.py:145: 2026-02-13 00:10:58,188 - INFO - ✓ 파라미터 정의: daily_price.FID_INPUT_ISCD
+database.py:145: 2026-02-13 00:10:58,205 - INFO - ✓ 파라미터 정의: daily_price.FID_PERIOD_DIV_CODE
+database.py:145: 2026-02-13 00:10:58,220 - INFO - ✓ 파라미터 정의: daily_price.FID_ORG_ADJ_PRC
+database.py:206: 2026-02-13 00:10:58,236 - INFO - ✓ 사용자 입력 추가: daily_price (4개, Active=True)
+database.py:85: 2026-02-13 00:10:58,256 - INFO - ✓ API 정의 추가: display_board_top
+database.py:145: 2026-02-13 00:10:58,274 - INFO - ✓ 파라미터 정의: display_board_top.FID_COND_MRKT_DIV_CODE
+database.py:145: 2026-02-13 00:10:58,292 - INFO - ✓ 파라미터 정의: display_board_top.FID_INPUT_ISCD
+database.py:206: 2026-02-13 00:10:58,308 - INFO - ✓ 사용자 입력 추가: display_board_top (2개, Active=True)
+log_setup.py:41: 2026-02-13 00:29:36,414 - INFO - Logging initialized. Log file: D:\Python\deriv\logs\kis_app.log
+insert_master_data.py:497: 2026-02-13 00:29:36,414 - INFO - ============================================================
+insert_master_data.py:498: 2026-02-13 00:29:36,415 - INFO - 마스터 데이터 다운로드 및 삽입 시작 (16 Types)
+insert_master_data.py:499: 2026-02-13 00:29:36,415 - INFO - ============================================================
+db_mst.py:57: 2026-02-13 00:29:36,597 - INFO - Master data tables initialized
+insert_master_data.py:30: 2026-02-13 00:29:36,598 - INFO - Downloading fo_idx_code_mts.mst.zip...
+insert_master_data.py:37: 2026-02-13 00:29:36,689 - INFO - Extracting fo_idx_code_mts.mst.zip...
+db_mst.py:66: 2026-02-13 00:29:36,895 - INFO - Deleted all data from dom_future_mst (5445 rows)
+db_mst.py:87: 2026-02-13 00:29:39,488 - INFO - Inserted 1000/5445 rows into dom_future_mst
+db_mst.py:87: 2026-02-13 00:29:40,786 - INFO - Inserted 2000/5445 rows into dom_future_mst
+db_mst.py:87: 2026-02-13 00:29:41,899 - INFO - Inserted 3000/5445 rows into dom_future_mst
+db_mst.py:87: 2026-02-13 00:29:42,880 - INFO - Inserted 4000/5445 rows into dom_future_mst
+db_mst.py:87: 2026-02-13 00:29:44,039 - INFO - Inserted 5000/5445 rows into dom_future_mst
+db_mst.py:87: 2026-02-13 00:29:44,740 - INFO - Inserted 5445/5445 rows into dom_future_mst
+insert_master_data.py:30: 2026-02-13 00:29:44,755 - INFO - Downloading ffcode.mst.zip...
+insert_master_data.py:37: 2026-02-13 00:29:44,800 - INFO - Extracting ffcode.mst.zip...
+db_mst.py:66: 2026-02-13 00:29:45,004 - INFO - Deleted all data from over_future_mst (5861 rows)
+db_mst.py:87: 2026-02-13 00:29:46,545 - INFO - Inserted 1000/5861 rows into over_future_mst
+db_mst.py:87: 2026-02-13 00:29:47,854 - INFO - Inserted 2000/5861 rows into over_future_mst
+db_mst.py:87: 2026-02-13 00:29:49,182 - INFO - Inserted 3000/5861 rows into over_future_mst
+db_mst.py:87: 2026-02-13 00:29:50,560 - INFO - Inserted 4000/5861 rows into over_future_mst
+db_mst.py:87: 2026-02-13 00:29:51,933 - INFO - Inserted 5000/5861 rows into over_future_mst
+db_mst.py:87: 2026-02-13 00:29:53,062 - INFO - Inserted 5861/5861 rows into over_future_mst
+insert_master_data.py:30: 2026-02-13 00:29:53,077 - INFO - Downloading fo_stk_code_mts.mst.zip...
+insert_master_data.py:37: 2026-02-13 00:29:53,181 - INFO - Extracting fo_stk_code_mts.mst.zip...
+db_mst.py:66: 2026-02-13 00:29:53,697 - INFO - Deleted all data from dom_stock_future_mst (14121 rows)
+db_mst.py:87: 2026-02-13 00:29:54,753 - INFO - Inserted 1000/14121 rows into dom_stock_future_mst
+db_mst.py:87: 2026-02-13 00:29:55,752 - INFO - Inserted 2000/14121 rows into dom_stock_future_mst
+db_mst.py:87: 2026-02-13 00:29:56,938 - INFO - Inserted 3000/14121 rows into dom_stock_future_mst
+db_mst.py:87: 2026-02-13 00:29:57,985 - INFO - Inserted 4000/14121 rows into dom_stock_future_mst
+db_mst.py:87: 2026-02-13 00:29:59,138 - INFO - Inserted 5000/14121 rows into dom_stock_future_mst
+db_mst.py:87: 2026-02-13 00:30:00,783 - INFO - Inserted 6000/14121 rows into dom_stock_future_mst
+db_mst.py:87: 2026-02-13 00:30:01,849 - INFO - Inserted 7000/14121 rows into dom_stock_future_mst
+db_mst.py:87: 2026-02-13 00:30:02,841 - INFO - Inserted 8000/14121 rows into dom_stock_future_mst
+db_mst.py:87: 2026-02-13 00:30:03,975 - INFO - Inserted 9000/14121 rows into dom_stock_future_mst
+db_mst.py:87: 2026-02-13 00:30:04,970 - INFO - Inserted 10000/14121 rows into dom_stock_future_mst
+db_mst.py:87: 2026-02-13 00:30:05,978 - INFO - Inserted 11000/14121 rows into dom_stock_future_mst
+db_mst.py:87: 2026-02-13 00:30:07,151 - INFO - Inserted 12000/14121 rows into dom_stock_future_mst
+db_mst.py:87: 2026-02-13 00:30:08,322 - INFO - Inserted 13000/14121 rows into dom_stock_future_mst
+db_mst.py:87: 2026-02-13 00:30:09,404 - INFO - Inserted 14000/14121 rows into dom_stock_future_mst
+db_mst.py:87: 2026-02-13 00:30:09,565 - INFO - Inserted 14121/14121 rows into dom_stock_future_mst
+insert_master_data.py:30: 2026-02-13 00:30:09,571 - INFO - Downloading nasmst.cod.zip...
+insert_master_data.py:37: 2026-02-13 00:30:09,710 - INFO - Extracting nasmst.cod.zip...
+insert_master_data.py:30: 2026-02-13 00:30:10,077 - INFO - Downloading nysmst.cod.zip...
+insert_master_data.py:37: 2026-02-13 00:30:10,151 - INFO - Extracting nysmst.cod.zip...
+insert_master_data.py:30: 2026-02-13 00:30:10,439 - INFO - Downloading amsmst.cod.zip...
+insert_master_data.py:37: 2026-02-13 00:30:10,549 - INFO - Extracting amsmst.cod.zip...
+insert_master_data.py:30: 2026-02-13 00:30:10,863 - INFO - Downloading shsmst.cod.zip...
+insert_master_data.py:37: 2026-02-13 00:30:10,931 - INFO - Extracting shsmst.cod.zip...
+insert_master_data.py:30: 2026-02-13 00:30:11,178 - INFO - Downloading shimst.cod.zip...
+insert_master_data.py:37: 2026-02-13 00:30:11,252 - INFO - Extracting shimst.cod.zip...
+insert_master_data.py:30: 2026-02-13 00:30:11,292 - INFO - Downloading szsmst.cod.zip...
+insert_master_data.py:37: 2026-02-13 00:30:11,362 - INFO - Extracting szsmst.cod.zip...
+insert_master_data.py:30: 2026-02-13 00:30:11,604 - INFO - Downloading szimst.cod.zip...
+insert_master_data.py:37: 2026-02-13 00:30:11,665 - INFO - Extracting szimst.cod.zip...
+insert_master_data.py:30: 2026-02-13 00:30:11,682 - INFO - Downloading tsemst.cod.zip...
+insert_master_data.py:37: 2026-02-13 00:30:11,751 - INFO - Extracting tsemst.cod.zip...
+insert_master_data.py:30: 2026-02-13 00:30:12,066 - INFO - Downloading hksmst.cod.zip...
+insert_master_data.py:37: 2026-02-13 00:30:12,141 - INFO - Extracting hksmst.cod.zip...
+insert_master_data.py:30: 2026-02-13 00:30:12,356 - INFO - Downloading hnxmst.cod.zip...
+insert_master_data.py:37: 2026-02-13 00:30:12,415 - INFO - Extracting hnxmst.cod.zip...
+insert_master_data.py:30: 2026-02-13 00:30:12,490 - INFO - Downloading hsxmst.cod.zip...
+insert_master_data.py:37: 2026-02-13 00:30:12,582 - INFO - Extracting hsxmst.cod.zip...
+db_mst.py:66: 2026-02-13 00:30:12,699 - INFO - Deleted all data from over_stock_mst (27223 rows)
+db_mst.py:87: 2026-02-13 00:30:15,405 - INFO - Inserted 2000/27223 rows into over_stock_mst
+db_mst.py:87: 2026-02-13 00:30:18,153 - INFO - Inserted 4000/27223 rows into over_stock_mst
+db_mst.py:87: 2026-02-13 00:30:20,953 - INFO - Inserted 6000/27223 rows into over_stock_mst
+db_mst.py:87: 2026-02-13 00:30:23,566 - INFO - Inserted 8000/27223 rows into over_stock_mst
+db_mst.py:87: 2026-02-13 00:30:26,006 - INFO - Inserted 10000/27223 rows into over_stock_mst
+db_mst.py:87: 2026-02-13 00:30:28,559 - INFO - Inserted 12000/27223 rows into over_stock_mst
+db_mst.py:87: 2026-02-13 00:30:31,392 - INFO - Inserted 14000/27223 rows into over_stock_mst
+db_mst.py:87: 2026-02-13 00:30:33,843 - INFO - Inserted 16000/27223 rows into over_stock_mst
+db_mst.py:87: 2026-02-13 00:30:36,552 - INFO - Inserted 18000/27223 rows into over_stock_mst
+db_mst.py:87: 2026-02-13 00:30:39,034 - INFO - Inserted 20000/27223 rows into over_stock_mst
+db_mst.py:87: 2026-02-13 00:30:41,207 - INFO - Inserted 22000/27223 rows into over_stock_mst
+db_mst.py:87: 2026-02-13 00:30:43,770 - INFO - Inserted 24000/27223 rows into over_stock_mst
+db_mst.py:87: 2026-02-13 00:30:46,160 - INFO - Inserted 26000/27223 rows into over_stock_mst
+db_mst.py:87: 2026-02-13 00:30:47,704 - INFO - Inserted 27223/27223 rows into over_stock_mst
+insert_master_data.py:30: 2026-02-13 00:30:47,754 - INFO - Downloading bond_code.zip...
+insert_master_data.py:37: 2026-02-13 00:30:47,880 - INFO - Extracting bond_code.zip...
+db_mst.py:66: 2026-02-13 00:30:48,080 - INFO - Deleted all data from dom_bond_mst (17782 rows)
+db_mst.py:87: 2026-02-13 00:30:49,238 - INFO - Inserted 1000/17782 rows into dom_bond_mst
+db_mst.py:87: 2026-02-13 00:30:50,072 - INFO - Inserted 2000/17782 rows into dom_bond_mst
+db_mst.py:87: 2026-02-13 00:30:50,968 - INFO - Inserted 3000/17782 rows into dom_bond_mst
+db_mst.py:87: 2026-02-13 00:30:52,105 - INFO - Inserted 4000/17782 rows into dom_bond_mst
+db_mst.py:87: 2026-02-13 00:30:53,294 - INFO - Inserted 5000/17782 rows into dom_bond_mst
+db_mst.py:87: 2026-02-13 00:30:54,728 - INFO - Inserted 6000/17782 rows into dom_bond_mst
+db_mst.py:87: 2026-02-13 00:30:55,591 - INFO - Inserted 7000/17782 rows into dom_bond_mst
+db_mst.py:87: 2026-02-13 00:30:56,575 - INFO - Inserted 8000/17782 rows into dom_bond_mst
+db_mst.py:87: 2026-02-13 00:30:57,592 - INFO - Inserted 9000/17782 rows into dom_bond_mst
+db_mst.py:87: 2026-02-13 00:30:58,625 - INFO - Inserted 10000/17782 rows into dom_bond_mst
+db_mst.py:87: 2026-02-13 00:31:00,538 - INFO - Inserted 11000/17782 rows into dom_bond_mst
+db_mst.py:87: 2026-02-13 00:31:02,141 - INFO - Inserted 12000/17782 rows into dom_bond_mst
+db_mst.py:87: 2026-02-13 00:31:03,435 - INFO - Inserted 13000/17782 rows into dom_bond_mst
+db_mst.py:87: 2026-02-13 00:31:04,467 - INFO - Inserted 14000/17782 rows into dom_bond_mst
+db_mst.py:87: 2026-02-13 00:31:05,572 - INFO - Inserted 15000/17782 rows into dom_bond_mst
+db_mst.py:87: 2026-02-13 00:31:06,569 - INFO - Inserted 16000/17782 rows into dom_bond_mst
+db_mst.py:87: 2026-02-13 00:31:07,739 - INFO - Inserted 17000/17782 rows into dom_bond_mst
+db_mst.py:87: 2026-02-13 00:31:08,543 - INFO - Inserted 17782/17782 rows into dom_bond_mst
+insert_master_data.py:30: 2026-02-13 00:31:08,559 - INFO - Downloading fo_cme_code.mst.zip...
+insert_master_data.py:37: 2026-02-13 00:31:08,622 - INFO - Extracting fo_cme_code.mst.zip...
+db_mst.py:66: 2026-02-13 00:31:08,632 - INFO - Deleted all data from dom_cme_future_mst (13 rows)
+db_mst.py:87: 2026-02-13 00:31:08,671 - INFO - Inserted 13/13 rows into dom_cme_future_mst
+insert_master_data.py:30: 2026-02-13 00:31:08,673 - INFO - Downloading fo_com_code.mst.zip...
+insert_master_data.py:37: 2026-02-13 00:31:08,734 - INFO - Extracting fo_com_code.mst.zip...
+db_mst.py:66: 2026-02-13 00:31:08,773 - INFO - Deleted all data from dom_com_future_mst (122 rows)
+db_mst.py:87: 2026-02-13 00:31:09,069 - INFO - Inserted 122/122 rows into dom_com_future_mst
+insert_master_data.py:30: 2026-02-13 00:31:09,142 - INFO - Downloading elw_code.zip...
+insert_master_data.py:37: 2026-02-13 00:31:09,220 - INFO - Extracting elw_code.zip...
+db_mst.py:66: 2026-02-13 00:31:09,390 - INFO - Deleted all data from dom_elw_mst (3089 rows)
+db_mst.py:87: 2026-02-13 00:31:10,688 - INFO - Inserted 1000/3089 rows into dom_elw_mst
+db_mst.py:87: 2026-02-13 00:31:11,866 - INFO - Inserted 2000/3089 rows into dom_elw_mst
+db_mst.py:87: 2026-02-13 00:31:13,780 - INFO - Inserted 3000/3089 rows into dom_elw_mst
+db_mst.py:87: 2026-02-13 00:31:14,394 - INFO - Inserted 3089/3089 rows into dom_elw_mst
+insert_master_data.py:30: 2026-02-13 00:31:14,408 - INFO - Downloading fo_eurex_code.mst.zip...
+insert_master_data.py:37: 2026-02-13 00:31:14,470 - INFO - Extracting fo_eurex_code.mst.zip...
+db_mst.py:66: 2026-02-13 00:31:14,632 - INFO - Deleted all data from dom_eurex_option_mst (5072 rows)
+db_mst.py:87: 2026-02-13 00:31:15,806 - INFO - Inserted 1000/5072 rows into dom_eurex_option_mst
+db_mst.py:87: 2026-02-13 00:31:16,836 - INFO - Inserted 2000/5072 rows into dom_eurex_option_mst
+db_mst.py:87: 2026-02-13 00:31:17,944 - INFO - Inserted 3000/5072 rows into dom_eurex_option_mst
+db_mst.py:87: 2026-02-13 00:31:19,054 - INFO - Inserted 4000/5072 rows into dom_eurex_option_mst
+db_mst.py:87: 2026-02-13 00:31:20,291 - INFO - Inserted 5000/5072 rows into dom_eurex_option_mst
+db_mst.py:87: 2026-02-13 00:31:20,376 - INFO - Inserted 5072/5072 rows into dom_eurex_option_mst
+insert_master_data.py:30: 2026-02-13 00:31:20,380 - INFO - Downloading konex_code.zip...
+insert_master_data.py:37: 2026-02-13 00:31:20,473 - INFO - Extracting konex_code.zip...
+db_mst.py:66: 2026-02-13 00:31:20,510 - INFO - Deleted all data from dom_konex_mst (112 rows)
+db_mst.py:87: 2026-02-13 00:31:20,653 - INFO - Inserted 112/112 rows into dom_konex_mst
+insert_master_data.py:30: 2026-02-13 00:31:20,656 - INFO - Downloading kosdaq_code.zip...
+insert_master_data.py:37: 2026-02-13 00:31:22,733 - INFO - Extracting kosdaq_code.zip...
+db_mst.py:66: 2026-02-13 00:31:22,806 - INFO - Deleted all data from dom_kosdaq_mst (1822 rows)
+db_mst.py:87: 2026-02-13 00:31:23,781 - INFO - Inserted 1000/1822 rows into dom_kosdaq_mst
+db_mst.py:87: 2026-02-13 00:31:24,842 - INFO - Inserted 1822/1822 rows into dom_kosdaq_mst
+insert_master_data.py:30: 2026-02-13 00:31:24,854 - INFO - Downloading kospi_code.zip...
+insert_master_data.py:37: 2026-02-13 00:31:24,922 - INFO - Extracting kospi_code.zip...
+db_mst.py:66: 2026-02-13 00:31:25,020 - INFO - Deleted all data from dom_kospi_mst (2493 rows)
+db_mst.py:87: 2026-02-13 00:31:26,119 - INFO - Inserted 1000/2493 rows into dom_kospi_mst
+db_mst.py:87: 2026-02-13 00:31:27,312 - INFO - Inserted 2000/2493 rows into dom_kospi_mst
+db_mst.py:87: 2026-02-13 00:31:27,966 - INFO - Inserted 2493/2493 rows into dom_kospi_mst
+db_mst.py:66: 2026-02-13 00:31:28,043 - INFO - Deleted all data from member_code_mst (63 rows)
+db_mst.py:87: 2026-02-13 00:31:28,122 - INFO - Inserted 63/63 rows into member_code_mst
+insert_master_data.py:30: 2026-02-13 00:31:28,124 - INFO - Downloading frgn_code.mst.zip...
+insert_master_data.py:37: 2026-02-13 00:31:28,230 - INFO - Extracting frgn_code.mst.zip...
+db_mst.py:66: 2026-02-13 00:31:28,439 - INFO - Deleted all data from over_index_mst (12344 rows)
+db_mst.py:87: 2026-02-13 00:31:30,265 - INFO - Inserted 1000/12344 rows into over_index_mst
+db_mst.py:87: 2026-02-13 00:31:31,972 - INFO - Inserted 2000/12344 rows into over_index_mst
+db_mst.py:87: 2026-02-13 00:31:33,786 - INFO - Inserted 3000/12344 rows into over_index_mst
+db_mst.py:87: 2026-02-13 00:31:35,093 - INFO - Inserted 4000/12344 rows into over_index_mst
+db_mst.py:87: 2026-02-13 00:31:37,026 - INFO - Inserted 5000/12344 rows into over_index_mst
+db_mst.py:87: 2026-02-13 00:31:38,789 - INFO - Inserted 6000/12344 rows into over_index_mst
+db_mst.py:87: 2026-02-13 00:31:40,155 - INFO - Inserted 7000/12344 rows into over_index_mst
+db_mst.py:87: 2026-02-13 00:31:41,609 - INFO - Inserted 8000/12344 rows into over_index_mst
+db_mst.py:87: 2026-02-13 00:31:42,880 - INFO - Inserted 9000/12344 rows into over_index_mst
+db_mst.py:87: 2026-02-13 00:31:44,370 - INFO - Inserted 10000/12344 rows into over_index_mst
+db_mst.py:87: 2026-02-13 00:31:46,121 - INFO - Inserted 11000/12344 rows into over_index_mst
+db_mst.py:87: 2026-02-13 00:31:47,380 - INFO - Inserted 12000/12344 rows into over_index_mst
+db_mst.py:87: 2026-02-13 00:31:47,892 - INFO - Inserted 12344/12344 rows into over_index_mst
+insert_master_data.py:30: 2026-02-13 00:31:47,913 - INFO - Downloading idxcode.zip...
+insert_master_data.py:37: 2026-02-13 00:31:47,995 - INFO - Extracting idxcode.zip...
+db_mst.py:66: 2026-02-13 00:31:48,031 - INFO - Deleted all data from sector_mst (486 rows)
+db_mst.py:87: 2026-02-13 00:31:48,610 - INFO - Inserted 486/486 rows into sector_mst
+insert_master_data.py:30: 2026-02-13 00:31:48,613 - INFO - Downloading theme_code.zip...
+insert_master_data.py:37: 2026-02-13 00:31:48,686 - INFO - Extracting theme_code.zip...
+db_mst.py:66: 2026-02-13 00:31:48,820 - INFO - Deleted all data from theme_mst (5528 rows)
+db_mst.py:87: 2026-02-13 00:31:50,345 - INFO - Inserted 1000/5528 rows into theme_mst
+db_mst.py:87: 2026-02-13 00:31:51,397 - INFO - Inserted 2000/5528 rows into theme_mst
+db_mst.py:87: 2026-02-13 00:31:52,572 - INFO - Inserted 3000/5528 rows into theme_mst
+db_mst.py:87: 2026-02-13 00:31:54,138 - INFO - Inserted 4000/5528 rows into theme_mst
+db_mst.py:87: 2026-02-13 00:31:55,791 - INFO - Inserted 5000/5528 rows into theme_mst
+db_mst.py:87: 2026-02-13 00:31:56,746 - INFO - Inserted 5528/5528 rows into theme_mst
+insert_master_data.py:527: 2026-02-13 00:31:56,758 - INFO - ============================================================
+insert_master_data.py:528: 2026-02-13 00:31:56,758 - INFO - ✓ 모든 마스터 데이터 처리 완료
+insert_master_data.py:534: 2026-02-13 00:31:56,759 - INFO - Temporary files left in: temp_master_data_full
+log_setup.py:41: 2026-02-13 00:42:14,357 - INFO - Logging initialized. Log file: D:\Python\deriv\logs\kis_app.log
+insert_master_data.py:497: 2026-02-13 00:42:14,358 - INFO - ============================================================
+insert_master_data.py:498: 2026-02-13 00:42:14,358 - INFO - 마스터 데이터 다운로드 및 삽입 시작 (16 Types)
+insert_master_data.py:499: 2026-02-13 00:42:14,359 - INFO - ============================================================
+db_mst.py:57: 2026-02-13 00:42:14,522 - INFO - Master data tables initialized
+insert_master_data.py:30: 2026-02-13 00:42:14,523 - INFO - Downloading fo_idx_code_mts.mst.zip...
+insert_master_data.py:37: 2026-02-13 00:42:14,622 - INFO - Extracting fo_idx_code_mts.mst.zip...
+db_mst.py:66: 2026-02-13 00:42:14,834 - INFO - Deleted all data from dom_future_mst (5445 rows)
+db_mst.py:87: 2026-02-13 00:42:17,184 - INFO - Inserted 1000/5445 rows into dom_future_mst
+db_mst.py:87: 2026-02-13 00:42:17,908 - INFO - Inserted 2000/5445 rows into dom_future_mst
+db_mst.py:87: 2026-02-13 00:42:18,298 - INFO - Inserted 3000/5445 rows into dom_future_mst
+db_mst.py:87: 2026-02-13 00:42:18,809 - INFO - Inserted 4000/5445 rows into dom_future_mst
+db_mst.py:87: 2026-02-13 00:42:19,422 - INFO - Inserted 5000/5445 rows into dom_future_mst
+db_mst.py:87: 2026-02-13 00:42:19,739 - INFO - Inserted 5445/5445 rows into dom_future_mst
+insert_master_data.py:30: 2026-02-13 00:42:19,742 - INFO - Downloading ffcode.mst.zip...
+insert_master_data.py:37: 2026-02-13 00:42:19,793 - INFO - Extracting ffcode.mst.zip...
+db_mst.py:66: 2026-02-13 00:42:19,904 - INFO - Deleted all data from over_future_mst (5861 rows)
+db_mst.py:87: 2026-02-13 00:42:20,647 - INFO - Inserted 1000/5861 rows into over_future_mst
+db_mst.py:87: 2026-02-13 00:42:21,504 - INFO - Inserted 2000/5861 rows into over_future_mst
+db_mst.py:87: 2026-02-13 00:42:22,562 - INFO - Inserted 3000/5861 rows into over_future_mst
+db_mst.py:87: 2026-02-13 00:42:23,398 - INFO - Inserted 4000/5861 rows into over_future_mst
+db_mst.py:87: 2026-02-13 00:42:24,049 - INFO - Inserted 5000/5861 rows into over_future_mst
+db_mst.py:87: 2026-02-13 00:42:24,698 - INFO - Inserted 5861/5861 rows into over_future_mst
+insert_master_data.py:30: 2026-02-13 00:42:24,715 - INFO - Downloading fo_stk_code_mts.mst.zip...
+insert_master_data.py:37: 2026-02-13 00:42:24,780 - INFO - Extracting fo_stk_code_mts.mst.zip...
+db_mst.py:66: 2026-02-13 00:42:25,071 - INFO - Deleted all data from dom_stock_future_mst (14121 rows)
+db_mst.py:87: 2026-02-13 00:42:25,764 - INFO - Inserted 1000/14121 rows into dom_stock_future_mst
+db_mst.py:87: 2026-02-13 00:42:26,641 - INFO - Inserted 2000/14121 rows into dom_stock_future_mst
+db_mst.py:87: 2026-02-13 00:42:27,419 - INFO - Inserted 3000/14121 rows into dom_stock_future_mst
+db_mst.py:87: 2026-02-13 00:42:28,031 - INFO - Inserted 4000/14121 rows into dom_stock_future_mst
+db_mst.py:87: 2026-02-13 00:42:28,511 - INFO - Inserted 5000/14121 rows into dom_stock_future_mst
+db_mst.py:87: 2026-02-13 00:42:29,207 - INFO - Inserted 6000/14121 rows into dom_stock_future_mst
+db_mst.py:87: 2026-02-13 00:42:29,861 - INFO - Inserted 7000/14121 rows into dom_stock_future_mst
+db_mst.py:87: 2026-02-13 00:42:30,621 - INFO - Inserted 8000/14121 rows into dom_stock_future_mst
+db_mst.py:87: 2026-02-13 00:42:31,213 - INFO - Inserted 9000/14121 rows into dom_stock_future_mst
+db_mst.py:87: 2026-02-13 00:42:32,014 - INFO - Inserted 10000/14121 rows into dom_stock_future_mst
+db_mst.py:87: 2026-02-13 00:42:32,798 - INFO - Inserted 11000/14121 rows into dom_stock_future_mst
+db_mst.py:87: 2026-02-13 00:42:33,498 - INFO - Inserted 12000/14121 rows into dom_stock_future_mst
+db_mst.py:87: 2026-02-13 00:42:34,062 - INFO - Inserted 13000/14121 rows into dom_stock_future_mst
+db_mst.py:87: 2026-02-13 00:42:34,692 - INFO - Inserted 14000/14121 rows into dom_stock_future_mst
+db_mst.py:87: 2026-02-13 00:42:34,793 - INFO - Inserted 14121/14121 rows into dom_stock_future_mst
+insert_master_data.py:30: 2026-02-13 00:42:34,798 - INFO - Downloading nasmst.cod.zip...
+insert_master_data.py:37: 2026-02-13 00:42:34,881 - INFO - Extracting nasmst.cod.zip...
+insert_master_data.py:30: 2026-02-13 00:42:35,116 - INFO - Downloading nysmst.cod.zip...
+insert_master_data.py:37: 2026-02-13 00:42:35,172 - INFO - Extracting nysmst.cod.zip...
+insert_master_data.py:30: 2026-02-13 00:42:35,314 - INFO - Downloading amsmst.cod.zip...
+insert_master_data.py:37: 2026-02-13 00:42:35,380 - INFO - Extracting amsmst.cod.zip...
+insert_master_data.py:30: 2026-02-13 00:42:35,632 - INFO - Downloading shsmst.cod.zip...
+insert_master_data.py:37: 2026-02-13 00:42:35,703 - INFO - Extracting shsmst.cod.zip...
+insert_master_data.py:30: 2026-02-13 00:42:35,847 - INFO - Downloading shimst.cod.zip...
+insert_master_data.py:37: 2026-02-13 00:42:35,904 - INFO - Extracting shimst.cod.zip...
+insert_master_data.py:30: 2026-02-13 00:42:35,932 - INFO - Downloading szsmst.cod.zip...
+insert_master_data.py:37: 2026-02-13 00:42:36,003 - INFO - Extracting szsmst.cod.zip...
+insert_master_data.py:30: 2026-02-13 00:42:36,210 - INFO - Downloading szimst.cod.zip...
+insert_master_data.py:37: 2026-02-13 00:42:36,263 - INFO - Extracting szimst.cod.zip...
+insert_master_data.py:30: 2026-02-13 00:42:36,279 - INFO - Downloading tsemst.cod.zip...
+insert_master_data.py:37: 2026-02-13 00:42:36,373 - INFO - Extracting tsemst.cod.zip...
+insert_master_data.py:30: 2026-02-13 00:42:36,649 - INFO - Downloading hksmst.cod.zip...
+insert_master_data.py:37: 2026-02-13 00:42:36,723 - INFO - Extracting hksmst.cod.zip...
+insert_master_data.py:30: 2026-02-13 00:42:36,953 - INFO - Downloading hnxmst.cod.zip...
+insert_master_data.py:37: 2026-02-13 00:42:37,014 - INFO - Extracting hnxmst.cod.zip...
+insert_master_data.py:30: 2026-02-13 00:42:37,086 - INFO - Downloading hsxmst.cod.zip...
+insert_master_data.py:37: 2026-02-13 00:42:37,142 - INFO - Extracting hsxmst.cod.zip...
+db_mst.py:66: 2026-02-13 00:42:37,239 - INFO - Deleted all data from over_stock_mst (27223 rows)
+db_mst.py:87: 2026-02-13 00:42:39,077 - INFO - Inserted 2000/27223 rows into over_stock_mst
+db_mst.py:87: 2026-02-13 00:42:40,520 - INFO - Inserted 4000/27223 rows into over_stock_mst
+db_mst.py:87: 2026-02-13 00:42:42,100 - INFO - Inserted 6000/27223 rows into over_stock_mst
+db_mst.py:87: 2026-02-13 00:42:43,273 - INFO - Inserted 8000/27223 rows into over_stock_mst
+db_mst.py:87: 2026-02-13 00:42:44,302 - INFO - Inserted 10000/27223 rows into over_stock_mst
+db_mst.py:87: 2026-02-13 00:42:46,617 - INFO - Inserted 12000/27223 rows into over_stock_mst
+db_mst.py:87: 2026-02-13 00:42:48,183 - INFO - Inserted 14000/27223 rows into over_stock_mst
+db_mst.py:87: 2026-02-13 00:42:49,372 - INFO - Inserted 16000/27223 rows into over_stock_mst
+db_mst.py:87: 2026-02-13 00:42:51,073 - INFO - Inserted 18000/27223 rows into over_stock_mst
+db_mst.py:87: 2026-02-13 00:42:52,726 - INFO - Inserted 20000/27223 rows into over_stock_mst
+db_mst.py:87: 2026-02-13 00:42:53,814 - INFO - Inserted 22000/27223 rows into over_stock_mst
+db_mst.py:87: 2026-02-13 00:42:55,125 - INFO - Inserted 24000/27223 rows into over_stock_mst
+db_mst.py:87: 2026-02-13 00:42:56,645 - INFO - Inserted 26000/27223 rows into over_stock_mst
+db_mst.py:87: 2026-02-13 00:42:57,928 - INFO - Inserted 27223/27223 rows into over_stock_mst
+insert_master_data.py:30: 2026-02-13 00:42:57,958 - INFO - Downloading bond_code.zip...
+insert_master_data.py:37: 2026-02-13 00:42:58,082 - INFO - Extracting bond_code.zip...
+db_mst.py:66: 2026-02-13 00:42:58,219 - INFO - Deleted all data from dom_bond_mst (17782 rows)
+db_mst.py:87: 2026-02-13 00:42:58,794 - INFO - Inserted 1000/17782 rows into dom_bond_mst
+db_mst.py:87: 2026-02-13 00:42:59,427 - INFO - Inserted 2000/17782 rows into dom_bond_mst
+db_mst.py:87: 2026-02-13 00:43:00,232 - INFO - Inserted 3000/17782 rows into dom_bond_mst
+db_mst.py:87: 2026-02-13 00:43:01,065 - INFO - Inserted 4000/17782 rows into dom_bond_mst
+db_mst.py:87: 2026-02-13 00:43:01,772 - INFO - Inserted 5000/17782 rows into dom_bond_mst
+db_mst.py:87: 2026-02-13 00:43:02,828 - INFO - Inserted 6000/17782 rows into dom_bond_mst
+db_mst.py:87: 2026-02-13 00:43:03,332 - INFO - Inserted 7000/17782 rows into dom_bond_mst
+db_mst.py:87: 2026-02-13 00:43:03,814 - INFO - Inserted 8000/17782 rows into dom_bond_mst
+db_mst.py:87: 2026-02-13 00:43:04,398 - INFO - Inserted 9000/17782 rows into dom_bond_mst
+db_mst.py:87: 2026-02-13 00:43:05,081 - INFO - Inserted 10000/17782 rows into dom_bond_mst
+db_mst.py:87: 2026-02-13 00:43:05,655 - INFO - Inserted 11000/17782 rows into dom_bond_mst
+db_mst.py:87: 2026-02-13 00:43:06,286 - INFO - Inserted 12000/17782 rows into dom_bond_mst
+db_mst.py:87: 2026-02-13 00:43:07,221 - INFO - Inserted 13000/17782 rows into dom_bond_mst
+db_mst.py:87: 2026-02-13 00:43:07,847 - INFO - Inserted 14000/17782 rows into dom_bond_mst
+db_mst.py:87: 2026-02-13 00:43:08,379 - INFO - Inserted 15000/17782 rows into dom_bond_mst
+db_mst.py:87: 2026-02-13 00:43:08,947 - INFO - Inserted 16000/17782 rows into dom_bond_mst
+db_mst.py:87: 2026-02-13 00:43:09,780 - INFO - Inserted 17000/17782 rows into dom_bond_mst
+db_mst.py:87: 2026-02-13 00:43:10,411 - INFO - Inserted 17782/17782 rows into dom_bond_mst
+insert_master_data.py:30: 2026-02-13 00:43:10,424 - INFO - Downloading fo_cme_code.mst.zip...
+insert_master_data.py:37: 2026-02-13 00:43:10,494 - INFO - Extracting fo_cme_code.mst.zip...
+db_mst.py:66: 2026-02-13 00:43:10,505 - INFO - Deleted all data from dom_cme_future_mst (13 rows)
+db_mst.py:87: 2026-02-13 00:43:10,539 - INFO - Inserted 13/13 rows into dom_cme_future_mst
+insert_master_data.py:30: 2026-02-13 00:43:10,539 - INFO - Downloading fo_com_code.mst.zip...
+insert_master_data.py:37: 2026-02-13 00:43:10,583 - INFO - Extracting fo_com_code.mst.zip...
+db_mst.py:66: 2026-02-13 00:43:10,618 - INFO - Deleted all data from dom_com_future_mst (122 rows)
+db_mst.py:87: 2026-02-13 00:43:10,741 - INFO - Inserted 122/122 rows into dom_com_future_mst
+insert_master_data.py:30: 2026-02-13 00:43:10,743 - INFO - Downloading elw_code.zip...
+insert_master_data.py:37: 2026-02-13 00:43:10,804 - INFO - Extracting elw_code.zip...
+db_mst.py:66: 2026-02-13 00:43:10,903 - INFO - Deleted all data from dom_elw_mst (3089 rows)
+db_mst.py:87: 2026-02-13 00:43:11,896 - INFO - Inserted 1000/3089 rows into dom_elw_mst
+db_mst.py:87: 2026-02-13 00:43:12,870 - INFO - Inserted 2000/3089 rows into dom_elw_mst
+db_mst.py:87: 2026-02-13 00:43:13,615 - INFO - Inserted 3000/3089 rows into dom_elw_mst
+db_mst.py:87: 2026-02-13 00:43:13,670 - INFO - Inserted 3089/3089 rows into dom_elw_mst
+insert_master_data.py:30: 2026-02-13 00:43:13,674 - INFO - Downloading fo_eurex_code.mst.zip...
+insert_master_data.py:37: 2026-02-13 00:43:13,752 - INFO - Extracting fo_eurex_code.mst.zip...
+db_mst.py:66: 2026-02-13 00:43:13,810 - INFO - Deleted all data from dom_eurex_option_mst (5072 rows)
+db_mst.py:87: 2026-02-13 00:43:14,529 - INFO - Inserted 1000/5072 rows into dom_eurex_option_mst
+db_mst.py:87: 2026-02-13 00:43:15,573 - INFO - Inserted 2000/5072 rows into dom_eurex_option_mst
+db_mst.py:87: 2026-02-13 00:43:16,247 - INFO - Inserted 3000/5072 rows into dom_eurex_option_mst
+db_mst.py:87: 2026-02-13 00:43:16,973 - INFO - Inserted 4000/5072 rows into dom_eurex_option_mst
+db_mst.py:87: 2026-02-13 00:43:17,829 - INFO - Inserted 5000/5072 rows into dom_eurex_option_mst
+db_mst.py:87: 2026-02-13 00:43:17,901 - INFO - Inserted 5072/5072 rows into dom_eurex_option_mst
+insert_master_data.py:30: 2026-02-13 00:43:17,904 - INFO - Downloading konex_code.zip...
+insert_master_data.py:37: 2026-02-13 00:43:17,964 - INFO - Extracting konex_code.zip...
+db_mst.py:66: 2026-02-13 00:43:17,991 - INFO - Deleted all data from dom_konex_mst (112 rows)
+db_mst.py:87: 2026-02-13 00:43:18,100 - INFO - Inserted 112/112 rows into dom_konex_mst
+insert_master_data.py:30: 2026-02-13 00:43:18,103 - INFO - Downloading kosdaq_code.zip...
+insert_master_data.py:37: 2026-02-13 00:43:18,163 - INFO - Extracting kosdaq_code.zip...
+db_mst.py:66: 2026-02-13 00:43:18,236 - INFO - Deleted all data from dom_kosdaq_mst (1822 rows)
+db_mst.py:87: 2026-02-13 00:43:18,975 - INFO - Inserted 1000/1822 rows into dom_kosdaq_mst
+db_mst.py:87: 2026-02-13 00:43:19,524 - INFO - Inserted 1822/1822 rows into dom_kosdaq_mst
+insert_master_data.py:30: 2026-02-13 00:43:19,532 - INFO - Downloading kospi_code.zip...
+insert_master_data.py:37: 2026-02-13 00:43:19,593 - INFO - Extracting kospi_code.zip...
+db_mst.py:66: 2026-02-13 00:43:19,662 - INFO - Deleted all data from dom_kospi_mst (2493 rows)
+db_mst.py:87: 2026-02-13 00:43:21,030 - INFO - Inserted 1000/2493 rows into dom_kospi_mst
+db_mst.py:87: 2026-02-13 00:43:22,112 - INFO - Inserted 2000/2493 rows into dom_kospi_mst
+db_mst.py:87: 2026-02-13 00:43:22,809 - INFO - Inserted 2493/2493 rows into dom_kospi_mst
+db_mst.py:66: 2026-02-13 00:43:22,868 - INFO - Deleted all data from member_code_mst (63 rows)
+db_mst.py:87: 2026-02-13 00:43:22,942 - INFO - Inserted 63/63 rows into member_code_mst
+insert_master_data.py:30: 2026-02-13 00:43:22,944 - INFO - Downloading frgn_code.mst.zip...
+insert_master_data.py:37: 2026-02-13 00:43:23,063 - INFO - Extracting frgn_code.mst.zip...
+db_mst.py:66: 2026-02-13 00:43:23,257 - INFO - Deleted all data from over_index_mst (12344 rows)
+db_mst.py:87: 2026-02-13 00:43:24,226 - INFO - Inserted 1000/12344 rows into over_index_mst
+db_mst.py:87: 2026-02-13 00:43:25,058 - INFO - Inserted 2000/12344 rows into over_index_mst
+db_mst.py:87: 2026-02-13 00:43:25,848 - INFO - Inserted 3000/12344 rows into over_index_mst
+db_mst.py:87: 2026-02-13 00:43:26,637 - INFO - Inserted 4000/12344 rows into over_index_mst
+db_mst.py:87: 2026-02-13 00:43:27,628 - INFO - Inserted 5000/12344 rows into over_index_mst
+db_mst.py:87: 2026-02-13 00:43:28,213 - INFO - Inserted 6000/12344 rows into over_index_mst
+db_mst.py:87: 2026-02-13 00:43:28,679 - INFO - Inserted 7000/12344 rows into over_index_mst
+db_mst.py:87: 2026-02-13 00:43:29,187 - INFO - Inserted 8000/12344 rows into over_index_mst
+db_mst.py:87: 2026-02-13 00:43:29,915 - INFO - Inserted 9000/12344 rows into over_index_mst
+db_mst.py:87: 2026-02-13 00:43:30,534 - INFO - Inserted 10000/12344 rows into over_index_mst
+db_mst.py:87: 2026-02-13 00:43:31,568 - INFO - Inserted 11000/12344 rows into over_index_mst
+db_mst.py:87: 2026-02-13 00:43:32,785 - INFO - Inserted 12000/12344 rows into over_index_mst
+db_mst.py:87: 2026-02-13 00:43:33,377 - INFO - Inserted 12344/12344 rows into over_index_mst
+insert_master_data.py:30: 2026-02-13 00:43:33,385 - INFO - Downloading idxcode.zip...
+insert_master_data.py:37: 2026-02-13 00:43:33,464 - INFO - Extracting idxcode.zip...
+db_mst.py:66: 2026-02-13 00:43:33,495 - INFO - Deleted all data from sector_mst (486 rows)
+db_mst.py:87: 2026-02-13 00:43:34,027 - INFO - Inserted 486/486 rows into sector_mst
+insert_master_data.py:30: 2026-02-13 00:43:34,030 - INFO - Downloading theme_code.zip...
+insert_master_data.py:37: 2026-02-13 00:43:34,083 - INFO - Extracting theme_code.zip...
+db_mst.py:66: 2026-02-13 00:43:34,163 - INFO - Deleted all data from theme_mst (5528 rows)
+db_mst.py:87: 2026-02-13 00:43:35,223 - INFO - Inserted 1000/5528 rows into theme_mst
+db_mst.py:87: 2026-02-13 00:43:35,877 - INFO - Inserted 2000/5528 rows into theme_mst
+db_mst.py:87: 2026-02-13 00:43:36,604 - INFO - Inserted 3000/5528 rows into theme_mst
+db_mst.py:87: 2026-02-13 00:43:37,388 - INFO - Inserted 4000/5528 rows into theme_mst
+db_mst.py:87: 2026-02-13 00:43:37,947 - INFO - Inserted 5000/5528 rows into theme_mst
+db_mst.py:87: 2026-02-13 00:43:38,238 - INFO - Inserted 5528/5528 rows into theme_mst
+insert_master_data.py:527: 2026-02-13 00:43:38,243 - INFO - ============================================================
+insert_master_data.py:528: 2026-02-13 00:43:38,243 - INFO - ✓ 모든 마스터 데이터 처리 완료
+insert_master_data.py:537: 2026-02-13 00:43:38,256 - INFO - Removed temporary directory: temp_master_data_full
+log_setup.py:41: 2026-02-13 00:46:48,491 - INFO - Logging initialized. Log file: D:\Python\deriv\logs\kis_app.log
+log_setup.py:41: 2026-02-13 00:47:01,135 - INFO - Logging initialized. Log file: D:\Python\deriv\logs\kis_app.log
+database.py:72: 2026-02-13 00:47:02,396 - ERROR - ✗ 이미 존재하는 프로그램: stock_price
+database.py:129: 2026-02-13 00:47:02,423 - INFO - ✓ 파라미터 정의: stock_price.FID_COND_MRKT_DIV_CODE
+database.py:129: 2026-02-13 00:47:02,440 - INFO - ✓ 파라미터 정의: stock_price.FID_INPUT_ISCD
+database.py:175: 2026-02-13 00:47:02,460 - INFO - ✓ 사용자 입력 업데이트: stock_price (2개, Active=True)
+database.py:72: 2026-02-13 00:47:02,463 - ERROR - ✗ 이미 존재하는 프로그램: daily_price
+database.py:129: 2026-02-13 00:47:02,478 - INFO - ✓ 파라미터 정의: daily_price.FID_COND_MRKT_DIV_CODE
+database.py:129: 2026-02-13 00:47:02,496 - INFO - ✓ 파라미터 정의: daily_price.FID_INPUT_ISCD
+database.py:129: 2026-02-13 00:47:02,513 - INFO - ✓ 파라미터 정의: daily_price.FID_PERIOD_DIV_CODE
+database.py:129: 2026-02-13 00:47:02,536 - INFO - ✓ 파라미터 정의: daily_price.FID_ORG_ADJ_PRC
+database.py:175: 2026-02-13 00:47:02,553 - INFO - ✓ 사용자 입력 업데이트: daily_price (4개, Active=True)
+database.py:72: 2026-02-13 00:47:02,557 - ERROR - ✗ 이미 존재하는 프로그램: display_board_top
+database.py:129: 2026-02-13 00:47:02,571 - INFO - ✓ 파라미터 정의: display_board_top.FID_COND_MRKT_DIV_CODE
+database.py:129: 2026-02-13 00:47:02,587 - INFO - ✓ 파라미터 정의: display_board_top.FID_INPUT_ISCD
+database.py:175: 2026-02-13 00:47:02,600 - INFO - ✓ 사용자 입력 업데이트: display_board_top (2개, Active=True)
+log_setup.py:41: 2026-02-13 00:51:33,666 - INFO - Logging initialized. Log file: D:\Python\deriv\logs\kis_app.log
+insert_master_data.py:497: 2026-02-13 00:51:33,667 - INFO - ============================================================
+insert_master_data.py:498: 2026-02-13 00:51:33,667 - INFO - 마스터 데이터 다운로드 및 삽입 시작 (16 Types)
+insert_master_data.py:499: 2026-02-13 00:51:33,667 - INFO - ============================================================
+db_mst.py:59: 2026-02-13 00:51:33,785 - INFO - Master data tables initialized
+insert_master_data.py:30: 2026-02-13 00:51:33,786 - INFO - Downloading fo_idx_code_mts.mst.zip...
+insert_master_data.py:37: 2026-02-13 00:51:33,870 - INFO - Extracting fo_idx_code_mts.mst.zip...
+db_mst.py:68: 2026-02-13 00:51:33,978 - INFO - Deleted all data from dom_future_mst (5445 rows)
+db_mst.py:89: 2026-02-13 00:51:35,244 - INFO - Inserted 1000/5445 rows into dom_future_mst
+db_mst.py:89: 2026-02-13 00:51:35,926 - INFO - Inserted 2000/5445 rows into dom_future_mst
+db_mst.py:89: 2026-02-13 00:51:36,266 - INFO - Inserted 3000/5445 rows into dom_future_mst
+db_mst.py:89: 2026-02-13 00:51:36,672 - INFO - Inserted 4000/5445 rows into dom_future_mst
+db_mst.py:89: 2026-02-13 00:51:37,056 - INFO - Inserted 5000/5445 rows into dom_future_mst
+db_mst.py:89: 2026-02-13 00:51:37,208 - INFO - Inserted 5445/5445 rows into dom_future_mst
+insert_master_data.py:30: 2026-02-13 00:51:37,211 - INFO - Downloading ffcode.mst.zip...
+insert_master_data.py:37: 2026-02-13 00:51:37,260 - INFO - Extracting ffcode.mst.zip...
+db_mst.py:68: 2026-02-13 00:51:37,320 - INFO - Deleted all data from over_future_mst (5861 rows)
+db_mst.py:89: 2026-02-13 00:51:37,810 - INFO - Inserted 1000/5861 rows into over_future_mst
+db_mst.py:89: 2026-02-13 00:51:38,466 - INFO - Inserted 2000/5861 rows into over_future_mst
+db_mst.py:89: 2026-02-13 00:51:38,872 - INFO - Inserted 3000/5861 rows into over_future_mst
+db_mst.py:89: 2026-02-13 00:51:39,320 - INFO - Inserted 4000/5861 rows into over_future_mst
+db_mst.py:89: 2026-02-13 00:51:39,807 - INFO - Inserted 5000/5861 rows into over_future_mst
+db_mst.py:89: 2026-02-13 00:51:40,208 - INFO - Inserted 5861/5861 rows into over_future_mst
+insert_master_data.py:30: 2026-02-13 00:51:40,217 - INFO - Downloading fo_stk_code_mts.mst.zip...
+insert_master_data.py:37: 2026-02-13 00:51:40,281 - INFO - Extracting fo_stk_code_mts.mst.zip...
+db_mst.py:68: 2026-02-13 00:51:40,474 - INFO - Deleted all data from dom_stock_future_mst (14121 rows)
+db_mst.py:89: 2026-02-13 00:51:40,855 - INFO - Inserted 1000/14121 rows into dom_stock_future_mst
+db_mst.py:89: 2026-02-13 00:51:41,461 - INFO - Inserted 2000/14121 rows into dom_stock_future_mst
+db_mst.py:89: 2026-02-13 00:51:42,088 - INFO - Inserted 3000/14121 rows into dom_stock_future_mst
+db_mst.py:89: 2026-02-13 00:51:42,685 - INFO - Inserted 4000/14121 rows into dom_stock_future_mst
+db_mst.py:89: 2026-02-13 00:51:43,389 - INFO - Inserted 5000/14121 rows into dom_stock_future_mst
+db_mst.py:89: 2026-02-13 00:51:44,521 - INFO - Inserted 6000/14121 rows into dom_stock_future_mst
+db_mst.py:89: 2026-02-13 00:51:45,149 - INFO - Inserted 7000/14121 rows into dom_stock_future_mst
+db_mst.py:89: 2026-02-13 00:51:46,418 - INFO - Inserted 8000/14121 rows into dom_stock_future_mst
+db_mst.py:89: 2026-02-13 00:51:47,430 - INFO - Inserted 9000/14121 rows into dom_stock_future_mst
+db_mst.py:89: 2026-02-13 00:51:48,130 - INFO - Inserted 10000/14121 rows into dom_stock_future_mst
+db_mst.py:89: 2026-02-13 00:51:48,863 - INFO - Inserted 11000/14121 rows into dom_stock_future_mst
+db_mst.py:89: 2026-02-13 00:51:50,058 - INFO - Inserted 12000/14121 rows into dom_stock_future_mst
+db_mst.py:89: 2026-02-13 00:51:51,125 - INFO - Inserted 13000/14121 rows into dom_stock_future_mst
+db_mst.py:89: 2026-02-13 00:51:52,122 - INFO - Inserted 14000/14121 rows into dom_stock_future_mst
+db_mst.py:89: 2026-02-13 00:51:52,225 - INFO - Inserted 14121/14121 rows into dom_stock_future_mst
+insert_master_data.py:30: 2026-02-13 00:51:52,230 - INFO - Downloading nasmst.cod.zip...
+insert_master_data.py:37: 2026-02-13 00:51:52,311 - INFO - Extracting nasmst.cod.zip...
+insert_master_data.py:30: 2026-02-13 00:51:52,658 - INFO - Downloading nysmst.cod.zip...
+insert_master_data.py:37: 2026-02-13 00:51:52,741 - INFO - Extracting nysmst.cod.zip...
+insert_master_data.py:30: 2026-02-13 00:51:53,012 - INFO - Downloading amsmst.cod.zip...
+insert_master_data.py:37: 2026-02-13 00:51:53,082 - INFO - Extracting amsmst.cod.zip...
+insert_master_data.py:30: 2026-02-13 00:51:53,351 - INFO - Downloading shsmst.cod.zip...
+insert_master_data.py:37: 2026-02-13 00:51:53,433 - INFO - Extracting shsmst.cod.zip...
+insert_master_data.py:30: 2026-02-13 00:51:53,693 - INFO - Downloading shimst.cod.zip...
+insert_master_data.py:37: 2026-02-13 00:51:53,742 - INFO - Extracting shimst.cod.zip...
+insert_master_data.py:30: 2026-02-13 00:51:53,785 - INFO - Downloading szsmst.cod.zip...
+insert_master_data.py:37: 2026-02-13 00:51:53,852 - INFO - Extracting szsmst.cod.zip...
+insert_master_data.py:30: 2026-02-13 00:51:54,140 - INFO - Downloading szimst.cod.zip...
+insert_master_data.py:37: 2026-02-13 00:51:54,192 - INFO - Extracting szimst.cod.zip...
+insert_master_data.py:30: 2026-02-13 00:51:54,212 - INFO - Downloading tsemst.cod.zip...
+insert_master_data.py:37: 2026-02-13 00:51:54,279 - INFO - Extracting tsemst.cod.zip...
+insert_master_data.py:30: 2026-02-13 00:51:54,590 - INFO - Downloading hksmst.cod.zip...
+insert_master_data.py:37: 2026-02-13 00:51:54,654 - INFO - Extracting hksmst.cod.zip...
+insert_master_data.py:30: 2026-02-13 00:51:54,886 - INFO - Downloading hnxmst.cod.zip...
+insert_master_data.py:37: 2026-02-13 00:51:54,942 - INFO - Extracting hnxmst.cod.zip...
+insert_master_data.py:30: 2026-02-13 00:51:55,033 - INFO - Downloading hsxmst.cod.zip...
+insert_master_data.py:37: 2026-02-13 00:51:55,081 - INFO - Extracting hsxmst.cod.zip...
+db_mst.py:68: 2026-02-13 00:51:55,207 - INFO - Deleted all data from over_stock_mst (27223 rows)
+db_mst.py:89: 2026-02-13 00:51:57,310 - INFO - Inserted 2000/27223 rows into over_stock_mst
+db_mst.py:89: 2026-02-13 00:51:59,424 - INFO - Inserted 4000/27223 rows into over_stock_mst
+db_mst.py:89: 2026-02-13 00:52:01,807 - INFO - Inserted 6000/27223 rows into over_stock_mst
+db_mst.py:89: 2026-02-13 00:52:03,062 - INFO - Inserted 8000/27223 rows into over_stock_mst
+db_mst.py:89: 2026-02-13 00:52:04,140 - INFO - Inserted 10000/27223 rows into over_stock_mst
+db_mst.py:89: 2026-02-13 00:52:05,420 - INFO - Inserted 12000/27223 rows into over_stock_mst
+db_mst.py:89: 2026-02-13 00:52:06,343 - INFO - Inserted 14000/27223 rows into over_stock_mst
+db_mst.py:89: 2026-02-13 00:52:07,444 - INFO - Inserted 16000/27223 rows into over_stock_mst
+db_mst.py:89: 2026-02-13 00:52:08,467 - INFO - Inserted 18000/27223 rows into over_stock_mst
+db_mst.py:89: 2026-02-13 00:52:09,452 - INFO - Inserted 20000/27223 rows into over_stock_mst
+db_mst.py:89: 2026-02-13 00:52:10,976 - INFO - Inserted 22000/27223 rows into over_stock_mst
+db_mst.py:89: 2026-02-13 00:52:12,111 - INFO - Inserted 24000/27223 rows into over_stock_mst
+db_mst.py:89: 2026-02-13 00:52:13,074 - INFO - Inserted 26000/27223 rows into over_stock_mst
+db_mst.py:89: 2026-02-13 00:52:13,572 - INFO - Inserted 27223/27223 rows into over_stock_mst
+insert_master_data.py:30: 2026-02-13 00:52:13,596 - INFO - Downloading bond_code.zip...
+insert_master_data.py:37: 2026-02-13 00:52:13,690 - INFO - Extracting bond_code.zip...
+db_mst.py:68: 2026-02-13 00:52:13,780 - INFO - Deleted all data from dom_bond_mst (17782 rows)
+db_mst.py:89: 2026-02-13 00:52:14,442 - INFO - Inserted 1000/17782 rows into dom_bond_mst
+db_mst.py:89: 2026-02-13 00:52:15,209 - INFO - Inserted 2000/17782 rows into dom_bond_mst
+db_mst.py:89: 2026-02-13 00:52:16,144 - INFO - Inserted 3000/17782 rows into dom_bond_mst
+db_mst.py:89: 2026-02-13 00:52:17,015 - INFO - Inserted 4000/17782 rows into dom_bond_mst
+db_mst.py:89: 2026-02-13 00:52:17,802 - INFO - Inserted 5000/17782 rows into dom_bond_mst
+db_mst.py:89: 2026-02-13 00:52:18,817 - INFO - Inserted 6000/17782 rows into dom_bond_mst
+db_mst.py:89: 2026-02-13 00:52:19,222 - INFO - Inserted 7000/17782 rows into dom_bond_mst
+db_mst.py:89: 2026-02-13 00:52:19,762 - INFO - Inserted 8000/17782 rows into dom_bond_mst
+db_mst.py:89: 2026-02-13 00:52:20,303 - INFO - Inserted 9000/17782 rows into dom_bond_mst
+db_mst.py:89: 2026-02-13 00:52:20,762 - INFO - Inserted 10000/17782 rows into dom_bond_mst
+db_mst.py:89: 2026-02-13 00:52:21,157 - INFO - Inserted 11000/17782 rows into dom_bond_mst
+db_mst.py:89: 2026-02-13 00:52:21,569 - INFO - Inserted 12000/17782 rows into dom_bond_mst
+db_mst.py:89: 2026-02-13 00:52:22,327 - INFO - Inserted 13000/17782 rows into dom_bond_mst
+db_mst.py:89: 2026-02-13 00:52:23,163 - INFO - Inserted 14000/17782 rows into dom_bond_mst
+db_mst.py:89: 2026-02-13 00:52:23,942 - INFO - Inserted 15000/17782 rows into dom_bond_mst
+db_mst.py:89: 2026-02-13 00:52:24,561 - INFO - Inserted 16000/17782 rows into dom_bond_mst
+db_mst.py:89: 2026-02-13 00:52:25,179 - INFO - Inserted 17000/17782 rows into dom_bond_mst
+db_mst.py:89: 2026-02-13 00:52:25,762 - INFO - Inserted 17782/17782 rows into dom_bond_mst
+insert_master_data.py:30: 2026-02-13 00:52:25,772 - INFO - Downloading fo_cme_code.mst.zip...
+insert_master_data.py:37: 2026-02-13 00:52:25,832 - INFO - Extracting fo_cme_code.mst.zip...
+db_mst.py:68: 2026-02-13 00:52:25,841 - INFO - Deleted all data from dom_cme_future_mst (13 rows)
+db_mst.py:89: 2026-02-13 00:52:25,872 - INFO - Inserted 13/13 rows into dom_cme_future_mst
+insert_master_data.py:30: 2026-02-13 00:52:25,872 - INFO - Downloading fo_com_code.mst.zip...
+insert_master_data.py:37: 2026-02-13 00:52:25,923 - INFO - Extracting fo_com_code.mst.zip...
+db_mst.py:68: 2026-02-13 00:52:25,952 - INFO - Deleted all data from dom_com_future_mst (122 rows)
+db_mst.py:89: 2026-02-13 00:52:26,034 - INFO - Inserted 122/122 rows into dom_com_future_mst
+insert_master_data.py:30: 2026-02-13 00:52:26,036 - INFO - Downloading elw_code.zip...
+insert_master_data.py:37: 2026-02-13 00:52:26,122 - INFO - Extracting elw_code.zip...
+db_mst.py:68: 2026-02-13 00:52:26,191 - INFO - Deleted all data from dom_elw_mst (3089 rows)
+db_mst.py:89: 2026-02-13 00:52:26,946 - INFO - Inserted 1000/3089 rows into dom_elw_mst
+db_mst.py:89: 2026-02-13 00:52:27,593 - INFO - Inserted 2000/3089 rows into dom_elw_mst
+db_mst.py:89: 2026-02-13 00:52:28,480 - INFO - Inserted 3000/3089 rows into dom_elw_mst
+db_mst.py:89: 2026-02-13 00:52:28,545 - INFO - Inserted 3089/3089 rows into dom_elw_mst
+insert_master_data.py:30: 2026-02-13 00:52:28,547 - INFO - Downloading fo_eurex_code.mst.zip...
+insert_master_data.py:37: 2026-02-13 00:52:28,620 - INFO - Extracting fo_eurex_code.mst.zip...
+db_mst.py:68: 2026-02-13 00:52:28,671 - INFO - Deleted all data from dom_eurex_option_mst (5072 rows)
+db_mst.py:89: 2026-02-13 00:52:29,189 - INFO - Inserted 1000/5072 rows into dom_eurex_option_mst
+db_mst.py:89: 2026-02-13 00:52:29,706 - INFO - Inserted 2000/5072 rows into dom_eurex_option_mst
+db_mst.py:89: 2026-02-13 00:52:30,364 - INFO - Inserted 3000/5072 rows into dom_eurex_option_mst
+db_mst.py:89: 2026-02-13 00:52:31,879 - INFO - Inserted 4000/5072 rows into dom_eurex_option_mst
+db_mst.py:89: 2026-02-13 00:52:32,629 - INFO - Inserted 5000/5072 rows into dom_eurex_option_mst
+db_mst.py:89: 2026-02-13 00:52:32,673 - INFO - Inserted 5072/5072 rows into dom_eurex_option_mst
+insert_master_data.py:30: 2026-02-13 00:52:32,676 - INFO - Downloading konex_code.zip...
+insert_master_data.py:37: 2026-02-13 00:52:32,734 - INFO - Extracting konex_code.zip...
+db_mst.py:68: 2026-02-13 00:52:32,760 - INFO - Deleted all data from dom_konex_mst (112 rows)
+db_mst.py:89: 2026-02-13 00:52:32,832 - INFO - Inserted 112/112 rows into dom_konex_mst
+insert_master_data.py:30: 2026-02-13 00:52:32,834 - INFO - Downloading kosdaq_code.zip...
+insert_master_data.py:37: 2026-02-13 00:52:32,892 - INFO - Extracting kosdaq_code.zip...
+db_mst.py:68: 2026-02-13 00:52:32,981 - INFO - Deleted all data from dom_kosdaq_mst (1822 rows)
+db_mst.py:89: 2026-02-13 00:52:33,677 - INFO - Inserted 1000/1822 rows into dom_kosdaq_mst
+db_mst.py:89: 2026-02-13 00:52:34,397 - INFO - Inserted 1822/1822 rows into dom_kosdaq_mst
+insert_master_data.py:30: 2026-02-13 00:52:34,407 - INFO - Downloading kospi_code.zip...
+insert_master_data.py:37: 2026-02-13 00:52:34,491 - INFO - Extracting kospi_code.zip...
+db_mst.py:68: 2026-02-13 00:52:34,561 - INFO - Deleted all data from dom_kospi_mst (2493 rows)
+db_mst.py:89: 2026-02-13 00:52:35,397 - INFO - Inserted 1000/2493 rows into dom_kospi_mst
+db_mst.py:89: 2026-02-13 00:52:36,124 - INFO - Inserted 2000/2493 rows into dom_kospi_mst
+db_mst.py:89: 2026-02-13 00:52:36,455 - INFO - Inserted 2493/2493 rows into dom_kospi_mst
+db_mst.py:68: 2026-02-13 00:52:36,507 - INFO - Deleted all data from member_code_mst (63 rows)
+db_mst.py:89: 2026-02-13 00:52:36,557 - INFO - Inserted 63/63 rows into member_code_mst
+insert_master_data.py:30: 2026-02-13 00:52:36,558 - INFO - Downloading frgn_code.mst.zip...
+insert_master_data.py:37: 2026-02-13 00:52:36,642 - INFO - Extracting frgn_code.mst.zip...
+db_mst.py:68: 2026-02-13 00:52:36,759 - INFO - Deleted all data from over_index_mst (12344 rows)
+db_mst.py:89: 2026-02-13 00:52:37,525 - INFO - Inserted 1000/12344 rows into over_index_mst
+db_mst.py:89: 2026-02-13 00:52:37,997 - INFO - Inserted 2000/12344 rows into over_index_mst
+db_mst.py:89: 2026-02-13 00:52:38,465 - INFO - Inserted 3000/12344 rows into over_index_mst
+db_mst.py:89: 2026-02-13 00:52:38,861 - INFO - Inserted 4000/12344 rows into over_index_mst
+db_mst.py:89: 2026-02-13 00:52:39,353 - INFO - Inserted 5000/12344 rows into over_index_mst
+db_mst.py:89: 2026-02-13 00:52:40,198 - INFO - Inserted 6000/12344 rows into over_index_mst
+db_mst.py:89: 2026-02-13 00:52:40,927 - INFO - Inserted 7000/12344 rows into over_index_mst
+db_mst.py:89: 2026-02-13 00:52:41,807 - INFO - Inserted 8000/12344 rows into over_index_mst
+db_mst.py:89: 2026-02-13 00:52:42,501 - INFO - Inserted 9000/12344 rows into over_index_mst
+db_mst.py:89: 2026-02-13 00:52:43,326 - INFO - Inserted 10000/12344 rows into over_index_mst
+db_mst.py:89: 2026-02-13 00:52:44,089 - INFO - Inserted 11000/12344 rows into over_index_mst
+db_mst.py:89: 2026-02-13 00:52:44,807 - INFO - Inserted 12000/12344 rows into over_index_mst
+db_mst.py:89: 2026-02-13 00:52:45,080 - INFO - Inserted 12344/12344 rows into over_index_mst
+insert_master_data.py:30: 2026-02-13 00:52:45,086 - INFO - Downloading idxcode.zip...
+insert_master_data.py:37: 2026-02-13 00:52:45,163 - INFO - Extracting idxcode.zip...
+db_mst.py:68: 2026-02-13 00:52:45,192 - INFO - Deleted all data from sector_mst (486 rows)
+db_mst.py:89: 2026-02-13 00:52:45,604 - INFO - Inserted 486/486 rows into sector_mst
+insert_master_data.py:30: 2026-02-13 00:52:45,612 - INFO - Downloading theme_code.zip...
+insert_master_data.py:37: 2026-02-13 00:52:45,673 - INFO - Extracting theme_code.zip...
+db_mst.py:68: 2026-02-13 00:52:45,767 - INFO - Deleted all data from theme_mst (5528 rows)
+db_mst.py:89: 2026-02-13 00:52:46,888 - INFO - Inserted 1000/5528 rows into theme_mst
+db_mst.py:89: 2026-02-13 00:52:47,814 - INFO - Inserted 2000/5528 rows into theme_mst
+db_mst.py:89: 2026-02-13 00:52:48,363 - INFO - Inserted 3000/5528 rows into theme_mst
+db_mst.py:89: 2026-02-13 00:52:48,788 - INFO - Inserted 4000/5528 rows into theme_mst
+db_mst.py:89: 2026-02-13 00:52:49,177 - INFO - Inserted 5000/5528 rows into theme_mst
+db_mst.py:89: 2026-02-13 00:52:49,412 - INFO - Inserted 5528/5528 rows into theme_mst
+insert_master_data.py:527: 2026-02-13 00:52:49,418 - INFO - ============================================================
+db_mst.py:97: 2026-02-13 00:52:49,418 - INFO - Updating metadata tables...
+db_mst.py:136: 2026-02-13 00:52:49,512 - INFO - Metadata tables updated successfully.
+insert_master_data.py:532: 2026-02-13 00:52:49,512 - INFO - ✓ 모든 마스터 데이터 처리 완료
+insert_master_data.py:541: 2026-02-13 00:52:49,527 - INFO - Removed temporary directory: temp_master_data_full
+log_setup.py:41: 2026-02-13 00:57:48,566 - INFO - Logging initialized. Log file: D:\Python\deriv\logs\kis_app.log
+insert_master_data.py:497: 2026-02-13 00:57:48,566 - INFO - ============================================================
+insert_master_data.py:498: 2026-02-13 00:57:48,567 - INFO - 마스터 데이터 다운로드 및 삽입 시작 (16 Types)
+insert_master_data.py:499: 2026-02-13 00:57:48,567 - INFO - ============================================================
+db_mst.py:59: 2026-02-13 00:57:48,628 - INFO - Master data tables initialized
+insert_master_data.py:30: 2026-02-13 00:57:48,628 - INFO - Downloading fo_idx_code_mts.mst.zip...
+insert_master_data.py:37: 2026-02-13 00:57:48,708 - INFO - Extracting fo_idx_code_mts.mst.zip...
+db_mst.py:68: 2026-02-13 00:57:48,938 - INFO - Deleted all data from dom_future_mst (5445 rows)
+db_mst.py:89: 2026-02-13 00:57:49,920 - INFO - Inserted 1000/5445 rows into dom_future_mst
+db_mst.py:89: 2026-02-13 00:57:50,515 - INFO - Inserted 2000/5445 rows into dom_future_mst
+db_mst.py:89: 2026-02-13 00:57:50,927 - INFO - Inserted 3000/5445 rows into dom_future_mst
+db_mst.py:89: 2026-02-13 00:57:51,284 - INFO - Inserted 4000/5445 rows into dom_future_mst
+db_mst.py:89: 2026-02-13 00:57:51,642 - INFO - Inserted 5000/5445 rows into dom_future_mst
+db_mst.py:89: 2026-02-13 00:57:51,871 - INFO - Inserted 5445/5445 rows into dom_future_mst
+insert_master_data.py:30: 2026-02-13 00:57:51,876 - INFO - Downloading ffcode.mst.zip...
+insert_master_data.py:37: 2026-02-13 00:57:51,938 - INFO - Extracting ffcode.mst.zip...
+db_mst.py:68: 2026-02-13 00:57:51,992 - INFO - Deleted all data from over_future_mst (5861 rows)
+db_mst.py:89: 2026-02-13 00:57:52,392 - INFO - Inserted 1000/5861 rows into over_future_mst
+db_mst.py:89: 2026-02-13 00:57:52,755 - INFO - Inserted 2000/5861 rows into over_future_mst
+db_mst.py:89: 2026-02-13 00:57:53,072 - INFO - Inserted 3000/5861 rows into over_future_mst
+db_mst.py:89: 2026-02-13 00:57:53,398 - INFO - Inserted 4000/5861 rows into over_future_mst
+db_mst.py:89: 2026-02-13 00:57:53,791 - INFO - Inserted 5000/5861 rows into over_future_mst
+db_mst.py:89: 2026-02-13 00:57:54,117 - INFO - Inserted 5861/5861 rows into over_future_mst
+insert_master_data.py:30: 2026-02-13 00:57:54,124 - INFO - Downloading fo_stk_code_mts.mst.zip...
+insert_master_data.py:37: 2026-02-13 00:57:54,187 - INFO - Extracting fo_stk_code_mts.mst.zip...
+db_mst.py:68: 2026-02-13 00:57:54,401 - INFO - Deleted all data from dom_stock_future_mst (14121 rows)
+db_mst.py:89: 2026-02-13 00:57:54,759 - INFO - Inserted 1000/14121 rows into dom_stock_future_mst
+db_mst.py:89: 2026-02-13 00:57:55,113 - INFO - Inserted 2000/14121 rows into dom_stock_future_mst
+db_mst.py:89: 2026-02-13 00:57:55,413 - INFO - Inserted 3000/14121 rows into dom_stock_future_mst
+db_mst.py:89: 2026-02-13 00:57:55,728 - INFO - Inserted 4000/14121 rows into dom_stock_future_mst
+db_mst.py:89: 2026-02-13 00:57:56,018 - INFO - Inserted 5000/14121 rows into dom_stock_future_mst
+db_mst.py:89: 2026-02-13 00:57:56,559 - INFO - Inserted 6000/14121 rows into dom_stock_future_mst
+db_mst.py:89: 2026-02-13 00:57:56,876 - INFO - Inserted 7000/14121 rows into dom_stock_future_mst
+db_mst.py:89: 2026-02-13 00:57:57,226 - INFO - Inserted 8000/14121 rows into dom_stock_future_mst
+db_mst.py:89: 2026-02-13 00:57:57,549 - INFO - Inserted 9000/14121 rows into dom_stock_future_mst
+db_mst.py:89: 2026-02-13 00:57:57,824 - INFO - Inserted 10000/14121 rows into dom_stock_future_mst
+db_mst.py:89: 2026-02-13 00:57:58,115 - INFO - Inserted 11000/14121 rows into dom_stock_future_mst
+db_mst.py:89: 2026-02-13 00:57:58,389 - INFO - Inserted 12000/14121 rows into dom_stock_future_mst
+db_mst.py:89: 2026-02-13 00:57:58,680 - INFO - Inserted 13000/14121 rows into dom_stock_future_mst
+db_mst.py:89: 2026-02-13 00:57:58,999 - INFO - Inserted 14000/14121 rows into dom_stock_future_mst
+db_mst.py:89: 2026-02-13 00:57:59,057 - INFO - Inserted 14121/14121 rows into dom_stock_future_mst
+insert_master_data.py:30: 2026-02-13 00:57:59,061 - INFO - Downloading nasmst.cod.zip...
+insert_master_data.py:37: 2026-02-13 00:57:59,118 - INFO - Extracting nasmst.cod.zip...
+insert_master_data.py:30: 2026-02-13 00:57:59,270 - INFO - Downloading nysmst.cod.zip...
+insert_master_data.py:37: 2026-02-13 00:57:59,327 - INFO - Extracting nysmst.cod.zip...
+insert_master_data.py:30: 2026-02-13 00:57:59,408 - INFO - Downloading amsmst.cod.zip...
+insert_master_data.py:37: 2026-02-13 00:57:59,465 - INFO - Extracting amsmst.cod.zip...
+insert_master_data.py:30: 2026-02-13 00:57:59,576 - INFO - Downloading shsmst.cod.zip...
+insert_master_data.py:37: 2026-02-13 00:57:59,625 - INFO - Extracting shsmst.cod.zip...
+insert_master_data.py:30: 2026-02-13 00:57:59,717 - INFO - Downloading shimst.cod.zip...
+insert_master_data.py:37: 2026-02-13 00:57:59,767 - INFO - Extracting shimst.cod.zip...
+insert_master_data.py:30: 2026-02-13 00:57:59,784 - INFO - Downloading szsmst.cod.zip...
+insert_master_data.py:37: 2026-02-13 00:57:59,845 - INFO - Extracting szsmst.cod.zip...
+insert_master_data.py:30: 2026-02-13 00:57:59,957 - INFO - Downloading szimst.cod.zip...
+insert_master_data.py:37: 2026-02-13 00:58:00,008 - INFO - Extracting szimst.cod.zip...
+insert_master_data.py:30: 2026-02-13 00:58:00,020 - INFO - Downloading tsemst.cod.zip...
+insert_master_data.py:37: 2026-02-13 00:58:00,087 - INFO - Extracting tsemst.cod.zip...
+insert_master_data.py:30: 2026-02-13 00:58:00,324 - INFO - Downloading hksmst.cod.zip...
+insert_master_data.py:37: 2026-02-13 00:58:00,467 - INFO - Extracting hksmst.cod.zip...
+insert_master_data.py:30: 2026-02-13 00:58:00,551 - INFO - Downloading hnxmst.cod.zip...
+insert_master_data.py:37: 2026-02-13 00:58:00,597 - INFO - Extracting hnxmst.cod.zip...
+insert_master_data.py:30: 2026-02-13 00:58:00,628 - INFO - Downloading hsxmst.cod.zip...
+insert_master_data.py:37: 2026-02-13 00:58:00,715 - INFO - Extracting hsxmst.cod.zip...
+db_mst.py:68: 2026-02-13 00:58:00,753 - INFO - Deleted all data from over_stock_mst (27223 rows)
+db_mst.py:89: 2026-02-13 00:58:01,660 - INFO - Inserted 2000/27223 rows into over_stock_mst
+db_mst.py:89: 2026-02-13 00:58:02,480 - INFO - Inserted 4000/27223 rows into over_stock_mst
+db_mst.py:89: 2026-02-13 00:58:03,332 - INFO - Inserted 6000/27223 rows into over_stock_mst
+db_mst.py:89: 2026-02-13 00:58:04,059 - INFO - Inserted 8000/27223 rows into over_stock_mst
+db_mst.py:89: 2026-02-13 00:58:04,940 - INFO - Inserted 10000/27223 rows into over_stock_mst
+db_mst.py:89: 2026-02-13 00:58:05,706 - INFO - Inserted 12000/27223 rows into over_stock_mst
+db_mst.py:89: 2026-02-13 00:58:06,436 - INFO - Inserted 14000/27223 rows into over_stock_mst
+db_mst.py:89: 2026-02-13 00:58:07,228 - INFO - Inserted 16000/27223 rows into over_stock_mst
+db_mst.py:89: 2026-02-13 00:58:08,115 - INFO - Inserted 18000/27223 rows into over_stock_mst
+db_mst.py:89: 2026-02-13 00:58:08,802 - INFO - Inserted 20000/27223 rows into over_stock_mst
+db_mst.py:89: 2026-02-13 00:58:09,592 - INFO - Inserted 22000/27223 rows into over_stock_mst
+db_mst.py:89: 2026-02-13 00:58:10,490 - INFO - Inserted 24000/27223 rows into over_stock_mst
+db_mst.py:89: 2026-02-13 00:58:11,167 - INFO - Inserted 26000/27223 rows into over_stock_mst
+db_mst.py:89: 2026-02-13 00:58:11,684 - INFO - Inserted 27223/27223 rows into over_stock_mst
+insert_master_data.py:30: 2026-02-13 00:58:11,712 - INFO - Downloading bond_code.zip...
+insert_master_data.py:37: 2026-02-13 00:58:11,847 - INFO - Extracting bond_code.zip...
+db_mst.py:68: 2026-02-13 00:58:11,917 - INFO - Deleted all data from dom_bond_mst (17782 rows)
+db_mst.py:89: 2026-02-13 00:58:12,231 - INFO - Inserted 1000/17782 rows into dom_bond_mst
+db_mst.py:89: 2026-02-13 00:58:12,557 - INFO - Inserted 2000/17782 rows into dom_bond_mst
+db_mst.py:89: 2026-02-13 00:58:12,854 - INFO - Inserted 3000/17782 rows into dom_bond_mst
+db_mst.py:89: 2026-02-13 00:58:13,114 - INFO - Inserted 4000/17782 rows into dom_bond_mst
+db_mst.py:89: 2026-02-13 00:58:13,393 - INFO - Inserted 5000/17782 rows into dom_bond_mst
+db_mst.py:89: 2026-02-13 00:58:13,885 - INFO - Inserted 6000/17782 rows into dom_bond_mst
+db_mst.py:89: 2026-02-13 00:58:14,224 - INFO - Inserted 7000/17782 rows into dom_bond_mst
+db_mst.py:89: 2026-02-13 00:58:14,783 - INFO - Inserted 8000/17782 rows into dom_bond_mst
+db_mst.py:89: 2026-02-13 00:58:15,359 - INFO - Inserted 9000/17782 rows into dom_bond_mst
+db_mst.py:89: 2026-02-13 00:58:15,737 - INFO - Inserted 10000/17782 rows into dom_bond_mst
+db_mst.py:89: 2026-02-13 00:58:16,223 - INFO - Inserted 11000/17782 rows into dom_bond_mst
+db_mst.py:89: 2026-02-13 00:58:16,957 - INFO - Inserted 12000/17782 rows into dom_bond_mst
+db_mst.py:89: 2026-02-13 00:58:17,448 - INFO - Inserted 13000/17782 rows into dom_bond_mst
+db_mst.py:89: 2026-02-13 00:58:17,906 - INFO - Inserted 14000/17782 rows into dom_bond_mst
+db_mst.py:89: 2026-02-13 00:58:18,206 - INFO - Inserted 15000/17782 rows into dom_bond_mst
+db_mst.py:89: 2026-02-13 00:58:18,496 - INFO - Inserted 16000/17782 rows into dom_bond_mst
+db_mst.py:89: 2026-02-13 00:58:18,781 - INFO - Inserted 17000/17782 rows into dom_bond_mst
+db_mst.py:89: 2026-02-13 00:58:19,064 - INFO - Inserted 17782/17782 rows into dom_bond_mst
+insert_master_data.py:30: 2026-02-13 00:58:19,072 - INFO - Downloading fo_cme_code.mst.zip...
+insert_master_data.py:37: 2026-02-13 00:58:19,127 - INFO - Extracting fo_cme_code.mst.zip...
+db_mst.py:68: 2026-02-13 00:58:19,133 - INFO - Deleted all data from dom_cme_future_mst (13 rows)
+db_mst.py:89: 2026-02-13 00:58:19,158 - INFO - Inserted 13/13 rows into dom_cme_future_mst
+insert_master_data.py:30: 2026-02-13 00:58:19,159 - INFO - Downloading fo_com_code.mst.zip...
+insert_master_data.py:37: 2026-02-13 00:58:19,218 - INFO - Extracting fo_com_code.mst.zip...
+db_mst.py:68: 2026-02-13 00:58:19,243 - INFO - Deleted all data from dom_com_future_mst (122 rows)
+db_mst.py:89: 2026-02-13 00:58:19,323 - INFO - Inserted 122/122 rows into dom_com_future_mst
+insert_master_data.py:30: 2026-02-13 00:58:19,324 - INFO - Downloading elw_code.zip...
+insert_master_data.py:37: 2026-02-13 00:58:19,377 - INFO - Extracting elw_code.zip...
+db_mst.py:68: 2026-02-13 00:58:19,436 - INFO - Deleted all data from dom_elw_mst (3089 rows)
+db_mst.py:89: 2026-02-13 00:58:19,992 - INFO - Inserted 1000/3089 rows into dom_elw_mst
+db_mst.py:89: 2026-02-13 00:58:20,471 - INFO - Inserted 2000/3089 rows into dom_elw_mst
+db_mst.py:89: 2026-02-13 00:58:21,006 - INFO - Inserted 3000/3089 rows into dom_elw_mst
+db_mst.py:89: 2026-02-13 00:58:21,055 - INFO - Inserted 3089/3089 rows into dom_elw_mst
+insert_master_data.py:30: 2026-02-13 00:58:21,057 - INFO - Downloading fo_eurex_code.mst.zip...
+insert_master_data.py:37: 2026-02-13 00:58:21,157 - INFO - Extracting fo_eurex_code.mst.zip...
+db_mst.py:68: 2026-02-13 00:58:21,206 - INFO - Deleted all data from dom_eurex_option_mst (5072 rows)
+db_mst.py:89: 2026-02-13 00:58:21,539 - INFO - Inserted 1000/5072 rows into dom_eurex_option_mst
+db_mst.py:89: 2026-02-13 00:58:22,047 - INFO - Inserted 2000/5072 rows into dom_eurex_option_mst
+db_mst.py:89: 2026-02-13 00:58:22,399 - INFO - Inserted 3000/5072 rows into dom_eurex_option_mst
+db_mst.py:89: 2026-02-13 00:58:22,702 - INFO - Inserted 4000/5072 rows into dom_eurex_option_mst
+db_mst.py:89: 2026-02-13 00:58:22,985 - INFO - Inserted 5000/5072 rows into dom_eurex_option_mst
+db_mst.py:89: 2026-02-13 00:58:23,021 - INFO - Inserted 5072/5072 rows into dom_eurex_option_mst
+insert_master_data.py:30: 2026-02-13 00:58:23,024 - INFO - Downloading konex_code.zip...
+insert_master_data.py:37: 2026-02-13 00:58:23,078 - INFO - Extracting konex_code.zip...
+db_mst.py:68: 2026-02-13 00:58:23,094 - INFO - Deleted all data from dom_konex_mst (112 rows)
+db_mst.py:89: 2026-02-13 00:58:23,151 - INFO - Inserted 112/112 rows into dom_konex_mst
+insert_master_data.py:30: 2026-02-13 00:58:23,152 - INFO - Downloading kosdaq_code.zip...
+insert_master_data.py:37: 2026-02-13 00:58:23,207 - INFO - Extracting kosdaq_code.zip...
+db_mst.py:68: 2026-02-13 00:58:23,242 - INFO - Deleted all data from dom_kosdaq_mst (1822 rows)
+db_mst.py:89: 2026-02-13 00:58:23,540 - INFO - Inserted 1000/1822 rows into dom_kosdaq_mst
+db_mst.py:89: 2026-02-13 00:58:23,806 - INFO - Inserted 1822/1822 rows into dom_kosdaq_mst
+insert_master_data.py:30: 2026-02-13 00:58:23,810 - INFO - Downloading kospi_code.zip...
+insert_master_data.py:37: 2026-02-13 00:58:23,885 - INFO - Extracting kospi_code.zip...
+db_mst.py:68: 2026-02-13 00:58:23,933 - INFO - Deleted all data from dom_kospi_mst (2493 rows)
+db_mst.py:89: 2026-02-13 00:58:24,285 - INFO - Inserted 1000/2493 rows into dom_kospi_mst
+db_mst.py:89: 2026-02-13 00:58:24,844 - INFO - Inserted 2000/2493 rows into dom_kospi_mst
+db_mst.py:89: 2026-02-13 00:58:25,089 - INFO - Inserted 2493/2493 rows into dom_kospi_mst
+db_mst.py:68: 2026-02-13 00:58:25,142 - INFO - Deleted all data from member_code_mst (63 rows)
+db_mst.py:89: 2026-02-13 00:58:25,189 - INFO - Inserted 63/63 rows into member_code_mst
+insert_master_data.py:30: 2026-02-13 00:58:25,191 - INFO - Downloading frgn_code.mst.zip...
+insert_master_data.py:37: 2026-02-13 00:58:25,305 - INFO - Extracting frgn_code.mst.zip...
+db_mst.py:68: 2026-02-13 00:58:25,372 - INFO - Deleted all data from over_index_mst (12344 rows)
+db_mst.py:89: 2026-02-13 00:58:25,763 - INFO - Inserted 1000/12344 rows into over_index_mst
+db_mst.py:89: 2026-02-13 00:58:26,131 - INFO - Inserted 2000/12344 rows into over_index_mst
+db_mst.py:89: 2026-02-13 00:58:26,467 - INFO - Inserted 3000/12344 rows into over_index_mst
+db_mst.py:89: 2026-02-13 00:58:26,868 - INFO - Inserted 4000/12344 rows into over_index_mst
+db_mst.py:89: 2026-02-13 00:58:27,307 - INFO - Inserted 5000/12344 rows into over_index_mst
+db_mst.py:89: 2026-02-13 00:58:27,816 - INFO - Inserted 6000/12344 rows into over_index_mst
+db_mst.py:89: 2026-02-13 00:58:28,104 - INFO - Inserted 7000/12344 rows into over_index_mst
+db_mst.py:89: 2026-02-13 00:58:28,381 - INFO - Inserted 8000/12344 rows into over_index_mst
+db_mst.py:89: 2026-02-13 00:58:28,663 - INFO - Inserted 9000/12344 rows into over_index_mst
+db_mst.py:89: 2026-02-13 00:58:28,970 - INFO - Inserted 10000/12344 rows into over_index_mst
+db_mst.py:89: 2026-02-13 00:58:29,336 - INFO - Inserted 11000/12344 rows into over_index_mst
+db_mst.py:89: 2026-02-13 00:58:29,841 - INFO - Inserted 12000/12344 rows into over_index_mst
+db_mst.py:89: 2026-02-13 00:58:30,007 - INFO - Inserted 12344/12344 rows into over_index_mst
+insert_master_data.py:30: 2026-02-13 00:58:30,013 - INFO - Downloading idxcode.zip...
+insert_master_data.py:37: 2026-02-13 00:58:30,088 - INFO - Extracting idxcode.zip...
+db_mst.py:68: 2026-02-13 00:58:30,104 - INFO - Deleted all data from sector_mst (486 rows)
+db_mst.py:89: 2026-02-13 00:58:30,306 - INFO - Inserted 486/486 rows into sector_mst
+insert_master_data.py:30: 2026-02-13 00:58:30,309 - INFO - Downloading theme_code.zip...
+insert_master_data.py:37: 2026-02-13 00:58:30,367 - INFO - Extracting theme_code.zip...
+db_mst.py:68: 2026-02-13 00:58:30,403 - INFO - Deleted all data from theme_mst (5528 rows)
+db_mst.py:89: 2026-02-13 00:58:30,814 - INFO - Inserted 1000/5528 rows into theme_mst
+db_mst.py:89: 2026-02-13 00:58:31,238 - INFO - Inserted 2000/5528 rows into theme_mst
+db_mst.py:89: 2026-02-13 00:58:31,789 - INFO - Inserted 3000/5528 rows into theme_mst
+db_mst.py:89: 2026-02-13 00:58:32,196 - INFO - Inserted 4000/5528 rows into theme_mst
+db_mst.py:89: 2026-02-13 00:58:32,554 - INFO - Inserted 5000/5528 rows into theme_mst
+db_mst.py:89: 2026-02-13 00:58:32,722 - INFO - Inserted 5528/5528 rows into theme_mst
+insert_master_data.py:527: 2026-02-13 00:58:32,725 - INFO - ============================================================
+db_mst.py:97: 2026-02-13 00:58:32,725 - INFO - Updating metadata tables...
+db_mst.py:136: 2026-02-13 00:58:32,805 - INFO - Metadata tables updated successfully.
+insert_master_data.py:532: 2026-02-13 00:58:32,806 - INFO - ✓ 모든 마스터 데이터 처리 완료
+insert_master_data.py:541: 2026-02-13 00:58:32,817 - INFO - Removed temporary directory: temp_master_data_full
+log_setup.py:41: 2026-02-13 11:59:41,276 - INFO - Logging initialized. Log file: D:\Python\deriv\logs\kis_app.log
+main.py:295: 2026-02-13 11:59:42,826 - ERROR - Traceback (most recent call last):
+  File "D:\Python\deriv\.venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        cursor, str_statement, effective_parameters, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "D:\Python\deriv\.venv\Lib\site-packages\sqlalchemy\engine\default.py", line 952, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+sqlite3.OperationalError: no such column: job_mst.execution_cycle
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\Python\deriv\main.py", line 273, in main
+    if not manager.validate_all_active_inputs(cycle=args.cycle):
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "D:\Python\deriv\main.py", line 125, in validate_all_active_inputs
+    active_inputs = self.db.list_active_user_inputs(cycle=cycle)
+  File "D:\Python\deriv\app\database.py", line 222, in list_active_user_inputs
+    return list(session.exec(statement).all())
+                ~~~~~~~~~~~~^^^^^^^^^^^
+  File "D:\Python\deriv\.venv\Lib\site-packages\sqlmodel\orm\session.py", line 81, in exec
+    results = super().execute(
+        statement,
+    ...<4 lines>...
+        _add_event=_add_event,
+    )
+  File "D:\Python\deriv\.venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2351, in execute
+    return self._execute_internal(
+           ~~~~~~~~~~~~~~~~~~~~~~^
+        statement,
+        ^^^^^^^^^^
+    ...<4 lines>...
+        _add_event=_add_event,
+        ^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "D:\Python\deriv\.venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2249, in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self,
+        ^^^^^
+    ...<4 lines>...
+        conn,
+        ^^^^^
+    )
+    ^
+  File "D:\Python\deriv\.venv\Lib\site-packages\sqlalchemy\orm\context.py", line 306, in orm_execute_statement
+    result = conn.execute(
+        statement, params or {}, execution_options=execution_options
+    )
+  File "D:\Python\deriv\.venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1419, in execute
+    return meth(
+        self,
+        distilled_parameters,
+        execution_options or NO_OPTIONS,
+    )
+  File "D:\Python\deriv\.venv\Lib\site-packages\sqlalchemy\sql\elements.py", line 527, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self, distilled_params, execution_options
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "D:\Python\deriv\.venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1641, in _execute_clauseelement
+    ret = self._execute_context(
+        dialect,
+    ...<8 lines>...
+        cache_hit=cache_hit,
+    )
+  File "D:\Python\deriv\.venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1846, in _execute_context
+    return self._exec_single_context(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        dialect, context, statement, parameters
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "D:\Python\deriv\.venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1986, in _exec_single_context
+    self._handle_dbapi_exception(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        e, str_statement, effective_parameters, cursor, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "D:\Python\deriv\.venv\Lib\site-packages\sqlalchemy\engine\base.py", line 2363, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "D:\Python\deriv\.venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        cursor, str_statement, effective_parameters, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "D:\Python\deriv\.venv\Lib\site-packages\sqlalchemy\engine\default.py", line 952, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+sqlalchemy.exc.OperationalError: (sqlite3.OperationalError) no such column: job_mst.execution_cycle
+[SQL: SELECT job_mst.id, job_mst.api_name, job_mst.params_json, job_mst.is_active, job_mst.save_mode, job_mst.execution_cycle, job_mst.description, job_mst.created_at, job_mst.updated_at 
+FROM job_mst 
+WHERE job_mst.is_active = 1]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+
+main.py:296: 2026-02-13 11:59:42,829 - ERROR - 치명적 오류: (sqlite3.OperationalError) no such column: job_mst.execution_cycle
+[SQL: SELECT job_mst.id, job_mst.api_name, job_mst.params_json, job_mst.is_active, job_mst.save_mode, job_mst.execution_cycle, job_mst.description, job_mst.created_at, job_mst.updated_at 
+FROM job_mst 
+WHERE job_mst.is_active = 1]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+log_setup.py:41: 2026-02-13 12:00:30,177 - INFO - Logging initialized. Log file: D:\Python\deriv\logs\kis_app.log
+log_setup.py:41: 2026-02-13 12:00:51,780 - INFO - Logging initialized. Log file: D:\Python\deriv\logs\kis_app.log
+insert_master_data.py:497: 2026-02-13 12:00:51,781 - INFO - ============================================================
+insert_master_data.py:498: 2026-02-13 12:00:51,781 - INFO - 마스터 데이터 다운로드 및 삽입 시작 (16 Types)
+insert_master_data.py:499: 2026-02-13 12:00:51,781 - INFO - ============================================================
+db_mst.py:59: 2026-02-13 12:00:51,930 - INFO - Master data tables initialized
+insert_master_data.py:30: 2026-02-13 12:00:51,930 - INFO - Downloading fo_idx_code_mts.mst.zip...
+insert_master_data.py:37: 2026-02-13 12:00:52,042 - INFO - Extracting fo_idx_code_mts.mst.zip...
+db_mst.py:68: 2026-02-13 12:00:52,311 - INFO - Deleted all data from dom_future_mst (0 rows)
+db_mst.py:89: 2026-02-13 12:00:53,202 - INFO - Inserted 1000/5253 rows into dom_future_mst
+db_mst.py:89: 2026-02-13 12:00:53,733 - INFO - Inserted 2000/5253 rows into dom_future_mst
+db_mst.py:89: 2026-02-13 12:00:54,161 - INFO - Inserted 3000/5253 rows into dom_future_mst
+db_mst.py:89: 2026-02-13 12:00:54,770 - INFO - Inserted 4000/5253 rows into dom_future_mst
+db_mst.py:89: 2026-02-13 12:00:55,524 - INFO - Inserted 5000/5253 rows into dom_future_mst
+db_mst.py:89: 2026-02-13 12:00:55,680 - INFO - Inserted 5253/5253 rows into dom_future_mst
+insert_master_data.py:30: 2026-02-13 12:00:55,683 - INFO - Downloading ffcode.mst.zip...
+insert_master_data.py:37: 2026-02-13 12:00:55,742 - INFO - Extracting ffcode.mst.zip...
+db_mst.py:68: 2026-02-13 12:00:55,844 - INFO - Deleted all data from over_future_mst (0 rows)
+db_mst.py:89: 2026-02-13 12:00:56,556 - INFO - Inserted 1000/5863 rows into over_future_mst
+db_mst.py:89: 2026-02-13 12:00:57,295 - INFO - Inserted 2000/5863 rows into over_future_mst
+db_mst.py:89: 2026-02-13 12:00:57,869 - INFO - Inserted 3000/5863 rows into over_future_mst
+db_mst.py:89: 2026-02-13 12:00:58,295 - INFO - Inserted 4000/5863 rows into over_future_mst
+db_mst.py:89: 2026-02-13 12:00:58,704 - INFO - Inserted 5000/5863 rows into over_future_mst
+db_mst.py:89: 2026-02-13 12:00:59,055 - INFO - Inserted 5863/5863 rows into over_future_mst
+insert_master_data.py:30: 2026-02-13 12:00:59,067 - INFO - Downloading fo_stk_code_mts.mst.zip...
+insert_master_data.py:37: 2026-02-13 12:00:59,152 - INFO - Extracting fo_stk_code_mts.mst.zip...
+db_mst.py:68: 2026-02-13 12:00:59,399 - INFO - Deleted all data from dom_stock_future_mst (0 rows)
+db_mst.py:89: 2026-02-13 12:01:00,020 - INFO - Inserted 1000/12779 rows into dom_stock_future_mst
+db_mst.py:89: 2026-02-13 12:01:00,666 - INFO - Inserted 2000/12779 rows into dom_stock_future_mst
+db_mst.py:89: 2026-02-13 12:01:01,270 - INFO - Inserted 3000/12779 rows into dom_stock_future_mst
+db_mst.py:89: 2026-02-13 12:01:01,906 - INFO - Inserted 4000/12779 rows into dom_stock_future_mst
+db_mst.py:89: 2026-02-13 12:01:02,636 - INFO - Inserted 5000/12779 rows into dom_stock_future_mst
+db_mst.py:89: 2026-02-13 12:01:03,317 - INFO - Inserted 6000/12779 rows into dom_stock_future_mst
+db_mst.py:89: 2026-02-13 12:01:03,687 - INFO - Inserted 7000/12779 rows into dom_stock_future_mst
+db_mst.py:89: 2026-02-13 12:01:04,136 - INFO - Inserted 8000/12779 rows into dom_stock_future_mst
+db_mst.py:89: 2026-02-13 12:01:04,738 - INFO - Inserted 9000/12779 rows into dom_stock_future_mst
+db_mst.py:89: 2026-02-13 12:01:05,417 - INFO - Inserted 10000/12779 rows into dom_stock_future_mst
+db_mst.py:89: 2026-02-13 12:01:06,058 - INFO - Inserted 11000/12779 rows into dom_stock_future_mst
+db_mst.py:89: 2026-02-13 12:01:06,683 - INFO - Inserted 12000/12779 rows into dom_stock_future_mst
+db_mst.py:89: 2026-02-13 12:01:07,210 - INFO - Inserted 12779/12779 rows into dom_stock_future_mst
+insert_master_data.py:30: 2026-02-13 12:01:07,218 - INFO - Downloading nasmst.cod.zip...
+insert_master_data.py:37: 2026-02-13 12:01:07,282 - INFO - Extracting nasmst.cod.zip...
+insert_master_data.py:30: 2026-02-13 12:01:07,508 - INFO - Downloading nysmst.cod.zip...
+insert_master_data.py:37: 2026-02-13 12:01:07,562 - INFO - Extracting nysmst.cod.zip...
+insert_master_data.py:30: 2026-02-13 12:01:07,669 - INFO - Downloading amsmst.cod.zip...
+insert_master_data.py:37: 2026-02-13 12:01:07,732 - INFO - Extracting amsmst.cod.zip...
+insert_master_data.py:30: 2026-02-13 12:01:07,836 - INFO - Downloading shsmst.cod.zip...
+insert_master_data.py:37: 2026-02-13 12:01:07,902 - INFO - Extracting shsmst.cod.zip...
+insert_master_data.py:30: 2026-02-13 12:01:07,985 - INFO - Downloading shimst.cod.zip...
+insert_master_data.py:37: 2026-02-13 12:01:08,033 - INFO - Extracting shimst.cod.zip...
+insert_master_data.py:30: 2026-02-13 12:01:08,064 - INFO - Downloading szsmst.cod.zip...
+insert_master_data.py:37: 2026-02-13 12:01:08,122 - INFO - Extracting szsmst.cod.zip...
+insert_master_data.py:30: 2026-02-13 12:01:08,220 - INFO - Downloading szimst.cod.zip...
+insert_master_data.py:37: 2026-02-13 12:01:08,274 - INFO - Extracting szimst.cod.zip...
+insert_master_data.py:30: 2026-02-13 12:01:08,305 - INFO - Downloading tsemst.cod.zip...
+insert_master_data.py:37: 2026-02-13 12:01:08,362 - INFO - Extracting tsemst.cod.zip...
+insert_master_data.py:30: 2026-02-13 12:01:08,475 - INFO - Downloading hksmst.cod.zip...
+insert_master_data.py:37: 2026-02-13 12:01:08,532 - INFO - Extracting hksmst.cod.zip...
+insert_master_data.py:30: 2026-02-13 12:01:08,619 - INFO - Downloading hnxmst.cod.zip...
+insert_master_data.py:37: 2026-02-13 12:01:08,672 - INFO - Extracting hnxmst.cod.zip...
+insert_master_data.py:30: 2026-02-13 12:01:08,709 - INFO - Downloading hsxmst.cod.zip...
+insert_master_data.py:37: 2026-02-13 12:01:08,752 - INFO - Extracting hsxmst.cod.zip...
+db_mst.py:68: 2026-02-13 12:01:08,791 - INFO - Deleted all data from over_stock_mst (0 rows)
+db_mst.py:89: 2026-02-13 12:01:10,114 - INFO - Inserted 2000/27236 rows into over_stock_mst
+db_mst.py:89: 2026-02-13 12:01:11,804 - INFO - Inserted 4000/27236 rows into over_stock_mst
+db_mst.py:89: 2026-02-13 12:01:12,980 - INFO - Inserted 6000/27236 rows into over_stock_mst
+db_mst.py:89: 2026-02-13 12:01:14,009 - INFO - Inserted 8000/27236 rows into over_stock_mst
+db_mst.py:89: 2026-02-13 12:01:15,537 - INFO - Inserted 10000/27236 rows into over_stock_mst
+db_mst.py:89: 2026-02-13 12:01:17,103 - INFO - Inserted 12000/27236 rows into over_stock_mst
+db_mst.py:89: 2026-02-13 12:01:18,638 - INFO - Inserted 14000/27236 rows into over_stock_mst
+db_mst.py:89: 2026-02-13 12:01:19,778 - INFO - Inserted 16000/27236 rows into over_stock_mst
+db_mst.py:89: 2026-02-13 12:01:21,293 - INFO - Inserted 18000/27236 rows into over_stock_mst
+db_mst.py:89: 2026-02-13 12:01:22,830 - INFO - Inserted 20000/27236 rows into over_stock_mst
+db_mst.py:89: 2026-02-13 12:01:23,765 - INFO - Inserted 22000/27236 rows into over_stock_mst
+db_mst.py:89: 2026-02-13 12:01:25,190 - INFO - Inserted 24000/27236 rows into over_stock_mst
+db_mst.py:89: 2026-02-13 12:01:26,698 - INFO - Inserted 26000/27236 rows into over_stock_mst
+db_mst.py:89: 2026-02-13 12:01:27,558 - INFO - Inserted 27236/27236 rows into over_stock_mst
+insert_master_data.py:30: 2026-02-13 12:01:27,587 - INFO - Downloading bond_code.zip...
+insert_master_data.py:37: 2026-02-13 12:01:27,652 - INFO - Extracting bond_code.zip...
+db_mst.py:68: 2026-02-13 12:01:27,739 - INFO - Deleted all data from dom_bond_mst (0 rows)
+db_mst.py:89: 2026-02-13 12:01:28,246 - INFO - Inserted 1000/17820 rows into dom_bond_mst
+db_mst.py:89: 2026-02-13 12:01:28,637 - INFO - Inserted 2000/17820 rows into dom_bond_mst
+db_mst.py:89: 2026-02-13 12:01:29,003 - INFO - Inserted 3000/17820 rows into dom_bond_mst
+db_mst.py:89: 2026-02-13 12:01:29,558 - INFO - Inserted 4000/17820 rows into dom_bond_mst
+db_mst.py:89: 2026-02-13 12:01:30,134 - INFO - Inserted 5000/17820 rows into dom_bond_mst
+db_mst.py:89: 2026-02-13 12:01:30,799 - INFO - Inserted 6000/17820 rows into dom_bond_mst
+db_mst.py:89: 2026-02-13 12:01:31,796 - INFO - Inserted 7000/17820 rows into dom_bond_mst
+db_mst.py:89: 2026-02-13 12:01:32,387 - INFO - Inserted 8000/17820 rows into dom_bond_mst
+db_mst.py:89: 2026-02-13 12:01:32,994 - INFO - Inserted 9000/17820 rows into dom_bond_mst
+db_mst.py:89: 2026-02-13 12:01:33,783 - INFO - Inserted 10000/17820 rows into dom_bond_mst
+db_mst.py:89: 2026-02-13 12:01:34,461 - INFO - Inserted 11000/17820 rows into dom_bond_mst
+db_mst.py:89: 2026-02-13 12:01:35,258 - INFO - Inserted 12000/17820 rows into dom_bond_mst
+db_mst.py:89: 2026-02-13 12:01:35,876 - INFO - Inserted 13000/17820 rows into dom_bond_mst
+db_mst.py:89: 2026-02-13 12:01:36,501 - INFO - Inserted 14000/17820 rows into dom_bond_mst
+db_mst.py:89: 2026-02-13 12:01:37,151 - INFO - Inserted 15000/17820 rows into dom_bond_mst
+db_mst.py:89: 2026-02-13 12:01:37,812 - INFO - Inserted 16000/17820 rows into dom_bond_mst
+db_mst.py:89: 2026-02-13 12:01:38,483 - INFO - Inserted 17000/17820 rows into dom_bond_mst
+db_mst.py:89: 2026-02-13 12:01:38,966 - INFO - Inserted 17820/17820 rows into dom_bond_mst
+insert_master_data.py:30: 2026-02-13 12:01:38,977 - INFO - Downloading fo_cme_code.mst.zip...
+insert_master_data.py:37: 2026-02-13 12:01:39,074 - INFO - Extracting fo_cme_code.mst.zip...
+db_mst.py:68: 2026-02-13 12:01:39,119 - INFO - Deleted all data from dom_cme_future_mst (0 rows)
+db_mst.py:89: 2026-02-13 12:01:39,149 - INFO - Inserted 13/13 rows into dom_cme_future_mst
+insert_master_data.py:30: 2026-02-13 12:01:39,150 - INFO - Downloading fo_com_code.mst.zip...
+insert_master_data.py:37: 2026-02-13 12:01:39,195 - INFO - Extracting fo_com_code.mst.zip...
+db_mst.py:68: 2026-02-13 12:01:39,243 - INFO - Deleted all data from dom_com_future_mst (0 rows)
+db_mst.py:89: 2026-02-13 12:01:39,341 - INFO - Inserted 122/122 rows into dom_com_future_mst
+insert_master_data.py:30: 2026-02-13 12:01:39,343 - INFO - Downloading elw_code.zip...
+insert_master_data.py:37: 2026-02-13 12:01:39,393 - INFO - Extracting elw_code.zip...
+db_mst.py:68: 2026-02-13 12:01:39,474 - INFO - Deleted all data from dom_elw_mst (0 rows)
+db_mst.py:89: 2026-02-13 12:01:40,236 - INFO - Inserted 1000/3088 rows into dom_elw_mst
+db_mst.py:89: 2026-02-13 12:01:41,001 - INFO - Inserted 2000/3088 rows into dom_elw_mst
+db_mst.py:89: 2026-02-13 12:01:42,302 - INFO - Inserted 3000/3088 rows into dom_elw_mst
+db_mst.py:89: 2026-02-13 12:01:42,393 - INFO - Inserted 3088/3088 rows into dom_elw_mst
+insert_master_data.py:30: 2026-02-13 12:01:42,401 - INFO - Downloading fo_eurex_code.mst.zip...
+insert_master_data.py:37: 2026-02-13 12:01:42,452 - INFO - Extracting fo_eurex_code.mst.zip...
+db_mst.py:68: 2026-02-13 12:01:42,538 - INFO - Deleted all data from dom_eurex_option_mst (0 rows)
+db_mst.py:89: 2026-02-13 12:01:43,228 - INFO - Inserted 1000/5072 rows into dom_eurex_option_mst
+db_mst.py:89: 2026-02-13 12:01:43,779 - INFO - Inserted 2000/5072 rows into dom_eurex_option_mst
+db_mst.py:89: 2026-02-13 12:01:44,252 - INFO - Inserted 3000/5072 rows into dom_eurex_option_mst
+db_mst.py:89: 2026-02-13 12:01:44,917 - INFO - Inserted 4000/5072 rows into dom_eurex_option_mst
+db_mst.py:89: 2026-02-13 12:01:45,575 - INFO - Inserted 5000/5072 rows into dom_eurex_option_mst
+db_mst.py:89: 2026-02-13 12:01:45,651 - INFO - Inserted 5072/5072 rows into dom_eurex_option_mst
+insert_master_data.py:30: 2026-02-13 12:01:45,653 - INFO - Downloading konex_code.zip...
+insert_master_data.py:37: 2026-02-13 12:01:45,700 - INFO - Extracting konex_code.zip...
+db_mst.py:68: 2026-02-13 12:01:45,760 - INFO - Deleted all data from dom_konex_mst (0 rows)
+db_mst.py:89: 2026-02-13 12:01:45,858 - INFO - Inserted 112/112 rows into dom_konex_mst
+insert_master_data.py:30: 2026-02-13 12:01:45,860 - INFO - Downloading kosdaq_code.zip...
+insert_master_data.py:37: 2026-02-13 12:01:45,913 - INFO - Extracting kosdaq_code.zip...
+db_mst.py:68: 2026-02-13 12:01:45,984 - INFO - Deleted all data from dom_kosdaq_mst (0 rows)
+db_mst.py:89: 2026-02-13 12:01:46,852 - INFO - Inserted 1000/1822 rows into dom_kosdaq_mst
+db_mst.py:89: 2026-02-13 12:01:47,477 - INFO - Inserted 1822/1822 rows into dom_kosdaq_mst
+insert_master_data.py:30: 2026-02-13 12:01:47,488 - INFO - Downloading kospi_code.zip...
+insert_master_data.py:37: 2026-02-13 12:01:47,543 - INFO - Extracting kospi_code.zip...
+db_mst.py:68: 2026-02-13 12:01:47,635 - INFO - Deleted all data from dom_kospi_mst (0 rows)
+db_mst.py:89: 2026-02-13 12:01:48,778 - INFO - Inserted 1000/2493 rows into dom_kospi_mst
+db_mst.py:89: 2026-02-13 12:01:49,511 - INFO - Inserted 2000/2493 rows into dom_kospi_mst
+db_mst.py:89: 2026-02-13 12:01:49,820 - INFO - Inserted 2493/2493 rows into dom_kospi_mst
+db_mst.py:68: 2026-02-13 12:01:49,897 - INFO - Deleted all data from member_code_mst (0 rows)
+db_mst.py:89: 2026-02-13 12:01:49,964 - INFO - Inserted 63/63 rows into member_code_mst
+insert_master_data.py:30: 2026-02-13 12:01:49,965 - INFO - Downloading frgn_code.mst.zip...
+insert_master_data.py:37: 2026-02-13 12:01:50,033 - INFO - Extracting frgn_code.mst.zip...
+db_mst.py:68: 2026-02-13 12:01:50,156 - INFO - Deleted all data from over_index_mst (0 rows)
+db_mst.py:89: 2026-02-13 12:01:50,848 - INFO - Inserted 1000/12351 rows into over_index_mst
+db_mst.py:89: 2026-02-13 12:01:51,551 - INFO - Inserted 2000/12351 rows into over_index_mst
+db_mst.py:89: 2026-02-13 12:01:52,223 - INFO - Inserted 3000/12351 rows into over_index_mst
+db_mst.py:89: 2026-02-13 12:01:52,921 - INFO - Inserted 4000/12351 rows into over_index_mst
+db_mst.py:89: 2026-02-13 12:01:53,552 - INFO - Inserted 5000/12351 rows into over_index_mst
+db_mst.py:89: 2026-02-13 12:01:54,367 - INFO - Inserted 6000/12351 rows into over_index_mst
+db_mst.py:89: 2026-02-13 12:01:55,039 - INFO - Inserted 7000/12351 rows into over_index_mst
+db_mst.py:89: 2026-02-13 12:01:55,754 - INFO - Inserted 8000/12351 rows into over_index_mst
+db_mst.py:89: 2026-02-13 12:01:56,469 - INFO - Inserted 9000/12351 rows into over_index_mst
+db_mst.py:89: 2026-02-13 12:01:57,251 - INFO - Inserted 10000/12351 rows into over_index_mst
+db_mst.py:89: 2026-02-13 12:01:58,025 - INFO - Inserted 11000/12351 rows into over_index_mst
+db_mst.py:89: 2026-02-13 12:01:58,641 - INFO - Inserted 12000/12351 rows into over_index_mst
+db_mst.py:89: 2026-02-13 12:01:58,836 - INFO - Inserted 12351/12351 rows into over_index_mst
+insert_master_data.py:30: 2026-02-13 12:01:58,843 - INFO - Downloading idxcode.zip...
+insert_master_data.py:37: 2026-02-13 12:01:58,904 - INFO - Extracting idxcode.zip...
+db_mst.py:68: 2026-02-13 12:01:58,942 - INFO - Deleted all data from sector_mst (0 rows)
+db_mst.py:89: 2026-02-13 12:01:59,207 - INFO - Inserted 486/486 rows into sector_mst
+insert_master_data.py:30: 2026-02-13 12:01:59,213 - INFO - Downloading theme_code.zip...
+insert_master_data.py:37: 2026-02-13 12:01:59,274 - INFO - Extracting theme_code.zip...
+db_mst.py:68: 2026-02-13 12:01:59,342 - INFO - Deleted all data from theme_mst (0 rows)
+db_mst.py:89: 2026-02-13 12:01:59,956 - INFO - Inserted 1000/5528 rows into theme_mst
+db_mst.py:89: 2026-02-13 12:02:00,541 - INFO - Inserted 2000/5528 rows into theme_mst
+db_mst.py:89: 2026-02-13 12:02:01,172 - INFO - Inserted 3000/5528 rows into theme_mst
+db_mst.py:89: 2026-02-13 12:02:01,842 - INFO - Inserted 4000/5528 rows into theme_mst
+db_mst.py:89: 2026-02-13 12:02:02,459 - INFO - Inserted 5000/5528 rows into theme_mst
+db_mst.py:89: 2026-02-13 12:02:02,893 - INFO - Inserted 5528/5528 rows into theme_mst
+insert_master_data.py:527: 2026-02-13 12:02:02,911 - INFO - ============================================================
+db_mst.py:97: 2026-02-13 12:02:02,913 - INFO - Updating metadata tables...
+db_mst.py:136: 2026-02-13 12:02:03,065 - INFO - Metadata tables updated successfully.
+insert_master_data.py:532: 2026-02-13 12:02:03,066 - INFO - ✓ 모든 마스터 데이터 처리 완료
+insert_master_data.py:541: 2026-02-13 12:02:03,090 - INFO - Removed temporary directory: temp_master_data_full
+log_setup.py:41: 2026-02-13 12:02:39,045 - INFO - Logging initialized. Log file: D:\Python\deriv\logs\kis_app.log
+load_api_data.py:119: 2026-02-13 12:02:39,075 - INFO - Loaded 288 output table mappings.
+load_api_data.py:152: 2026-02-13 12:02:39,185 - INFO - Loading avg_unit...
+load_api_data.py:179: 2026-02-13 12:02:39,186 - WARNING - Failed to parse avg_unit.py: DatabaseManager.add_api_definition() got an unexpected keyword argument 'program_name'
+load_api_data.py:152: 2026-02-13 12:02:39,295 - INFO - Loading buy...
+load_api_data.py:179: 2026-02-13 12:02:39,296 - WARNING - Failed to parse buy.py: DatabaseManager.add_api_definition() got an unexpected keyword argument 'program_name'
+load_api_data.py:152: 2026-02-13 12:02:39,327 - INFO - Loading inquire_asking_price...
+load_api_data.py:179: 2026-02-13 12:02:39,328 - WARNING - Failed to parse inquire_asking_price.py: DatabaseManager.add_api_definition() got an unexpected keyword argument 'program_name'
+load_api_data.py:152: 2026-02-13 12:02:39,360 - INFO - Loading inquire_balance...
+load_api_data.py:179: 2026-02-13 12:02:39,362 - WARNING - Failed to parse inquire_balance.py: DatabaseManager.add_api_definition() got an unexpected keyword argument 'program_name'
+load_api_data.py:152: 2026-02-13 12:02:39,394 - INFO - Loading inquire_ccnl...
+load_api_data.py:179: 2026-02-13 12:02:39,395 - WARNING - Failed to parse inquire_ccnl.py: DatabaseManager.add_api_definition() got an unexpected keyword argument 'program_name'
+load_api_data.py:152: 2026-02-13 12:02:39,431 - INFO - Loading inquire_daily_ccld...
+load_api_data.py:179: 2026-02-13 12:02:39,432 - WARNING - Failed to parse inquire_daily_ccld.py: DatabaseManager.add_api_definition() got an unexpected keyword argument 'program_name'
+load_api_data.py:152: 2026-02-13 12:02:39,462 - INFO - Loading inquire_daily_itemchartprice...
+load_api_data.py:179: 2026-02-13 12:02:39,462 - WARNING - Failed to parse inquire_daily_itemchartprice.py: DatabaseManager.add_api_definition() got an unexpected keyword argument 'program_name'
+load_api_data.py:152: 2026-02-13 12:02:39,493 - INFO - Loading daily_price...
+load_api_data.py:179: 2026-02-13 12:02:39,493 - WARNING - Failed to parse inquire_daily_price.py: DatabaseManager.add_api_definition() got an unexpected keyword argument 'program_name'
+load_api_data.py:152: 2026-02-13 12:02:39,524 - INFO - Loading stock_price...
+load_api_data.py:179: 2026-02-13 12:02:39,524 - WARNING - Failed to parse inquire_price.py: DatabaseManager.add_api_definition() got an unexpected keyword argument 'program_name'
+load_api_data.py:152: 2026-02-13 12:02:39,552 - INFO - Loading inquire_psbl_order...
+load_api_data.py:179: 2026-02-13 12:02:39,555 - WARNING - Failed to parse inquire_psbl_order.py: DatabaseManager.add_api_definition() got an unexpected keyword argument 'program_name'
+load_api_data.py:152: 2026-02-13 12:02:39,588 - INFO - Loading inquire_psbl_rvsecncl...
+load_api_data.py:179: 2026-02-13 12:02:39,589 - WARNING - Failed to parse inquire_psbl_rvsecncl.py: DatabaseManager.add_api_definition() got an unexpected keyword argument 'program_name'
+load_api_data.py:152: 2026-02-13 12:02:39,617 - INFO - Loading issue_info...
+load_api_data.py:179: 2026-02-13 12:02:39,617 - WARNING - Failed to parse issue_info.py: DatabaseManager.add_api_definition() got an unexpected keyword argument 'program_name'
+load_api_data.py:152: 2026-02-13 12:02:39,648 - INFO - Loading order_rvsecncl...
+load_api_data.py:179: 2026-02-13 12:02:39,648 - WARNING - Failed to parse order_rvsecncl.py: DatabaseManager.add_api_definition() got an unexpected keyword argument 'program_name'
+load_api_data.py:152: 2026-02-13 12:02:39,679 - INFO - Loading search_bond_info...
+load_api_data.py:179: 2026-02-13 12:02:39,679 - WARNING - Failed to parse search_bond_info.py: DatabaseManager.add_api_definition() got an unexpected keyword argument 'program_name'
+load_api_data.py:152: 2026-02-13 12:02:39,712 - INFO - Loading sell...
+load_api_data.py:179: 2026-02-13 12:02:39,712 - WARNING - Failed to parse sell.py: DatabaseManager.add_api_definition() got an unexpected keyword argument 'program_name'
+load_api_data.py:152: 2026-02-13 12:02:39,803 - INFO - Loading display_board_callput...
+load_api_data.py:179: 2026-02-13 12:02:39,803 - WARNING - Failed to parse display_board_callput.py: DatabaseManager.add_api_definition() got an unexpected keyword argument 'program_name'
+load_api_data.py:152: 2026-02-13 12:02:39,839 - INFO - Loading display_board_futures...
+load_api_data.py:179: 2026-02-13 12:02:39,839 - WARNING - Failed to parse display_board_futures.py: DatabaseManager.add_api_definition() got an unexpected keyword argument 'program_name'
+load_api_data.py:152: 2026-02-13 12:02:39,875 - INFO - Loading display_board_option_list...
+load_api_data.py:179: 2026-02-13 12:02:39,876 - WARNING - Failed to parse display_board_option_list.py: DatabaseManager.add_api_definition() got an unexpected keyword argument 'program_name'
+load_api_data.py:152: 2026-02-13 12:02:39,919 - INFO - Loading display_board_top...
+load_api_data.py:179: 2026-02-13 12:02:39,922 - WARNING - Failed to parse display_board_top.py: DatabaseManager.add_api_definition() got an unexpected keyword argument 'program_name'
+load_api_data.py:152: 2026-02-13 12:02:39,966 - INFO - Loading exp_price_trend...
+load_api_data.py:179: 2026-02-13 12:02:39,966 - WARNING - Failed to parse exp_price_trend.py: DatabaseManager.add_api_definition() got an unexpected keyword argument 'program_name'
+load_api_data.py:152: 2026-02-13 12:02:40,200 - INFO - Loading inquire_asking_price...
+load_api_data.py:179: 2026-02-13 12:02:40,201 - WARNING - Failed to parse inquire_asking_price.py: DatabaseManager.add_api_definition() got an unexpected keyword argument 'program_name'
+load_api_data.py:152: 2026-02-13 12:02:40,242 - INFO - Loading inquire_balance...
+load_api_data.py:179: 2026-02-13 12:02:40,243 - WARNING - Failed to parse inquire_balance.py: DatabaseManager.add_api_definition() got an unexpected keyword argument 'program_name'
+load_api_data.py:152: 2026-02-13 12:02:40,283 - INFO - Loading inquire_balance_settlement_pl...
+load_api_data.py:179: 2026-02-13 12:02:40,285 - WARNING - Failed to parse inquire_balance_settlement_pl.py: DatabaseManager.add_api_definition() got an unexpected keyword argument 'program_name'
+load_api_data.py:152: 2026-02-13 12:02:40,324 - INFO - Loading inquire_balance_valuation_pl...
+load_api_data.py:179: 2026-02-13 12:02:40,325 - WARNING - Failed to parse inquire_balance_valuation_pl.py: DatabaseManager.add_api_definition() got an unexpected keyword argument 'program_name'
+load_api_data.py:152: 2026-02-13 12:02:40,360 - INFO - Loading inquire_ccnl...
+load_api_data.py:179: 2026-02-13 12:02:40,361 - WARNING - Failed to parse inquire_ccnl.py: DatabaseManager.add_api_definition() got an unexpected keyword argument 'program_name'
+load_api_data.py:152: 2026-02-13 12:02:40,395 - INFO - Loading inquire_ccnl_bstime...
+load_api_data.py:179: 2026-02-13 12:02:40,395 - WARNING - Failed to parse inquire_ccnl_bstime.py: DatabaseManager.add_api_definition() got an unexpected keyword argument 'program_name'
+load_api_data.py:152: 2026-02-13 12:02:40,431 - INFO - Loading inquire_daily_amount_fee...
+load_api_data.py:179: 2026-02-13 12:02:40,431 - WARNING - Failed to parse inquire_daily_amount_fee.py: DatabaseManager.add_api_definition() got an unexpected keyword argument 'program_name'
+load_api_data.py:152: 2026-02-13 12:02:40,465 - INFO - Loading inquire_daily_fuopchartprice...
+load_api_data.py:179: 2026-02-13 12:02:40,465 - WARNING - Failed to parse inquire_daily_fuopchartprice.py: DatabaseManager.add_api_definition() got an unexpected keyword argument 'program_name'
+load_api_data.py:152: 2026-02-13 12:02:40,509 - INFO - Loading inquire_deposit...
+load_api_data.py:179: 2026-02-13 12:02:40,509 - WARNING - Failed to parse inquire_deposit.py: DatabaseManager.add_api_definition() got an unexpected keyword argument 'program_name'
+load_api_data.py:152: 2026-02-13 12:02:40,544 - INFO - Loading inquire_ngt_balance...
+load_api_data.py:179: 2026-02-13 12:02:40,545 - WARNING - Failed to parse inquire_ngt_balance.py: DatabaseManager.add_api_definition() got an unexpected keyword argument 'program_name'
+load_api_data.py:152: 2026-02-13 12:02:40,579 - INFO - Loading inquire_ngt_ccnl...
+load_api_data.py:179: 2026-02-13 12:02:40,580 - WARNING - Failed to parse inquire_ngt_ccnl.py: DatabaseManager.add_api_definition() got an unexpected keyword argument 'program_name'
+load_api_data.py:152: 2026-02-13 12:02:40,612 - INFO - Loading stock_price...
+load_api_data.py:179: 2026-02-13 12:02:40,612 - WARNING - Failed to parse inquire_price.py: DatabaseManager.add_api_definition() got an unexpected keyword argument 'program_name'
+load_api_data.py:152: 2026-02-13 12:02:40,663 - INFO - Loading inquire_psbl_ngt_order...
+load_api_data.py:179: 2026-02-13 12:02:40,664 - WARNING - Failed to parse inquire_psbl_ngt_order.py: DatabaseManager.add_api_definition() got an unexpected keyword argument 'program_name'
+load_api_data.py:152: 2026-02-13 12:02:40,715 - INFO - Loading inquire_psbl_order...
+load_api_data.py:179: 2026-02-13 12:02:40,715 - WARNING - Failed to parse inquire_psbl_order.py: DatabaseManager.add_api_definition() got an unexpected keyword argument 'program_name'
+load_api_data.py:152: 2026-02-13 12:02:40,759 - INFO - Loading inquire_time_fuopchartprice...
+load_api_data.py:179: 2026-02-13 12:02:40,760 - WARNING - Failed to parse inquire_time_fuopchartprice.py: DatabaseManager.add_api_definition() got an unexpected keyword argument 'program_name'
+load_api_data.py:152: 2026-02-13 12:02:41,020 - INFO - Loading ngt_margin_detail...
+load_api_data.py:179: 2026-02-13 12:02:41,021 - WARNING - Failed to parse ngt_margin_detail.py: DatabaseManager.add_api_definition() got an unexpected keyword argument 'program_name'
+load_api_data.py:152: 2026-02-13 12:02:41,088 - INFO - Loading order...
+load_api_data.py:179: 2026-02-13 12:02:41,088 - WARNING - Failed to parse order.py: DatabaseManager.add_api_definition() got an unexpected keyword argument 'program_name'
+load_api_data.py:152: 2026-02-13 12:02:41,132 - INFO - Loading order_rvsecncl...
+load_api_data.py:179: 2026-02-13 12:02:41,132 - WARNING - Failed to parse order_rvsecncl.py: DatabaseManager.add_api_definition() got an unexpected keyword argument 'program_name'
+load_api_data.py:152: 2026-02-13 12:02:41,294 - INFO - Loading after_hour_balance...
+load_api_data.py:179: 2026-02-13 12:02:41,294 - WARNING - Failed to parse after_hour_balance.py: DatabaseManager.add_api_definition() got an unexpected keyword argument 'program_name'
+load_api_data.py:152: 2026-02-13 12:02:41,408 - INFO - Loading bulk_trans_num...
+load_api_data.py:179: 2026-02-13 12:02:41,409 - WARNING - Failed to parse bulk_trans_num.py: DatabaseManager.add_api_definition() got an unexpected keyword argument 'program_name'
+load_api_data.py:152: 2026-02-13 12:02:41,450 - INFO - Loading capture_uplowprice...
+load_api_data.py:179: 2026-02-13 12:02:41,451 - WARNING - Failed to parse capture_uplowprice.py: DatabaseManager.add_api_definition() got an unexpected keyword argument 'program_name'
+load_api_data.py:152: 2026-02-13 12:02:41,586 - INFO - Loading comp_interest...
+load_api_data.py:179: 2026-02-13 12:02:41,586 - WARNING - Failed to parse comp_interest.py: DatabaseManager.add_api_definition() got an unexpected keyword argument 'program_name'
+load_api_data.py:152: 2026-02-13 12:02:41,626 - INFO - Loading comp_program_trade_daily...
+load_api_data.py:179: 2026-02-13 12:02:41,627 - WARNING - Failed to parse comp_program_trade_daily.py: DatabaseManager.add_api_definition() got an unexpected keyword argument 'program_name'
+load_api_data.py:152: 2026-02-13 12:02:41,678 - INFO - Loading comp_program_trade_today...
+load_api_data.py:179: 2026-02-13 12:02:41,679 - WARNING - Failed to parse comp_program_trade_today.py: DatabaseManager.add_api_definition() got an unexpected keyword argument 'program_name'
+load_api_data.py:152: 2026-02-13 12:02:41,720 - INFO - Loading credit_balance...
+load_api_data.py:179: 2026-02-13 12:02:41,722 - WARNING - Failed to parse credit_balance.py: DatabaseManager.add_api_definition() got an unexpected keyword argument 'program_name'
+load_api_data.py:152: 2026-02-13 12:02:41,757 - INFO - Loading credit_by_company...
+load_api_data.py:179: 2026-02-13 12:02:41,758 - WARNING - Failed to parse credit_by_company.py: DatabaseManager.add_api_definition() got an unexpected keyword argument 'program_name'
+load_api_data.py:152: 2026-02-13 12:02:41,792 - INFO - Loading daily_credit_balance...
+load_api_data.py:179: 2026-02-13 12:02:41,792 - WARNING - Failed to parse daily_credit_balance.py: DatabaseManager.add_api_definition() got an unexpected keyword argument 'program_name'
+load_api_data.py:152: 2026-02-13 12:02:41,827 - INFO - Loading daily_loan_trans...
+load_api_data.py:179: 2026-02-13 12:02:41,827 - WARNING - Failed to parse daily_loan_trans.py: DatabaseManager.add_api_definition() got an unexpected keyword argument 'program_name'
+load_api_data.py:152: 2026-02-13 12:02:41,861 - INFO - Loading daily_short_sale...
+load_api_data.py:179: 2026-02-13 12:02:41,861 - WARNING - Failed to parse daily_short_sale.py: DatabaseManager.add_api_definition() got an unexpected keyword argument 'program_name'
+load_api_data.py:152: 2026-02-13 12:02:41,895 - INFO - Loading disparity...
+load_api_data.py:179: 2026-02-13 12:02:41,895 - WARNING - Failed to parse disparity.py: DatabaseManager.add_api_definition() got an unexpected keyword argument 'program_name'
+load_api_data.py:152: 2026-02-13 12:02:41,935 - INFO - Loading dividend_rate...
+load_api_data.py:179: 2026-02-13 12:02:41,941 - WARNING - Failed to parse dividend_rate.py: DatabaseManager.add_api_definition() got an unexpected keyword argument 'program_name'
+load_api_data.py:152: 2026-02-13 12:02:41,989 - INFO - Loading estimate_perform...
+load_api_data.py:179: 2026-02-13 12:02:41,989 - WARNING - Failed to parse estimate_perform.py: DatabaseManager.add_api_definition() got an unexpected keyword argument 'program_name'
+load_api_data.py:152: 2026-02-13 12:02:42,180 - INFO - Loading exp_closing_price...
+load_api_data.py:179: 2026-02-13 12:02:42,180 - WARNING - Failed to parse exp_closing_price.py: DatabaseManager.add_api_definition() got an unexpected keyword argument 'program_name'
+load_api_data.py:152: 2026-02-13 12:02:42,211 - INFO - Loading exp_index_trend...
+load_api_data.py:179: 2026-02-13 12:02:42,212 - WARNING - Failed to parse exp_index_trend.py: DatabaseManager.add_api_definition() got an unexpected keyword argument 'program_name'
+load_api_data.py:152: 2026-02-13 12:02:42,253 - INFO - Loading exp_price_trend...
+load_api_data.py:179: 2026-02-13 12:02:42,255 - WARNING - Failed to parse exp_price_trend.py: DatabaseManager.add_api_definition() got an unexpected keyword argument 'program_name'
+load_api_data.py:152: 2026-02-13 12:02:42,294 - INFO - Loading exp_total_index...
+load_api_data.py:179: 2026-02-13 12:02:42,295 - WARNING - Failed to parse exp_total_index.py: DatabaseManager.add_api_definition() got an unexpected keyword argument 'program_name'
+load_api_data.py:152: 2026-02-13 12:02:42,329 - INFO - Loading exp_trans_updown...
+load_api_data.py:179: 2026-02-13 12:02:42,330 - WARNING - Failed to parse exp_trans_updown.py: DatabaseManager.add_api_definition() got an unexpected keyword argument 'program_name'
+load_api_data.py:152: 2026-02-13 12:02:42,361 - INFO - Loading finance_balance_sheet...
+load_api_data.py:179: 2026-02-13 12:02:42,361 - WARNING - Failed to parse finance_balance_sheet.py: DatabaseManager.add_api_definition() got an unexpected keyword argument 'program_name'
+load_api_data.py:152: 2026-02-13 12:02:42,396 - INFO - Loading finance_financial_ratio...
+load_api_data.py:179: 2026-02-13 12:02:42,396 - WARNING - Failed to parse finance_financial_ratio.py: DatabaseManager.add_api_definition() got an unexpected keyword argument 'program_name'
+load_api_data.py:152: 2026-02-13 12:02:42,425 - INFO - Loading finance_growth_ratio...
+load_api_data.py:179: 2026-02-13 12:02:42,426 - WARNING - Failed to parse finance_growth_ratio.py: DatabaseManager.add_api_definition() got an unexpected keyword argument 'program_name'
+load_api_data.py:152: 2026-02-13 12:02:42,459 - INFO - Loading finance_income_statement...
+load_api_data.py:179: 2026-02-13 12:02:42,460 - WARNING - Failed to parse finance_income_statement.py: DatabaseManager.add_api_definition() got an unexpected keyword argument 'program_name'
+load_api_data.py:152: 2026-02-13 12:02:42,494 - INFO - Loading finance_other_major_ratios...
+load_api_data.py:179: 2026-02-13 12:02:42,495 - WARNING - Failed to parse finance_other_major_ratios.py: DatabaseManager.add_api_definition() got an unexpected keyword argument 'program_name'
+load_api_data.py:152: 2026-02-13 12:02:42,526 - INFO - Loading finance_profit_ratio...
+load_api_data.py:179: 2026-02-13 12:02:42,527 - WARNING - Failed to parse finance_profit_ratio.py: DatabaseManager.add_api_definition() got an unexpected keyword argument 'program_name'
+load_api_data.py:152: 2026-02-13 12:02:42,558 - INFO - Loading finance_ratio...
+load_api_data.py:179: 2026-02-13 12:02:42,558 - WARNING - Failed to parse finance_ratio.py: DatabaseManager.add_api_definition() got an unexpected keyword argument 'program_name'
+load_api_data.py:152: 2026-02-13 12:02:42,588 - INFO - Loading finance_stability_ratio...
+load_api_data.py:179: 2026-02-13 12:02:42,589 - WARNING - Failed to parse finance_stability_ratio.py: DatabaseManager.add_api_definition() got an unexpected keyword argument 'program_name'
+load_api_data.py:152: 2026-02-13 12:02:42,619 - INFO - Loading fluctuation...
+load_api_data.py:179: 2026-02-13 12:02:42,620 - WARNING - Failed to parse fluctuation.py: DatabaseManager.add_api_definition() got an unexpected keyword argument 'program_name'
+load_api_data.py:152: 2026-02-13 12:02:42,655 - INFO - Loading foreign_institution_total...
+load_api_data.py:179: 2026-02-13 12:02:42,655 - WARNING - Failed to parse foreign_institution_total.py: DatabaseManager.add_api_definition() got an unexpected keyword argument 'program_name'
+load_api_data.py:152: 2026-02-13 12:02:42,689 - INFO - Loading frgnmem_pchs_trend...
+load_api_data.py:179: 2026-02-13 12:02:42,690 - WARNING - Failed to parse frgnmem_pchs_trend.py: DatabaseManager.add_api_definition() got an unexpected keyword argument 'program_name'
+load_api_data.py:152: 2026-02-13 12:02:42,726 - INFO - Loading frgnmem_trade_estimate...
+load_api_data.py:179: 2026-02-13 12:02:42,726 - WARNING - Failed to parse frgnmem_trade_estimate.py: DatabaseManager.add_api_definition() got an unexpected keyword argument 'program_name'
+load_api_data.py:152: 2026-02-13 12:02:42,877 - INFO - Loading frgnmem_trade_trend...
+load_api_data.py:179: 2026-02-13 12:02:42,878 - WARNING - Failed to parse frgnmem_trade_trend.py: DatabaseManager.add_api_definition() got an unexpected keyword argument 'program_name'
+load_api_data.py:152: 2026-02-13 12:02:42,907 - INFO - Loading hts_top_view...
+load_api_data.py:179: 2026-02-13 12:02:42,907 - WARNING - Failed to parse hts_top_view.py: DatabaseManager.add_api_definition() got an unexpected keyword argument 'program_name'
+load_api_data.py:152: 2026-02-13 12:02:43,010 - INFO - Loading inquire_account_balance...
+load_api_data.py:179: 2026-02-13 12:02:43,010 - WARNING - Failed to parse inquire_account_balance.py: DatabaseManager.add_api_definition() got an unexpected keyword argument 'program_name'
+load_api_data.py:152: 2026-02-13 12:02:43,042 - INFO - Loading inquire_asking_price_exp_ccn...
+load_api_data.py:179: 2026-02-13 12:02:43,042 - WARNING - Failed to parse inquire_asking_price_exp_ccn.py: DatabaseManager.add_api_definition() got an unexpected keyword argument 'program_name'
+load_api_data.py:152: 2026-02-13 12:02:43,078 - INFO - Loading inquire_balance...
+load_api_data.py:179: 2026-02-13 12:02:43,110 - WARNING - Failed to parse inquire_balance.py: DatabaseManager.add_api_definition() got an unexpected keyword argument 'program_name'
+load_api_data.py:152: 2026-02-13 12:02:43,174 - INFO - Loading inquire_balance_rlz_pl...
+load_api_data.py:179: 2026-02-13 12:02:43,175 - WARNING - Failed to parse inquire_balance_rlz_pl.py: DatabaseManager.add_api_definition() got an unexpected keyword argument 'program_name'
+load_api_data.py:152: 2026-02-13 12:02:43,216 - INFO - Loading inquire_ccnl...
+load_api_data.py:179: 2026-02-13 12:02:43,216 - WARNING - Failed to parse inquire_ccnl.py: DatabaseManager.add_api_definition() got an unexpected keyword argument 'program_name'
+load_api_data.py:152: 2026-02-13 12:02:43,260 - INFO - Loading inquire_credit_psamount...
+load_api_data.py:179: 2026-02-13 12:02:43,260 - WARNING - Failed to parse inquire_credit_psamount.py: DatabaseManager.add_api_definition() got an unexpected keyword argument 'program_name'
+load_api_data.py:152: 2026-02-13 12:02:43,300 - INFO - Loading inquire_daily_ccld...
+load_api_data.py:179: 2026-02-13 12:02:43,300 - WARNING - Failed to parse inquire_daily_ccld.py: DatabaseManager.add_api_definition() got an unexpected keyword argument 'program_name'
+load_api_data.py:152: 2026-02-13 12:02:43,332 - INFO - Loading inquire_daily_indexchartprice...
+load_api_data.py:179: 2026-02-13 12:02:43,333 - WARNING - Failed to parse inquire_daily_indexchartprice.py: DatabaseManager.add_api_definition() got an unexpected keyword argument 'program_name'
+load_api_data.py:152: 2026-02-13 12:02:43,366 - INFO - Loading inquire_daily_itemchartprice...
+load_api_data.py:179: 2026-02-13 12:02:43,366 - WARNING - Failed to parse inquire_daily_itemchartprice.py: DatabaseManager.add_api_definition() got an unexpected keyword argument 'program_name'
+load_api_data.py:152: 2026-02-13 12:02:43,407 - INFO - Loading inquire_daily_overtimeprice...
+load_api_data.py:179: 2026-02-13 12:02:43,407 - WARNING - Failed to parse inquire_daily_overtimeprice.py: DatabaseManager.add_api_definition() got an unexpected keyword argument 'program_name'
+load_api_data.py:152: 2026-02-13 12:02:43,459 - INFO - Loading daily_price...
+load_api_data.py:179: 2026-02-13 12:02:43,460 - WARNING - Failed to parse inquire_daily_price.py: DatabaseManager.add_api_definition() got an unexpected keyword argument 'program_name'
+load_api_data.py:152: 2026-02-13 12:02:43,500 - INFO - Loading inquire_daily_trade_volume...
+load_api_data.py:179: 2026-02-13 12:02:43,500 - WARNING - Failed to parse inquire_daily_trade_volume.py: DatabaseManager.add_api_definition() got an unexpected keyword argument 'program_name'
+load_api_data.py:152: 2026-02-13 12:02:43,529 - INFO - Loading inquire_elw_price...
+load_api_data.py:179: 2026-02-13 12:02:43,530 - WARNING - Failed to parse inquire_elw_price.py: DatabaseManager.add_api_definition() got an unexpected keyword argument 'program_name'
+load_api_data.py:152: 2026-02-13 12:02:43,559 - INFO - Loading inquire_index_category_price...
+load_api_data.py:179: 2026-02-13 12:02:43,560 - WARNING - Failed to parse inquire_index_category_price.py: DatabaseManager.add_api_definition() got an unexpected keyword argument 'program_name'
+load_api_data.py:152: 2026-02-13 12:02:43,596 - INFO - Loading inquire_index_daily_price...
+load_api_data.py:179: 2026-02-13 12:02:43,597 - WARNING - Failed to parse inquire_index_daily_price.py: DatabaseManager.add_api_definition() got an unexpected keyword argument 'program_name'
+load_api_data.py:152: 2026-02-13 12:02:43,624 - INFO - Loading inquire_index_price...
+load_api_data.py:179: 2026-02-13 12:02:43,624 - WARNING - Failed to parse inquire_index_price.py: DatabaseManager.add_api_definition() got an unexpected keyword argument 'program_name'
+load_api_data.py:152: 2026-02-13 12:02:43,648 - INFO - Loading inquire_index_tickprice...
+load_api_data.py:179: 2026-02-13 12:02:43,649 - WARNING - Failed to parse inquire_index_tickprice.py: DatabaseManager.add_api_definition() got an unexpected keyword argument 'program_name'
+load_api_data.py:152: 2026-02-13 12:02:43,675 - INFO - Loading inquire_index_timeprice...
+load_api_data.py:179: 2026-02-13 12:02:43,676 - WARNING - Failed to parse inquire_index_timeprice.py: DatabaseManager.add_api_definition() got an unexpected keyword argument 'program_name'
+load_api_data.py:152: 2026-02-13 12:02:43,708 - INFO - Loading inquire_investor...
+load_api_data.py:179: 2026-02-13 12:02:43,709 - WARNING - Failed to parse inquire_investor.py: DatabaseManager.add_api_definition() got an unexpected keyword argument 'program_name'
+load_api_data.py:152: 2026-02-13 12:02:43,745 - INFO - Loading inquire_investor_daily_by_market...
+load_api_data.py:179: 2026-02-13 12:02:43,746 - WARNING - Failed to parse inquire_investor_daily_by_market.py: DatabaseManager.add_api_definition() got an unexpected keyword argument 'program_name'
+load_api_data.py:152: 2026-02-13 12:02:43,790 - INFO - Loading inquire_investor_time_by_market...
+load_api_data.py:179: 2026-02-13 12:02:43,791 - WARNING - Failed to parse inquire_investor_time_by_market.py: DatabaseManager.add_api_definition() got an unexpected keyword argument 'program_name'
+load_api_data.py:152: 2026-02-13 12:02:43,826 - INFO - Loading inquire_member...
+load_api_data.py:179: 2026-02-13 12:02:43,827 - WARNING - Failed to parse inquire_member.py: DatabaseManager.add_api_definition() got an unexpected keyword argument 'program_name'
+load_api_data.py:152: 2026-02-13 12:02:43,860 - INFO - Loading inquire_member_daily...
+load_api_data.py:179: 2026-02-13 12:02:43,860 - WARNING - Failed to parse inquire_member_daily.py: DatabaseManager.add_api_definition() got an unexpected keyword argument 'program_name'
+log_setup.py:41: 2026-02-13 12:03:23,038 - INFO - Logging initialized. Log file: D:\Python\deriv\logs\kis_app.log
+database.py:69: 2026-02-13 12:03:23,824 - INFO - ✓ API 정의 추가: stock_price
+database.py:129: 2026-02-13 12:03:23,843 - INFO - ✓ 파라미터 정의: stock_price.FID_COND_MRKT_DIV_CODE
+database.py:129: 2026-02-13 12:03:23,859 - INFO - ✓ 파라미터 정의: stock_price.FID_INPUT_ISCD
+database.py:194: 2026-02-13 12:03:23,878 - INFO - ✓ 사용자 입력 추가: stock_price (2개, Active=True)
+database.py:69: 2026-02-13 12:03:23,892 - INFO - ✓ API 정의 추가: daily_price
+database.py:129: 2026-02-13 12:03:23,908 - INFO - ✓ 파라미터 정의: daily_price.FID_COND_MRKT_DIV_CODE
+database.py:129: 2026-02-13 12:03:23,922 - INFO - ✓ 파라미터 정의: daily_price.FID_INPUT_ISCD
+database.py:129: 2026-02-13 12:03:23,937 - INFO - ✓ 파라미터 정의: daily_price.FID_PERIOD_DIV_CODE
+database.py:129: 2026-02-13 12:03:23,952 - INFO - ✓ 파라미터 정의: daily_price.FID_ORG_ADJ_PRC
+database.py:194: 2026-02-13 12:03:23,967 - INFO - ✓ 사용자 입력 추가: daily_price (4개, Active=True)
+database.py:69: 2026-02-13 12:03:23,981 - INFO - ✓ API 정의 추가: display_board_top
+database.py:129: 2026-02-13 12:03:23,995 - INFO - ✓ 파라미터 정의: display_board_top.FID_COND_MRKT_DIV_CODE
+database.py:129: 2026-02-13 12:03:24,010 - INFO - ✓ 파라미터 정의: display_board_top.FID_INPUT_ISCD
+database.py:194: 2026-02-13 12:03:24,026 - INFO - ✓ 사용자 입력 추가: display_board_top (2개, Active=True)
+log_setup.py:41: 2026-02-13 12:03:35,222 - INFO - Logging initialized. Log file: D:\Python\deriv\logs\kis_app.log
+main.py:131: 2026-02-13 12:03:36,752 - INFO - ============================================================
+main.py:132: 2026-02-13 12:03:36,752 - INFO - 파라미터 사전 검증 (3개)
+main.py:133: 2026-02-13 12:03:36,753 - INFO - ============================================================
+main.py:146: 2026-02-13 12:03:36,767 - INFO - ✓ [stock_price] 검증 통과
+main.py:146: 2026-02-13 12:03:36,773 - INFO - ✓ [daily_price] 검증 통과
+main.py:146: 2026-02-13 12:03:36,779 - INFO - ✓ [display_board_top] 검증 통과
+main.py:277: 2026-02-13 12:03:36,779 - INFO - 모든 파라미터 검증 완료. API 실행을 시작합니다.
+kis_auth.py:140: 2026-02-13 12:03:36,783 - INFO - 새 토큰 발급 중... (server=prod)
+kis_auth.py:62: 2026-02-13 12:03:37,677 - INFO - 토큰 저장 완료: 2026-02-14 12:03:36
+kis_auth.py:166: 2026-02-13 12:03:37,681 - INFO - ✓ 토큰 발급 성공
+main.py:162: 2026-02-13 12:03:37,684 - INFO - ============================================================
+main.py:163: 2026-02-13 12:03:37,684 - INFO - 일괄 실행 시작 (3개)
+main.py:164: 2026-02-13 12:03:37,685 - INFO - ============================================================
+main.py:174: 2026-02-13 12:03:37,685 - INFO - ▶ 실행: stock_price
+main.py:220: 2026-02-13 12:03:38,266 - INFO -   ✓ 성공: 1건 (DB 저장: 1건)
+main.py:174: 2026-02-13 12:03:38,267 - INFO - ▶ 실행: daily_price
+main.py:220: 2026-02-13 12:03:38,871 - INFO -   ✓ 성공: 30건 (DB 저장: 30건)
+main.py:174: 2026-02-13 12:03:38,871 - INFO - ▶ 실행: display_board_top
+main.py:223: 2026-02-13 12:03:39,336 - ERROR -   ✗ API 호출 실패
+main.py:225: 2026-02-13 12:03:39,337 - ERROR -   Status code: 200
+main.py:233: 2026-02-13 12:03:39,337 - INFO - ================================================================================
+main.py:234: 2026-02-13 12:03:39,337 - INFO - 실행 완료: 성공 2, 실패 1
+main.py:235: 2026-02-13 12:03:39,338 - INFO - ================================================================================
+log_setup.py:41: 2026-02-13 12:09:49,471 - INFO - Logging initialized. Log file: D:\Python\deriv\logs\kis_app.log
+main.py:131: 2026-02-13 12:09:51,150 - INFO - ============================================================
+main.py:132: 2026-02-13 12:09:51,151 - INFO - 파라미터 사전 검증 (3개)
+main.py:133: 2026-02-13 12:09:51,151 - INFO - ============================================================
+main.py:146: 2026-02-13 12:09:51,166 - INFO - ✓ [stock_price] 검증 통과
+main.py:146: 2026-02-13 12:09:51,171 - INFO - ✓ [daily_price] 검증 통과
+main.py:146: 2026-02-13 12:09:51,178 - INFO - ✓ [display_board_top] 검증 통과
+main.py:277: 2026-02-13 12:09:51,179 - INFO - 모든 파라미터 검증 완료. API 실행을 시작합니다.
+kis_auth.py:88: 2026-02-13 12:09:51,217 - INFO - 기존 토큰 사용 (만료: 2026-02-14 12:03:36)
+main.py:162: 2026-02-13 12:09:51,219 - INFO - ============================================================
+main.py:163: 2026-02-13 12:09:51,219 - INFO - 일괄 실행 시작 (3개)
+main.py:164: 2026-02-13 12:09:51,220 - INFO - ============================================================
+main.py:174: 2026-02-13 12:09:51,220 - INFO - ▶ 실행: stock_price
+database.py:361: 2026-02-13 12:09:52,016 - INFO - Overwrote existing data for stock_price (1 rows deleted)
+main.py:220: 2026-02-13 12:09:52,046 - INFO -   ✓ 성공: 1건 (DB 저장: 1건)
+main.py:174: 2026-02-13 12:09:52,047 - INFO - ▶ 실행: daily_price
+database.py:361: 2026-02-13 12:09:52,709 - INFO - Overwrote existing data for daily_price (30 rows deleted)
+main.py:220: 2026-02-13 12:09:52,764 - INFO -   ✓ 성공: 30건 (DB 저장: 30건)
+main.py:174: 2026-02-13 12:09:52,765 - INFO - ▶ 실행: display_board_top
+main.py:220: 2026-02-13 12:09:53,492 - INFO -   ✓ 성공: 1건 (DB 저장: 1건)
+main.py:233: 2026-02-13 12:09:53,493 - INFO - ================================================================================
+main.py:234: 2026-02-13 12:09:53,493 - INFO - 실행 완료: 성공 3, 실패 0
+main.py:235: 2026-02-13 12:09:53,494 - INFO - ================================================================================

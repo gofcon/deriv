@@ -1,0 +1,7 @@
+sqlmodel>=0.0.14
+sqlalchemy>=2.0.0
+pandas>=2.0.0
+requests>=2.31.0
+PyYAML>=6.0
+pycryptodome>=3.19.0
+websockets>=12.0
