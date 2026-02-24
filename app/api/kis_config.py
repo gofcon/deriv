@@ -21,7 +21,7 @@ class KISConfig:
             config_dir: 설정 파일 디렉토리 (기본: ~/KIS/config)
         """
         if config_dir is None:
-            self.config_root = os.path.join(os.path.expanduser("~"), "KIS", "config")
+            self.config_root = os.path.join(os.path.expanduser("~"), "kis", "config")
         else:
             self.config_root = config_dir
         
