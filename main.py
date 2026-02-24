@@ -10,7 +10,7 @@ from app.api import kis_auth as ka
 from app.database import DatabaseManager
 from app.config import DB_PATH
 
-from logs.log_setup import setup_logging
+from scripts.log_setup import setup_logging
 
 setup_logging()
 
