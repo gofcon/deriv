@@ -13,11 +13,17 @@ def setup_logging(log_file="kis_app.log"):
     Args:
         log_file (str): Name of the log file. Defaults to "kis_app.log".
     """
-    # Determine the absolute path to the logs directory
-    # Assuming this file is in d:\Python\deriv\logs\
-    # and we want logs to be in the same directory.
-    current_dir = os.path.dirname(os.path.abspath(__file__))
-    log_path = os.path.join(current_dir, log_file)
+    # Determine the absolute path to the logs directory at the project root
+    # This file is in d:\Python\deriv\scripts\
+    # Project root is the parent.
+    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    log_dir = os.path.join(base_dir, "logs")
+    
+    # Create logs directory if it doesn't exist
+    if not os.path.exists(log_dir):
+        os.makedirs(log_dir)
+        
+    log_path = os.path.join(log_dir, log_file)
     
     # Create handlers
     file_handler = logging.FileHandler(log_path, encoding='utf-8', mode='a')
