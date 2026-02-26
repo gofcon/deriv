@@ -26,14 +26,20 @@ from .models import (
     MetaTableMst,  # New
     MetaColumnMst  # New
 )
-from .config import DB_PATH
+from .config import DB_PATH, get_engine_kwargs
 
 class MasterDatabaseManager:
     """마스터 데이터 전용 데이터베이스 매니저"""
     
-    def __init__(self, db_path: str = DB_PATH):
-        self.db_url = f"sqlite:///{db_path}"
-        self.engine = create_engine(self.db_url)
+    def __init__(self, db_path: str = None):
+        if db_path is not None:
+            # Explicit SQLite path override
+            self.engine = create_engine(f"sqlite:///{db_path}")
+        else:
+            # Use centralized config
+            kwargs = get_engine_kwargs()
+            url = kwargs.pop("url")
+            self.engine = create_engine(url, **kwargs)
         
     @contextmanager
     def get_session(self):

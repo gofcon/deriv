@@ -21,18 +21,20 @@ from .models import (
 import pandas as pd
 
 
-from app.config import DB_PATH
+from app.config import DB_PATH, get_engine_kwargs
 
 class DatabaseManager:
     """SQLModel based Database Manager"""
     
     def __init__(self, db_path: str = None):
-        if db_path is None:
-            self.db_path = DB_PATH
+        if db_path is not None:
+            # Explicit SQLite path override (for testing/scripts)
+            self.engine = create_engine(f"sqlite:///{db_path}", echo=False)
         else:
-            self.db_path = db_path
-            
-        self.engine = create_engine(f"sqlite:///{self.db_path}", echo=False)
+            # Use centralized config (Oracle or SQLite based on .env)
+            kwargs = get_engine_kwargs()
+            url = kwargs.pop("url")
+            self.engine = create_engine(url, **kwargs)
 
     
     def get_session(self) -> Session:

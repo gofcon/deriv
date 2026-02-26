@@ -501,7 +501,7 @@ def main():
     base_dir = "temp_master_data_full"
     os.makedirs(base_dir, exist_ok=True)
     
-    db = MasterDatabaseManager(DB_PATH)
+    db = MasterDatabaseManager()
     
     # Create all tables (or just master tables)
     db.init_master_tables()

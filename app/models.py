@@ -7,6 +7,22 @@ from typing import Optional, List, Dict, Any
 from datetime import datetime
 from sqlmodel import Field, SQLModel, Relationship
 
+from sqlalchemy.ext.compiler import compiles
+from sqlalchemy.types import String, VARCHAR
+
+@compiles(String, 'oracle')
+@compiles(VARCHAR, 'oracle')
+def compile_varchar_oracle(element, compiler, **kw):
+    """
+    Oracle requires VARCHAR2 length. SQLModel's default str maps to lengthless VARCHAR.
+    This override enforces a default length of 4000 for Oracle connections.
+    """
+    if getattr(element, 'length', None) is None:
+        return "VARCHAR2(4000)"
+    else:
+        return compiler.visit_VARCHAR(element, **kw)
+
+
 
 class APIMst(SQLModel, table=True):
     """API Master Table"""
