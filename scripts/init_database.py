@@ -42,6 +42,43 @@ def init_database():
     print("테이블 생성 중...")
     SQLModel.metadata.create_all(engine)
 
+    if DB_TYPE == "oracle":
+        # Oracle 코멘트 추가 (Table/Column)
+        import inspect
+        from sqlalchemy import text
+        print("Oracle 테이블/컬럼 코멘트 추가 중...")
+        with engine.begin() as conn:
+            for name, obj in inspect.getmembers(app.models):
+                if inspect.isclass(obj) and issubclass(obj, SQLModel) and obj != SQLModel:
+                    table_name = getattr(obj, "__tablename__", None)
+                    if not table_name:
+                        continue
+                    
+                    # 1. 테이블 코멘트
+                    if obj.__doc__:
+                        t_comment = obj.__doc__.strip().replace("'", "''")
+                        if t_comment:
+                            try:
+                                conn.execute(text(f"COMMENT ON TABLE {table_name} IS '{t_comment}'"))
+                            except Exception as e:
+                                pass
+                    
+                    # 2. 컬럼 코멘트
+                    fields = getattr(obj, "model_fields", getattr(obj, "__fields__", {}))
+                    for fname, finfo in fields.items():
+                        # Pydantic v1 vs v2 compatibility
+                        desc = getattr(finfo, "description", None)
+                        if not desc and getattr(finfo, "field_info", None):
+                            desc = getattr(finfo.field_info, "description", None)
+                            
+                        if desc:
+                            c_comment = desc.replace("'", "''")
+                            try:
+                                conn.execute(text(f"COMMENT ON COLUMN {table_name}.{fname} IS '{c_comment}'"))
+                            except Exception as e:
+                                pass
+
+
     print("=" * 80)
     print("✓ 테이블 생성 완료")
     print("=" * 80)
