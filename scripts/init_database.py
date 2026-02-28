@@ -16,7 +16,7 @@ setup_logging()
 
 from sqlmodel import SQLModel, create_engine
 
-def init_database():
+def init_database(drop_tables=False):
     """데이터베이스 테이블 초기화"""
     
     if DB_TYPE == "sqlite":
@@ -36,8 +36,13 @@ def init_database():
     engine = create_engine(url, **kwargs)
     
     # Import all models to register them with SQLModel metadata
-    import app.models  # noqa: F401
+    # import app.models  # noqa: F401
+    import app.models_gof as target_models  # noqa: F401
     
+    if drop_tables:
+        print("기존 테이블 삭제 중...")
+        SQLModel.metadata.drop_all(engine)
+        
     # 테이블 생성
     print("테이블 생성 중...")
     SQLModel.metadata.create_all(engine)
@@ -48,7 +53,7 @@ def init_database():
         from sqlalchemy import text
         print("Oracle 테이블/컬럼 코멘트 추가 중...")
         with engine.begin() as conn:
-            for name, obj in inspect.getmembers(app.models):
+            for name, obj in inspect.getmembers(target_models):
                 if inspect.isclass(obj) and issubclass(obj, SQLModel) and obj != SQLModel:
                     table_name = getattr(obj, "__tablename__", None)
                     if not table_name:
@@ -86,4 +91,5 @@ def init_database():
 
 
 if __name__ == "__main__":
-    init_database()
+    drop_tables = "--drop" in sys.argv
+    init_database(drop_tables=drop_tables)

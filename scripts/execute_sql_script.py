@@ -80,5 +80,5 @@ def execute_script(file_path: str):
         print(f"치명적인 오류 발생: {e}")
 
 if __name__ == "__main__":
-    script_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "script_kis.sql")
+    script_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "script_gof.sql")
     execute_script(script_path)
