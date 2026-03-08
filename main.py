@@ -9,7 +9,6 @@ import pandas as pd
 from app.api import kis_auth as ka
 from app.database import DatabaseManager
 from app.config import DB_PATH
-
 from scripts.log_setup import setup_logging
 
 setup_logging()
@@ -131,8 +130,8 @@ class APIManager:
         active_inputs = self.db.list_active_api_job_msts(cycle=cycle)
         
         if not active_inputs:
-            logging.warning("활성화된 프로그램(Job)이 없습니다.")
-            return False
+            # API Job이 없더라도 브라우저 작업은 존재할 수 있으므로 True 반환
+            return True
             
         logging.info("="*60)
         logging.info(f"파라미터 사전 검증 ({len(active_inputs)}개)")
@@ -194,15 +193,21 @@ class APIManager:
                     continue
                 
                 # 검증된 파라미터 사용 (기본값 포함)
-                params = validation.validated_params
-                print(params)
+                validated_params = validation.validated_params
                 
                 # 3. API 호출
+                # JobMst의 params_json은 generate_jobs.py에 의해 이미 매크로가 해석, 할당된 순수 파라미터 대상입니다.
+                resolved_params = validated_params
+                
+                logging.info(f"  - 실행 파라미터: {resolved_params}")
+                
+                self.db.update_api_job_status(ui.job_id, "RUNNING")
+                
                 res = client.fetch(
                     api_url=api_def.api_url,
                     api_id=api_def.api_id,
                     header_json=api_def.header_json,
-                    params=params
+                    params=resolved_params
                 )
                 
                 if res.is_ok():
@@ -224,15 +229,18 @@ class APIManager:
                     # Output 테이블에 저장
                     saved_count = self.db.insert_output_data(ui.api_id, ui.job_id, data)
                     logging.info(f"  ✓ 성공: {len(data)}건 (DB 저장: {saved_count}건)")
+                    
+                    self.db.update_api_job_status(ui.job_id, "SUCCESS")
                     success_count += 1
                 else:
-                    logging.error("  ✗ API 호출 실패")
-                    # res.print_error(url=api_def.api_url)
-                    logging.error(f"  Status code: {res.get_status_code()}")
+                    err_msg = f"API 호출 실패. Status code: {res.get_status_code()}"
+                    logging.error(f"  ✗ {err_msg}")
+                    self.db.update_api_job_status(ui.job_id, "FAIL", err_msg)
                     fail_count += 1
                     
             except Exception as e:
                 logging.error(f"  ✗ 실행 중 오류: {e}")
+                self.db.update_api_job_status(ui.job_id, "FAIL", str(e))
                 fail_count += 1
         
         # logging.info("\n" + "="*80)
@@ -263,14 +271,19 @@ class APIManager:
         scraper = BrowserScraper(self.db)
         
         for job in active_browser_jobs:
-            logging.info(f"▶ 브라우저 스크래핑 실행: {job.job_id}")
+            logging.info(f"▶ 브라우저 스크래핑 템플릿: {job.job_id}")
             try:
+                # JobMst에는 이미 분해(explode)되고 치환(resolve)된 단일 파라미터 대상이 영구적으로 들어있음
+                resolved_params = job.params_json
+                logging.info(f"  - 실행 파라미터: {resolved_params}")
+                
+                self.db.update_browser_job_status(job.job_id, "RUNNING")
+                
                 # 1. 브라우저 스크래핑 실행
-                result_data = scraper.execute_job(job)
+                result_data = scraper.execute_job(job, resolved_params=resolved_params)
                 
                 if result_data:
                     # 2. 데이터 프레임 변환
-                    # dict인 경우 리스트로 감싸거나, 내부에 리스트가 있는 경우 그대로 사용
                     is_scalar = True
                     for v in result_data.values():
                         if isinstance(v, list):
@@ -282,21 +295,26 @@ class APIManager:
                     else:
                         df = pd.DataFrame(result_data)
                     
-                    logging.info(f"  추출된 데이터: {len(df)}건")
+                    logging.info(f"    추출된 데이터: {len(df)}건")
                     print(df.head())
                     
                     # 3. Output 테이블 저장 (browser_id를 기준으로 저장)
                     saved_count = self.db.insert_browser_output_data(job.browser_id, job.job_id, df)
-                    logging.info(f"  ✓ 성공: {len(df)}건 (DB 저장: {saved_count}건)")
+                    logging.info(f"    ✓ 성공: {len(df)}건 (DB 저장: {saved_count}건)")
+                    
+                    self.db.update_browser_job_status(job.job_id, "SUCCESS")
                     success_count += 1
                 else:
-                    logging.error("  ✗ 브라우저 스크래핑 결과 없음")
+                    err_msg = "브라우저 스크래핑 결과 없음"
+                    logging.error(f"    ✗ {err_msg}")
+                    self.db.update_browser_job_status(job.job_id, "FAIL", err_msg)
                     fail_count += 1
                     
             except Exception as e:
                 logging.error(f"  ✗ 브라우저 스크래핑 실행 중 오류: {e}")
                 import traceback
                 logging.error(traceback.format_exc())
+                self.db.update_browser_job_status(job.job_id, "FAIL", str(e))
                 fail_count += 1
                 
         logging.info("="*80)

@@ -1,5 +1,5 @@
 [Unit]
-Description=KIS API 5-Minute Execution
+Description=Main Scraper 1-Hour Execution
 After=network.target
 
 [Service]
@@ -8,7 +8,7 @@ User=opc
 Group=opc
 WorkingDirectory=/home/opc/deriv
 # ExecStart calls the wrapper script with cycle argument
-ExecStart=/bin/bash /home/opc/deriv/scripts/run_cycle.sh 5min
+ExecStart=/bin/bash /home/opc/deriv/scripts/run_cycle.sh 1hour
 
 [Install]
 WantedBy=multi-user.target

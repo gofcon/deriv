@@ -3,7 +3,7 @@ import sys
 import logging
 
 # Add project root to sys.path
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 from app.database import DatabaseManager
 from scripts.log_setup import setup_logging
@@ -87,6 +87,21 @@ def load_sample_browser_data():
         is_active=True,
         save_mode="append",
         execution_cycle="daily"
+    )
+
+    # 5. BrowserScheduleMst: KRX ISIN 다중 수집 스케줄 (Array + Date Macros)
+    db.add_browser_schedule_mst(
+        schedule_id="sch_browser_krx_isin_02",
+        browser_id="browser_krx_isin",
+        description="KRX ISIN 검색 스케줄 (KR1/KR2, 지난달)",
+        macro_params={
+            "search_keyword": ["KR1", "KR2"],
+            "start_date": "{{last_month_start}}",
+            "end_date": "{{last_month_end}}"
+        },
+        is_active=True,
+        save_mode="append",
+        execution_cycle="monthly"
     )
 
     logging.info("==========================================")

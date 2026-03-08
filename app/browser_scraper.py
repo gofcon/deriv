@@ -20,7 +20,7 @@ class BrowserScraper:
     def __init__(self, db_manager: DatabaseManager):
         self.db = db_manager
         
-    def execute_job(self, job: BrowserJobMst) -> Optional[Dict[str, Any]]:
+    def execute_job(self, job: BrowserJobMst, resolved_params: dict = None) -> Optional[Dict[str, Any]]:
         """작업 1건 실행 (단일 쓰레드 동기 방식)"""
         logging.info(f"▶ Browser 작업 시작: {job.job_id} (Target BrowserMst: {job.browser_id})")
         
@@ -29,7 +29,7 @@ class BrowserScraper:
             logging.error(f"✕ Browser 정의를 찾을 수 없습니다: {job.browser_id}")
             return None
             
-        params = job.params_json or {}
+        params = resolved_params if resolved_params is not None else (job.params_json or {})
         
         try:
             with sync_playwright() as p:

@@ -1,6 +1,6 @@
 """Test Oracle ADB connection via SQLAlchemy creator pattern (config.py)"""
 import sys, os
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 from app.config import get_engine_kwargs, DB_TYPE
 from sqlmodel import create_engine, text

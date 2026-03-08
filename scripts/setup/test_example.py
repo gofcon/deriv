@@ -7,7 +7,7 @@ from urllib.parse import quote_plus
 from dotenv import load_dotenv
 
 # Load .env from project root
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 load_dotenv(os.path.join(BASE_DIR, ".env"))
 
 # print(os.path.abspath(__file__))

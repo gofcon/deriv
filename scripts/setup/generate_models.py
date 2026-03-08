@@ -206,7 +206,7 @@ def parse_ddl_and_generate_models(sql_file_path, output_file_path):
     print(f"Generated ORM models at {output_file_path}")
 
 if __name__ == "__main__":
-    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
     sql_file_path = os.path.join(base_dir, "data", "script_gof.sql")
     output_file_path = os.path.join(base_dir, "app", "models_gof.py")
     parse_ddl_and_generate_models(sql_file_path, output_file_path)

@@ -30,7 +30,6 @@ class ApiMst(SQLModel, table=True):
     api_type: str = Field(max_length=100)
     api_url: str = Field(max_length=100)
     header_json: dict = Field(sa_column=Column(JSON))
-    # tr_cont: Optional[str] = Field(default=None, max_length=10)
     request_type: str = Field(max_length=20)
     description: Optional[str] = Field(default=None, max_length=100)
     output_table_name: Optional[str] = Field(default=None, max_length=100)
@@ -58,12 +57,12 @@ class ApiParam(SQLModel, table=True):
     api_mst: Optional["ApiMst"] = Relationship(back_populates="api_params")
 
 
-class ApiJobMst(SQLModel, table=True):
-    __tablename__ = "api_job_mst"
+class ApiScheduleMst(SQLModel, table=True):
+    __tablename__ = "api_schedule_mst"
 
-    job_id: str = Field(primary_key=True, max_length=50)
+    schedule_id: str = Field(primary_key=True, max_length=50)
     api_id: str = Field(foreign_key="api_mst.api_id")
-    params_json: dict = Field(sa_column=Column(JSON))
+    macro_params_json: dict = Field(sa_column=Column(JSON))
     is_active: bool = Field(default=False)
     save_mode: Optional[str] = Field(default="overwrite", max_length=20)
     execution_cycle: Optional[str] = Field(default="daily", max_length=20)
@@ -71,7 +70,30 @@ class ApiJobMst(SQLModel, table=True):
     updated_at: Optional[datetime] = Field(default=None,  
         sa_column=Column(DateTime, server_default=func.now(), onupdate=func.now()) )
 
+    api_mst: Optional["ApiMst"] = Relationship()
+    api_job_msts: list["ApiJobMst"] = Relationship(back_populates="schedule_mst")
+
+
+class ApiJobMst(SQLModel, table=True):
+    __tablename__ = "api_job_mst"
+
+    job_id: str = Field(primary_key=True, max_length=150)
+    schedule_id: Optional[str] = Field(foreign_key="api_schedule_mst.schedule_id", default=None)
+    base_yymm: Optional[str] = Field(default=None, max_length=6)
+    api_id: str = Field(foreign_key="api_mst.api_id")
+    params_json: dict = Field(sa_column=Column(JSON))
+    status: str = Field(default="PENDING", max_length=20)
+    error_message: Optional[str] = Field(default=None, max_length=4000)
+    is_active: bool = Field(default=True)
+    save_mode: Optional[str] = Field(default="overwrite", max_length=20)
+    execution_cycle: Optional[str] = Field(default="daily", max_length=20)
+    description: Optional[str] = Field(default=None, max_length=100)
+    executed_at: Optional[datetime] = Field(default=None, sa_column=Column(DateTime))
+    updated_at: Optional[datetime] = Field(default=None,  
+        sa_column=Column(DateTime, server_default=func.now(), onupdate=func.now()) )
+
     api_mst: Optional["ApiMst"] = Relationship(back_populates="api_job_msts")
+    schedule_mst: Optional["ApiScheduleMst"] = Relationship(back_populates="api_job_msts")
 
 
 class BrowserMst(SQLModel, table=True):
@@ -94,12 +116,12 @@ class BrowserMst(SQLModel, table=True):
     browser_job_msts: list["BrowserJobMst"] = Relationship(back_populates="browser_mst")
 
 
-class BrowserJobMst(SQLModel, table=True):
-    __tablename__ = "browser_job_mst"
+class BrowserScheduleMst(SQLModel, table=True):
+    __tablename__ = "browser_schedule_mst"
 
-    job_id: str = Field(primary_key=True, max_length=100)
+    schedule_id: str = Field(primary_key=True, max_length=100)
     browser_id: str = Field(foreign_key="browser_mst.browser_id")
-    params_json: dict = Field(default_factory=dict, sa_column=Column(JSON))
+    macro_params_json: dict = Field(default_factory=dict, sa_column=Column(JSON))
     is_active: bool = Field(default=False)
     save_mode: Optional[str] = Field(default="append", max_length=20)
     execution_cycle: Optional[str] = Field(default="daily", max_length=20)
@@ -107,7 +129,30 @@ class BrowserJobMst(SQLModel, table=True):
     updated_at: Optional[datetime] = Field(default=None,  
         sa_column=Column(DateTime, server_default=func.now(), onupdate=func.now()) )
 
+    browser_mst: Optional["BrowserMst"] = Relationship()
+    browser_job_msts: list["BrowserJobMst"] = Relationship(back_populates="schedule_mst")
+
+
+class BrowserJobMst(SQLModel, table=True):
+    __tablename__ = "browser_job_mst"
+
+    job_id: str = Field(primary_key=True, max_length=150)
+    schedule_id: Optional[str] = Field(foreign_key="browser_schedule_mst.schedule_id", default=None)
+    base_yymm: Optional[str] = Field(default=None, max_length=6)
+    browser_id: str = Field(foreign_key="browser_mst.browser_id")
+    params_json: dict = Field(default_factory=dict, sa_column=Column(JSON))
+    status: str = Field(default="PENDING", max_length=20)
+    error_message: Optional[str] = Field(default=None, max_length=4000)
+    is_active: bool = Field(default=True)
+    save_mode: Optional[str] = Field(default="append", max_length=20)
+    execution_cycle: Optional[str] = Field(default="daily", max_length=20)
+    description: Optional[str] = Field(default=None, max_length=200)
+    executed_at: Optional[datetime] = Field(default=None, sa_column=Column(DateTime))
+    updated_at: Optional[datetime] = Field(default=None,  
+        sa_column=Column(DateTime, server_default=func.now(), onupdate=func.now()) )
+
     browser_mst: Optional["BrowserMst"] = Relationship(back_populates="browser_job_msts")
+    schedule_mst: Optional["BrowserScheduleMst"] = Relationship(back_populates="browser_job_msts")
 
 
 class BrowserRst(SQLModel, table=True):

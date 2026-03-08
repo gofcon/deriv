@@ -7,7 +7,7 @@ import logging
 import sys
 
 # Add project root to sys.path
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 from app.database import DatabaseManager
 from app.config import DB_PATH, DB_TYPE

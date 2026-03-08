@@ -8,7 +8,7 @@ import logging
 import sys
 
 # Add project root to sys.path
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 from typing import Optional, List, Dict
 from app.database import DatabaseManager
@@ -20,7 +20,7 @@ from scripts.log_setup import setup_logging
 setup_logging()
 logger = logging.getLogger(__name__)
 
-PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 REPO_DIR = os.path.join(PROJECT_ROOT, "temp_repo", "examples_llm")
 DB_PATH = os.path.join(PROJECT_ROOT, "data", "kis_api.db")
 MAPPING_FILE = os.path.join(PROJECT_ROOT, "data", "column_mappings.json")

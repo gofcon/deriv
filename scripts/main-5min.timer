@@ -1,5 +1,5 @@
 [Unit]
-Description=Timer for KIS API 5-Minute Execution
+Description=Timer for Main Scraper 5-Minute Execution
 
 [Timer]
 # Example: Run every 5 minutes from 08:30 to 16:00 on weekdays (Mon-Fri)

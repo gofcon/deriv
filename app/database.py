@@ -6,15 +6,17 @@ import logging
 from typing import Optional, List, Dict, Any
 from datetime import datetime
 
-from sqlmodel import Session, SQLModel, create_engine, select
+from sqlmodel import Session, SQLModel, create_engine, select, or_
 from sqlalchemy.exc import IntegrityError
 
 from .models_gofcon import (
     ApiMst, 
     ApiParam, 
     ApiJobMst,
+    ApiScheduleMst,
     BrowserMst,
     BrowserJobMst,
+    BrowserScheduleMst,
     BrowserRst,
     KrxIsinMst,
     ValidationResult,
@@ -160,7 +162,68 @@ class DatabaseManager:
             )
             return list(session.exec(statement).all())
     
-    # ==================== User Input 관리 (JSON 형식) ====================
+    # ==================== Schedule 관리 ====================
+    
+    def add_api_schedule_mst(
+        self,
+        schedule_id: str,
+        api_id: str,
+        macro_params: Dict[str, Any],
+        description: Optional[str] = None,
+        is_active: bool = True,
+        save_mode: str = "overwrite",
+        execution_cycle: str = "daily"
+    ) -> ApiScheduleMst:
+        """API 스케줄 템플릿(매크로 포함) 추가/업데이트"""
+        import json
+        with self.get_session() as session:
+            statement = select(ApiScheduleMst).where(ApiScheduleMst.schedule_id == schedule_id)
+            existing = session.exec(statement).first()
+            
+            if existing:
+                existing.macro_params_json = macro_params
+                existing.api_id = api_id
+                existing.description = description
+                existing.is_active = is_active
+                existing.save_mode = save_mode
+                existing.execution_cycle = execution_cycle
+                existing.updated_at = datetime.now()
+                session.add(existing)
+                session.commit()
+                session.refresh(existing)
+                logging.info(f"✓ API 스케줄 업데이트: {schedule_id}")
+                return existing
+            else:
+                new_sch = ApiScheduleMst(
+                    schedule_id=schedule_id,
+                    api_id=api_id,
+                    description=description,
+                    is_active=is_active,
+                    save_mode=save_mode,
+                    execution_cycle=execution_cycle,
+                    macro_params_json=macro_params
+                )
+                session.add(new_sch)
+                session.commit()
+                session.refresh(new_sch)
+                logging.info(f"✓ API 스케줄 추가: {schedule_id}")
+                return new_sch
+                
+    def get_api_schedule_mst(self, schedule_id: str) -> Optional[ApiScheduleMst]:
+        """API 스케줄 조회"""
+        with self.get_session() as session:
+            statement = select(ApiScheduleMst).where(ApiScheduleMst.schedule_id == schedule_id)
+            return session.exec(statement).first()
+
+    def list_active_api_schedule_msts(self, cycle: str = None) -> List[ApiScheduleMst]:
+        """활성화된 API 스케줄 목록 조회"""
+        with self.get_session() as session:
+            statement = select(ApiScheduleMst).where(ApiScheduleMst.is_active == True)
+            if cycle:
+                statement = statement.where(or_(ApiScheduleMst.execution_cycle == cycle, ApiScheduleMst.execution_cycle == "once"))
+            return list(session.exec(statement).all())
+            
+    # ==================== User Input 관리 (JSON 형식 - Execution Queue) ====================
     
     def add_api_job_mst(
         self,
@@ -169,13 +232,16 @@ class DatabaseManager:
         params: Dict[str, Any],
         description: Optional[str] = None,
         is_active: bool = True,
+        schedule_id: Optional[str] = None,
+        status: str = "PENDING",
         save_mode: str = "append",
-        execution_cycle: str = "5min"
+        execution_cycle: str = "5min",
+        base_yymm: Optional[str] = None
     ) -> ApiJobMst:
         """
         사용자 입력 추가/업데이트 (JSON 형식)
         
-        ✨ 핵심: params는 딕셔너리 {"KEY": "VALUE", ...}
+        ✨ 핵심: params는 딕셔셔리 {"KEY": "VALUE", ...}
         """
         import json
         with self.get_session() as session:
@@ -193,11 +259,14 @@ class DatabaseManager:
                 existing.is_active = is_active
                 existing.save_mode = save_mode
                 existing.execution_cycle = execution_cycle
+                existing.schedule_id = schedule_id
+                existing.status = status
+                existing.base_yymm = base_yymm
                 existing.updated_at = datetime.now()
                 session.add(existing)
                 session.commit()
                 session.refresh(existing)
-                logging.info(f"✓ 사용자 입력 업데이트: {job_id} ({len(params)}개, Active={is_active})")
+                logging.info(f"✓ API Job 큐 업데이트: {job_id} ({len(params)}개, status={status})")
                 return existing
             else:
                 # 새로 추가
@@ -207,13 +276,16 @@ class DatabaseManager:
                     description=description,
                     is_active=is_active,
                     save_mode=save_mode,
-                    execution_cycle=execution_cycle
+                    execution_cycle=execution_cycle,
+                    schedule_id=schedule_id,
+                    status=status,
+                    base_yymm=base_yymm
                 )
                 user_input.params_json = params
                 session.add(user_input)
                 session.commit()
                 session.refresh(user_input)
-                logging.info(f"✓ 사용자 입력 추가: {job_id} ({len(params)}개, Active={is_active})")
+                logging.info(f"✓ API Job 큐 추가: {job_id} ({len(params)}개, status={status})")
                 return user_input
     
     def get_api_job_mst(self, job_id: str) -> Optional[ApiJobMst]:
@@ -232,16 +304,51 @@ class DatabaseManager:
 
     def list_active_api_job_msts(self, cycle: str = None) -> List[ApiJobMst]:
         """
-        활성화된 API 사용자 입력(Job) 목록 조회
+        활성화된 API Job 목록 조회 (주기별 반복 실행 대상)
         :param cycle: 실행 주기 필터 (None이면 전체)
         """
         with self.get_session() as session:
             statement = select(ApiJobMst).where(ApiJobMst.is_active == True)
             
             if cycle:
-                statement = statement.where(ApiJobMst.execution_cycle == cycle)
+                statement = statement.where(or_(ApiJobMst.execution_cycle == cycle, ApiJobMst.execution_cycle == "once"))
                 
             return list(session.exec(statement).all())
+            
+    def deactivate_api_jobs_by_schedule(self, schedule_id: str) -> None:
+        """스케줄 기반으로 생성된 구형 Job 일괄 비활성화"""
+        with self.get_session() as session:
+            statement = select(ApiJobMst).where(ApiJobMst.schedule_id == schedule_id)
+            jobs = session.exec(statement).all()
+            for job in jobs:
+                job.is_active = False
+                session.add(job)
+            session.commit()
+            
+    def update_api_job_status(self, job_id: str, status: str, error_message: str = None) -> bool:
+        """API 작업 상태 및 실행 시간 업데이트"""
+        with self.get_session() as session:
+            job = session.exec(select(ApiJobMst).where(ApiJobMst.job_id == job_id)).first()
+            if job:
+                job.status = status
+                job.executed_at = datetime.now()
+                if error_message:
+                    job.error_message = error_message
+                
+                # 'once' (1회성) 작업이 성공적으로 끝났다면 다시 실행되지 않도록 비활성화
+                if status == "SUCCESS" and job.execution_cycle == "once":
+                    job.is_active = False
+                    logging.info(f"  - 1회성 작업({job_id}) 완료로 비활성화(is_active=False) 처리됨")
+                    if job.schedule_id:
+                        schedule = session.exec(select(ApiScheduleMst).where(ApiScheduleMst.schedule_id == job.schedule_id)).first()
+                        if schedule:
+                            schedule.is_active = False
+                            session.add(schedule)
+                            
+                session.add(job)
+                session.commit()
+                return True
+            return False
     
     def delete_api_job_mst(self, job_id: str) -> bool:
         """API 사용자 입력(Job) 삭제"""
@@ -315,7 +422,68 @@ class DatabaseManager:
             statement = select(BrowserMst).where(BrowserMst.browser_id == browser_id)
             return session.exec(statement).first()
 
-    # ==================== Browser 스크래핑 작업(Job) 관리 ====================
+    # ==================== Browser 스케줄 관리 ====================
+    
+    def add_browser_schedule_mst(
+        self,
+        schedule_id: str,
+        browser_id: str,
+        macro_params: Dict[str, Any],
+        description: str = None,
+        is_active: bool = True,
+        save_mode: str = "append",
+        execution_cycle: str = "daily"
+    ) -> BrowserScheduleMst:
+        """Browser 스크래핑 스케줄 템플릿 추가/업데이트"""
+        import json
+        with self.get_session() as session:
+            statement = select(BrowserScheduleMst).where(BrowserScheduleMst.schedule_id == schedule_id)
+            existing = session.exec(statement).first()
+            
+            if existing:
+                existing.browser_id = browser_id
+                existing.macro_params_json = macro_params
+                existing.description = description
+                existing.is_active = is_active
+                existing.save_mode = save_mode
+                existing.execution_cycle = execution_cycle
+                existing.updated_at = datetime.now()
+                session.add(existing)
+                session.commit()
+                session.refresh(existing)
+                logging.info(f"✓ Browser 스케줄 업데이트: {schedule_id}")
+                return existing
+            else:
+                new_sch = BrowserScheduleMst(
+                    schedule_id=schedule_id,
+                    browser_id=browser_id,
+                    description=description,
+                    macro_params_json=macro_params,
+                    is_active=is_active,
+                    save_mode=save_mode,
+                    execution_cycle=execution_cycle
+                )
+                session.add(new_sch)
+                session.commit()
+                session.refresh(new_sch)
+                logging.info(f"✓ Browser 스케줄 추가: {schedule_id}")
+                return new_sch
+
+    def get_browser_schedule_mst(self, schedule_id: str) -> Optional[BrowserScheduleMst]:
+        """Browser 스케줄 조회"""
+        with self.get_session() as session:
+            statement = select(BrowserScheduleMst).where(BrowserScheduleMst.schedule_id == schedule_id)
+            return session.exec(statement).first()
+
+    def list_active_browser_schedule_msts(self, cycle: str = None) -> List[BrowserScheduleMst]:
+        """활성화된 Browser 스케줄 목록 조회"""
+        with self.get_session() as session:
+            statement = select(BrowserScheduleMst).where(BrowserScheduleMst.is_active == True)
+            if cycle:
+                statement = statement.where(or_(BrowserScheduleMst.execution_cycle == cycle, BrowserScheduleMst.execution_cycle == "once"))
+            return list(session.exec(statement).all())
+            
+    # ==================== Browser 스크래핑 큐(Job) 관리 ====================
 
     def add_browser_job_mst(
         self,
@@ -325,9 +493,12 @@ class DatabaseManager:
         description: str = None,
         is_active: bool = True,
         save_mode: str = "append",
-        execution_cycle: str = "daily"
+        execution_cycle: str = "daily",
+        schedule_id: Optional[str] = None,
+        status: str = "PENDING",
+        base_yymm: Optional[str] = None
     ) -> BrowserJobMst:
-        """Browser 스크래핑 인스턴스 추가/업데이트"""
+        """Browser 스크래핑 큐 추가/업데이트"""
         import json
         with self.get_session() as session:
             statement = select(BrowserJobMst).where(BrowserJobMst.job_id == job_id)
@@ -340,10 +511,13 @@ class DatabaseManager:
                 existing.is_active = is_active
                 existing.save_mode = save_mode
                 existing.execution_cycle = execution_cycle
+                existing.schedule_id = schedule_id
+                existing.status = status
+                existing.updated_at = datetime.now()
                 session.add(existing)
                 session.commit()
                 session.refresh(existing)
-                logging.info(f"✓ Browser 작업 업데이트: {job_id}")
+                logging.info(f"✓ Browser 작업 큐 업데이트: {job_id}")
                 return existing
             else:
                 new_job = BrowserJobMst(
@@ -353,12 +527,15 @@ class DatabaseManager:
                     params_json=params,
                     is_active=is_active,
                     save_mode=save_mode,
-                    execution_cycle=execution_cycle
+                    execution_cycle=execution_cycle,
+                    schedule_id=schedule_id,
+                    status=status,
+                    base_yymm=base_yymm
                 )
                 session.add(new_job)
                 session.commit()
                 session.refresh(new_job)
-                logging.info(f"✓ Browser 작업 추가: {job_id} ({len(params)}개 파라미터, Active={is_active})")
+                logging.info(f"✓ Browser 작업 큐 추가: {job_id} ({len(params)}개 파라미터, status={status})")
                 return new_job
 
     def get_browser_job_mst(self, job_id: str) -> Optional[BrowserJobMst]:
@@ -368,12 +545,47 @@ class DatabaseManager:
             return session.exec(statement).first()
 
     def list_active_browser_job_msts(self, cycle: str = None) -> List[BrowserJobMst]:
-        """활성화된 Browser 작업(Job) 목록 조회"""
+        """활성화된 Browser Job 목록 조회 (주기별 반복 실행 대상)"""
         with self.get_session() as session:
             statement = select(BrowserJobMst).where(BrowserJobMst.is_active == True)
             if cycle:
-                statement = statement.where(BrowserJobMst.execution_cycle == cycle)
+                statement = statement.where(or_(BrowserJobMst.execution_cycle == cycle, BrowserJobMst.execution_cycle == "once"))
             return list(session.exec(statement).all())
+            
+    def deactivate_browser_jobs_by_schedule(self, schedule_id: str) -> None:
+        """스케줄 기반으로 생성된 구형 Job 일괄 비활성화"""
+        with self.get_session() as session:
+            statement = select(BrowserJobMst).where(BrowserJobMst.schedule_id == schedule_id)
+            jobs = session.exec(statement).all()
+            for job in jobs:
+                job.is_active = False
+                session.add(job)
+            session.commit()
+            
+    def update_browser_job_status(self, job_id: str, status: str, error_message: str = None) -> bool:
+        """Browser 작업 상태 및 실행 시간 업데이트"""
+        with self.get_session() as session:
+            job = session.exec(select(BrowserJobMst).where(BrowserJobMst.job_id == job_id)).first()
+            if job:
+                job.status = status
+                job.executed_at = datetime.now()
+                if error_message:
+                    job.error_message = error_message
+                
+                # 'once' (1회성) 작업이 성공적으로 끝났다면 다시 실행되지 않도록 비활성화
+                if status == "SUCCESS" and job.execution_cycle == "once":
+                    job.is_active = False
+                    logging.info(f"  - 1회성 작업({job_id}) 완료로 비활성화(is_active=False) 처리됨")
+                    if job.schedule_id:
+                        schedule = session.exec(select(BrowserScheduleMst).where(BrowserScheduleMst.schedule_id == job.schedule_id)).first()
+                        if schedule:
+                            schedule.is_active = False
+                            session.add(schedule)
+                            
+                session.add(job)
+                session.commit()
+                return True
+            return False
     
     # ==================== 검증 엔진 ====================
     

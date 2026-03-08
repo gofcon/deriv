@@ -6,7 +6,7 @@ import sys
 import os
 
 # Add project root to sys.path
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 from app.database import DatabaseManager
 from app.models import StockPrice, DailyPrice, DisplayBoardTop
@@ -14,7 +14,7 @@ from sqlmodel import select
 
 def verify():
     # Use absolute path for DB
-    db_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "kis_api.db")
+    db_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), "data", "kis_api.db")
     db = DatabaseManager(db_path)
     
     with db.get_session() as session:

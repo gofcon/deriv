@@ -6,7 +6,7 @@ import os
 import sys
 
 # Add project root to sys.path
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 from app.config import get_engine_kwargs
 from scripts.log_setup import setup_logging
@@ -21,7 +21,7 @@ def extract_ddl():
     url = kwargs.pop("url")
     engine = create_engine(url, **kwargs)
     
-    out_file = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "script_gof.sql")
+    out_file = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), "data", "script_gof.sql")
     
     try:
         with engine.begin() as conn:

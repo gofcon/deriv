@@ -9,7 +9,7 @@ import sys
 import os
 
 # Add project root to sys.path
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 from app.database import DatabaseManager
 
@@ -18,7 +18,7 @@ from scripts.log_setup import setup_logging
 setup_logging()
 
 # Default DB path relative to script location
-DEFAULT_DB_PATH = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "kis_api.db")
+DEFAULT_DB_PATH = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), "data", "kis_api.db")
 
 def import_from_csv(csv_file: str, db_path: str = DEFAULT_DB_PATH) -> None:
     """CSV → DB 임포트"""

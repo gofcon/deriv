@@ -7,7 +7,7 @@ import logging
 import sys
 
 # Add project root to sys.path
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 from app.config import DB_TYPE, DB_PATH, get_engine_kwargs
 from scripts.log_setup import setup_logging
@@ -87,7 +87,7 @@ def init_database(drop_tables=False):
     print("=" * 80)
     print("✓ 테이블 생성 완료")
     print("=" * 80)
-    print("※ 데이터를 적재하려면 'scripts/insert_sample_data.py' 또는 'scripts/load_api_data.py'를 실행하세요.")
+    print(f"※ 데이터를 적재하려면 'scripts/setup/load_api_data.py' 또는 'scripts/load_api_data.py'를 실행하세요.")
 
 
 if __name__ == "__main__":

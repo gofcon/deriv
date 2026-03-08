@@ -7,7 +7,7 @@ import sys
 import logging
 
 # Add project root to sys.path
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 from app.config import DB_TYPE, get_engine_kwargs
 from scripts.log_setup import setup_logging

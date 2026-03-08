@@ -7,7 +7,7 @@ import sys
 import logging
 
 # Add project root to sys.path
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 from app.config import get_engine_kwargs
 from scripts.log_setup import setup_logging
@@ -80,5 +80,5 @@ def execute_script(file_path: str):
         print(f"치명적인 오류 발생: {e}")
 
 if __name__ == "__main__":
-    script_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "script_gof.sql")
+    script_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), "data", "script_gof.sql")
     execute_script(script_path)
