@@ -88,14 +88,20 @@ class MasterDatabaseManager:
                 total = len(data_list)
                 for i in range(0, total, batch_size):
                     batch_data = data_list[i:i+batch_size]
+                    
+                    # Convert all non-None values to string to avoid DPY-3013 with Oracle
+                    processed_batch = []
+                    for row in batch_data:
+                        processed_row = {k: (str(v) if v is not None else None) for k, v in row.items()}
+                        processed_batch.append(processed_row)
+                        
                     # 모델 인스턴스 생성을 통해 default_factory 실행 보장
-                    instances = [model_class(**row) for row in batch_data]
+                    instances = [model_class(**row) for row in processed_batch]
                     session.add_all(instances)
                     session.commit()
                     logging.info(f"Inserted {min(i+batch_size, total)}/{total} rows into {model_class.__tablename__}")
         except Exception as e:
             logging.error(f"Error inserting data into {model_class.__tablename__}: {e}")
-            raise e
             raise e
 
     def update_metadata_tables(self):

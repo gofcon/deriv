@@ -9,15 +9,25 @@ from datetime import datetime
 from sqlmodel import Session, SQLModel, create_engine, select
 from sqlalchemy.exc import IntegrityError
 
-from .models import (
-    APIMst, 
-    APIParam, 
-    JobMst, 
+from .models_gofcon import (
+    ApiMst, 
+    ApiParam, 
+    ApiJobMst,
+    BrowserMst,
+    BrowserJobMst,
+    BrowserRst,
+    KrxIsinMst,
     ValidationResult,
     StockPrice,
     DailyPrice,
     DisplayBoardTop,
 )
+# from .models import (
+#     ValidationResult,
+#     StockPrice,
+#     DailyPrice,
+#     DisplayBoardTop,
+# )
 import pandas as pd
 
 
@@ -27,14 +37,21 @@ class DatabaseManager:
     """SQLModel based Database Manager"""
     
     def __init__(self, db_path: str = None):
-        if db_path is not None:
-            # Explicit SQLite path override (for testing/scripts)
-            self.engine = create_engine(f"sqlite:///{db_path}", echo=False)
-        else:
-            # Use centralized config (Oracle or SQLite based on .env)
-            kwargs = get_engine_kwargs()
-            url = kwargs.pop("url")
-            self.engine = create_engine(url, **kwargs)
+        kwargs = get_engine_kwargs()
+        url = kwargs.pop("url")
+        
+        # 만약 명시적으로 경로가 주어지고 (CLI), 설정이 sqlite인 경우에만 URL 덮어쓰기
+        from app.config import DB_TYPE
+        if db_path is not None and DB_TYPE == "sqlite":
+            url = f"sqlite:///{db_path}"
+            
+        self.engine = create_engine(url, **kwargs)
+        # OracleDialect workaround for JSON deserialization
+        import json
+        if not hasattr(self.engine.dialect, '_json_deserializer'):
+            self.engine.dialect._json_deserializer = lambda x: json.loads(x) if isinstance(x, (str, bytes, bytearray)) else x
+        if not hasattr(self.engine.dialect, '_json_serializer'):
+            self.engine.dialect._json_serializer = json.dumps
 
     
     def get_session(self) -> Session:
@@ -43,24 +60,28 @@ class DatabaseManager:
     
     # ==================== API Definition 관리 ====================
     
-    def add_api_definition(
+    def add_api_mst(
         self,
+        api_id: str,
         api_name: str,
+        api_type: str,
         api_url: str,
-        tr_id: str,
-        tr_cont: str = "",
+        header_json: dict,
+        request_type: str = "GET",
         description: Optional[str] = None,
         output_table_name: Optional[str] = None,
       
-    ) -> Optional[APIMst]:
+    ) -> Optional[ApiMst]:
         """API 정의 추가"""
         with self.get_session() as session:
             try:
-                api_def = APIMst(
+                api_def = ApiMst(
+                    api_id=api_id,
                     api_name=api_name,
+                    api_type=api_type,
                     api_url=api_url,
-                    tr_id=tr_id,
-                    tr_cont=tr_cont,
+                    header_json=header_json,
+                    request_type=request_type,
                     description=description,
                     output_table_name=output_table_name,
                     
@@ -68,56 +89,52 @@ class DatabaseManager:
                 session.add(api_def)
                 session.commit()
                 session.refresh(api_def)
-                logging.info(f"✓ API 정의 추가: {api_name}")
+                logging.info(f"✓ API 정의 추가: {api_name} (API_ID: {api_id})")
                 return api_def
             except IntegrityError:
-                logging.error(f"✗ 이미 존재하는 프로그램: {api_name}")
+                logging.error(f"✗ 이미 존재하는 프로그램: {api_id}")
                 return None
     
-    def get_api_definition(self, api_name: str) -> Optional[APIMst]:
+    def get_api_mst(self, api_id: str) -> Optional[ApiMst]:
         """API 정의 조회"""
         with self.get_session() as session:
-            statement = select(APIMst).where(
-                APIMst.api_name == api_name,
-                # APIMst.is_active == True
+            statement = select(ApiMst).where(
+                ApiMst.api_id == api_id
             )
             return session.exec(statement).first()
     
-    def list_api_definitions(self) -> List[APIMst]:
+    def list_api_msts(self) -> List[ApiMst]:
         """모든 활성 API 목록"""
         with self.get_session() as session:
-            # statement = select(APIMst).where(APIMst.is_active == True)
-            statement = select(APIMst)
+            statement = select(ApiMst)
             return list(session.exec(statement).all())
     
     # ==================== Parameter Definition 관리 ====================
     
-    def add_parameter_definition(
+    def add_api_param(
         self,
-        api_name: str,
+        api_id: str,
         param_name: str,
-        param_type: str = "string",
         is_required: bool = False,
         default_value: Optional[str] = None,
         min_length: Optional[int] = None,
         max_length: Optional[int] = None,
         allowed_values: Optional[str] = None,
         description: Optional[str] = None
-    ) -> Optional[APIParam]:
+    ) -> Optional[ApiParam]:
         """파라미터 정의 추가 (검증 룰 포함)"""
-        api_def = self.get_api_definition(api_name)
+        api_def = self.get_api_mst(api_id)
         if not api_def:
-            logging.error(f"✗ API 정의 없음: {api_name}")
+            logging.error(f"✗ API 정의 없음: {api_id}")
             return None
         
         # 파라미터 이름 대문자 정규화
         param_name = param_name.upper()
         
         with self.get_session() as session:
-            param_def = APIParam(
-                api_name=api_def.api_name,
+            param_def = ApiParam(
+                api_id=api_id,
                 param_name=param_name,
-                param_type=param_type,
                 is_required=is_required,
                 default_value=default_value,
                 min_length=min_length,
@@ -128,47 +145,50 @@ class DatabaseManager:
             session.add(param_def)
             session.commit()
             session.refresh(param_def)
-            logging.info(f"✓ 파라미터 정의: {api_name}.{param_name}")
+            logging.info(f"✓ 파라미터 정의: {api_id}.{param_name}")
             return param_def
     
-    def get_parameter_definitions(self, api_name: str) -> List[APIParam]:
+    def get_api_params(self, api_id: str) -> List[ApiParam]:
         """파라미터 정의 목록 조회"""
-        api_def = self.get_api_definition(api_name)
+        api_def = self.get_api_mst(api_id)
         if not api_def:
             return []
         
         with self.get_session() as session:
-            statement = select(APIParam).where(
-                APIParam.api_name == api_def.api_name
+            statement = select(ApiParam).where(
+                ApiParam.api_id == api_id
             )
             return list(session.exec(statement).all())
     
     # ==================== User Input 관리 (JSON 형식) ====================
     
-    def add_user_input(
+    def add_api_job_mst(
         self,
-        api_name: str,
+        job_id: str,
+        api_id: str,
         params: Dict[str, Any],
         description: Optional[str] = None,
         is_active: bool = True,
         save_mode: str = "append",
         execution_cycle: str = "5min"
-    ) -> JobMst:
+    ) -> ApiJobMst:
         """
         사용자 입력 추가/업데이트 (JSON 형식)
         
         ✨ 핵심: params는 딕셔너리 {"KEY": "VALUE", ...}
         """
+        import json
         with self.get_session() as session:
             # 기존 입력 확인
-            statement = select(JobMst).where(
-                JobMst.api_name == api_name
+            statement = select(ApiJobMst).where(
+                ApiJobMst.job_id == job_id
             )
             existing = session.exec(statement).first()
             
             if existing:
                 # 업데이트
-                existing.set_params_dict(params)
+                existing.params_json = params
+                existing.api_id = api_id
                 existing.description = description
                 existing.is_active = is_active
                 existing.save_mode = save_mode
@@ -177,70 +197,187 @@ class DatabaseManager:
                 session.add(existing)
                 session.commit()
                 session.refresh(existing)
-                logging.info(f"✓ 사용자 입력 업데이트: {api_name} ({len(params)}개, Active={is_active})")
+                logging.info(f"✓ 사용자 입력 업데이트: {job_id} ({len(params)}개, Active={is_active})")
                 return existing
             else:
                 # 새로 추가
-                user_input = JobMst(
-                    api_name=api_name,
-                    params_json="",
+                user_input = ApiJobMst(
+                    job_id=job_id,
+                    api_id=api_id,
                     description=description,
                     is_active=is_active,
                     save_mode=save_mode,
                     execution_cycle=execution_cycle
                 )
-                user_input.set_params_dict(params)
+                user_input.params_json = params
                 session.add(user_input)
                 session.commit()
                 session.refresh(user_input)
-                logging.info(f"✓ 사용자 입력 추가: {api_name} ({len(params)}개, Active={is_active})")
+                logging.info(f"✓ 사용자 입력 추가: {job_id} ({len(params)}개, Active={is_active})")
                 return user_input
     
-    def get_user_input(self, api_name: str) -> Optional[JobMst]:
-        """사용자 입력 조회"""
+    def get_api_job_mst(self, job_id: str) -> Optional[ApiJobMst]:
+        """API 사용자 입력(Job) 조회"""
         with self.get_session() as session:
-            statement = select(JobMst).where(
-                JobMst.api_name == api_name
+            statement = select(ApiJobMst).where(
+                ApiJobMst.job_id == job_id
             )
             return session.exec(statement).first()
     
-    def list_user_inputs(self) -> List[JobMst]:
-        """모든 사용자 입력 목록"""
+    def list_api_job_msts(self) -> List[ApiJobMst]:
+        """모든 API 사용자 입력(Job) 목록"""
         with self.get_session() as session:
-            statement = select(JobMst)
+            statement = select(ApiJobMst)
             return list(session.exec(statement).all())
 
-    def list_active_user_inputs(self, cycle: str = None) -> List[JobMst]:
+    def list_active_api_job_msts(self, cycle: str = None) -> List[ApiJobMst]:
         """
-        활성화된 사용자 입력 목록 조회
+        활성화된 API 사용자 입력(Job) 목록 조회
         :param cycle: 실행 주기 필터 (None이면 전체)
         """
         with self.get_session() as session:
-            statement = select(JobMst).where(JobMst.is_active == True)
+            statement = select(ApiJobMst).where(ApiJobMst.is_active == True)
             
             if cycle:
-                statement = statement.where(JobMst.execution_cycle == cycle)
+                statement = statement.where(ApiJobMst.execution_cycle == cycle)
                 
             return list(session.exec(statement).all())
     
-    def delete_user_input(self, api_name: str) -> bool:
-        """사용자 입력 삭제"""
+    def delete_api_job_mst(self, job_id: str) -> bool:
+        """API 사용자 입력(Job) 삭제"""
         with self.get_session() as session:
-            statement = select(JobMst).where(
-                JobMst.api_name == api_name
+            statement = select(ApiJobMst).where(
+                ApiJobMst.job_id == job_id
             )
-            user_input = session.exec(statement).first()
+            job_input = session.exec(statement).first()
             
-            if user_input:
-                session.delete(user_input)
+            if job_input:
+                session.delete(job_input)
                 session.commit()
-                logging.info(f"✓ 사용자 입력 삭제: {api_name}")
+                logging.info(f"✓ 사용자 입력 삭제: {job_id}")
                 return True
             return False
+            
+    # ==================== Browser 스펙 통제 관리 ====================
+
+    def add_browser_mst(
+        self,
+        browser_id: str,
+        browser_name: str,
+        target_url: str,
+        output_table_name: str = None,
+        selector_json: dict = None,
+        behavior_json: list = None,
+        pagination_json: dict = None,
+        human_like: bool = False,
+        description: str = None
+    ) -> BrowserMst:
+        """Browser 스크래핑 템플릿 추가/업데이트"""
+        with self.get_session() as session:
+            statement = select(BrowserMst).where(BrowserMst.browser_id == browser_id)
+            existing = session.exec(statement).first()
+            
+            if existing:
+                existing.browser_name = browser_name
+                existing.target_url = target_url
+                existing.output_table_name = output_table_name
+                if selector_json is not None: existing.selector_json = selector_json
+                if behavior_json is not None: existing.behavior_json = behavior_json
+                if pagination_json is not None: existing.pagination_json = pagination_json
+                existing.human_like = human_like
+                if description: existing.description = description
+                session.add(existing)
+                session.commit()
+                session.refresh(existing)
+                logging.info(f"✓ Browser 정의 업데이트: {browser_name} (ID: {browser_id})")
+                return existing
+            else:
+                new_def = BrowserMst(
+                    browser_id=browser_id,
+                    browser_name=browser_name,
+                    target_url=target_url,
+                    output_table_name=output_table_name,
+                    selector_json=selector_json or {},
+                    behavior_json=behavior_json or [],
+                    pagination_json=pagination_json or {},
+                    human_like=human_like,
+                    description=description
+                )
+                session.add(new_def)
+                session.commit()
+                session.refresh(new_def)
+                logging.info(f"✓ Browser 정의 추가: {browser_name} (ID: {browser_id})")
+                return new_def
+
+    def get_browser_mst(self, browser_id: str) -> Optional[BrowserMst]:
+        """Browser 정의 조회"""
+        with self.get_session() as session:
+            statement = select(BrowserMst).where(BrowserMst.browser_id == browser_id)
+            return session.exec(statement).first()
+
+    # ==================== Browser 스크래핑 작업(Job) 관리 ====================
+
+    def add_browser_job_mst(
+        self,
+        job_id: str,
+        browser_id: str,
+        params: Dict[str, Any],
+        description: str = None,
+        is_active: bool = True,
+        save_mode: str = "append",
+        execution_cycle: str = "daily"
+    ) -> BrowserJobMst:
+        """Browser 스크래핑 인스턴스 추가/업데이트"""
+        import json
+        with self.get_session() as session:
+            statement = select(BrowserJobMst).where(BrowserJobMst.job_id == job_id)
+            existing = session.exec(statement).first()
+            
+            if existing:
+                existing.browser_id = browser_id
+                existing.params_json = params
+                existing.description = description
+                existing.is_active = is_active
+                existing.save_mode = save_mode
+                existing.execution_cycle = execution_cycle
+                session.add(existing)
+                session.commit()
+                session.refresh(existing)
+                logging.info(f"✓ Browser 작업 업데이트: {job_id}")
+                return existing
+            else:
+                new_job = BrowserJobMst(
+                    job_id=job_id,
+                    browser_id=browser_id,
+                    description=description,
+                    params_json=params,
+                    is_active=is_active,
+                    save_mode=save_mode,
+                    execution_cycle=execution_cycle
+                )
+                session.add(new_job)
+                session.commit()
+                session.refresh(new_job)
+                logging.info(f"✓ Browser 작업 추가: {job_id} ({len(params)}개 파라미터, Active={is_active})")
+                return new_job
+
+    def get_browser_job_mst(self, job_id: str) -> Optional[BrowserJobMst]:
+        """Browser 작업(Job) 조회"""
+        with self.get_session() as session:
+            statement = select(BrowserJobMst).where(BrowserJobMst.job_id == job_id)
+            return session.exec(statement).first()
+
+    def list_active_browser_job_msts(self, cycle: str = None) -> List[BrowserJobMst]:
+        """활성화된 Browser 작업(Job) 목록 조회"""
+        with self.get_session() as session:
+            statement = select(BrowserJobMst).where(BrowserJobMst.is_active == True)
+            if cycle:
+                statement = statement.where(BrowserJobMst.execution_cycle == cycle)
+            return list(session.exec(statement).all())
     
     # ==================== 검증 엔진 ====================
     
-    def validate_user_inputs(self, api_name: str) -> ValidationResult:
+    def validate_job_inputs(self, api_id: str, job_id: str) -> ValidationResult:
         """
         사용자 입력 검증
         
@@ -260,21 +397,24 @@ class DatabaseManager:
         )
         
         # 1. API 정의 확인
-        api_def = self.get_api_definition(api_name)
+        api_def = self.get_api_mst(api_id)
         if not api_def:
             result.is_valid = False
-            result.errors.append(f"API 정의 없음: {api_name}")
+            result.errors.append(f"API 정의 없음: {api_id}")
             return result
         
         # 2. 파라미터 정의 조회
-        param_defs = self.get_parameter_definitions(api_name)
+        param_defs = self.get_api_params(api_id)
         if not param_defs:
             result.warnings.append("파라미터 정의 없음 - 검증 생략")
             return result
         
         # 3. 사용자 입력 조회 (JSON → Dict) 및 대문자로 정규화
-        user_input = self.get_user_input(api_name)
-        raw_user_params = user_input.get_params_dict() if user_input else {}
+        job_input = self.get_api_job_mst(job_id)
+        raw_user_params = job_input.params_json if job_input else {}
+        if isinstance(raw_user_params, str):
+            import json
+            raw_user_params = json.loads(raw_user_params) if raw_user_params else {}
         # 파라미터 키를 모두 대문자로 변환
         user_params = {k.upper(): v for k, v in raw_user_params.items()}
         
@@ -336,12 +476,12 @@ class DatabaseManager:
         
         return result
 
-    def insert_output_data(self, api_name: str, df: pd.DataFrame) -> int:
+    def insert_output_data(self, api_id: str, job_id: str, df: pd.DataFrame) -> int:
         """DataFrame을 output 테이블에 삽입"""
-        api_def = self.get_api_definition(api_name)
-        user_input = self.get_user_input(api_name)
+        api_def = self.get_api_mst(api_id)
+        job_input = self.get_api_job_mst(job_id)
         if not api_def or not api_def.output_table_name:
-            logging.warning(f"Output table not defined for {api_name}")
+            logging.warning(f"Output table not defined for API_ID: {api_id}")
             return 0
         
         # Get output model class dynamically
@@ -352,15 +492,24 @@ class DatabaseManager:
         
         try:
             # Overwrite 모드인 경우 기존 데이터 삭제
-            if user_input.save_mode == "overwrite":
+            if job_input and job_input.save_mode == "overwrite":
                 with self.get_session() as session:
-                    statement = select(output_model).where(output_model.api_name == api_name)
+                    # Depending on how the output table identifies records, 
+                    # usually it was linked by api_name. Assuming it's now api_id.
+                    if hasattr(output_model, "api_id"):
+                        statement = select(output_model).where(output_model.api_id == api_id)
+                    elif hasattr(output_model, "tr_id"):
+                        statement = select(output_model).where(output_model.tr_id == api_id)
+                    else:
+                        statement = select(output_model).where(output_model.api_name == api_def.api_name)
+                    
                     results = session.exec(statement).all()
                     if results:
                         for row in results:
                             session.delete(row)
                         session.commit()
-                        logging.info(f"Overwrote existing data for {api_name} ({len(results)} rows deleted)")
+                        logging.info(f"Overwrote existing data for {api_id} ({len(results)} rows deleted)")
+
 
             # valid keys caching
             valid_keys = output_model.model_fields.keys() if hasattr(output_model, 'model_fields') else None
@@ -378,11 +527,15 @@ class DatabaseManager:
                         if pd.notna(v) and (valid_keys is None or k in valid_keys):
                              model_data[k] = str(v)
                     
-                    # Create record with api_name
-                    record = output_model(
-                        api_name=api_name,
-                        **model_data
-                    )
+                    # Create record with api_id and api_name depending on model
+                    if hasattr(output_model, "api_id"):
+                        model_data["api_id"] = api_id
+                    elif hasattr(output_model, "tr_id"): # Fallback for old models if any
+                        model_data["tr_id"] = api_id
+                    if hasattr(output_model, "api_name"):
+                        model_data["api_name"] = api_def.api_name
+                        
+                    record = output_model(**model_data)
                     session.add(record)
                     count += 1
                 session.commit()
@@ -393,11 +546,104 @@ class DatabaseManager:
             logging.error(traceback.format_exc())
             return 0
 
+    def insert_browser_output_data(self, browser_id: str, job_id: str, df: pd.DataFrame) -> int:
+        """Browser DataFrame을 output 테이블에 삽입"""
+        browser_def = self.get_browser_mst(browser_id)
+        job_input = self.get_browser_job_mst(job_id)
+        if not browser_def or not browser_def.output_table_name:
+            logging.warning(f"Output table not defined for BROWSER_ID: {browser_id}")
+            return 0
+        
+        output_model = self._get_output_model(browser_def.output_table_name.upper() if browser_def.output_table_name else "")
+        if not output_model:
+            logging.warning(f"Output model not found for table: {browser_def.output_table_name}")
+            return 0
+        
+        try:
+            # === Generalized JSON Table Branch ===
+            if browser_def.output_table_name.upper() == "BROWSER_RST":
+                if job_input and job_input.save_mode == "overwrite":
+                    with self.get_session() as session:
+                        statement = select(BrowserRst).where(BrowserRst.browser_id == browser_id)
+                        results = session.exec(statement).all()
+                        if results:
+                            for row in results:
+                                session.delete(row)
+                            session.commit()
+                            logging.info(f"Overwrote existing general data for {browser_id} ({len(results)} rows deleted)")
+
+                with self.get_session() as session:
+                    count = 0
+                    for _, row in df.iterrows():
+                        row_dict = row.to_dict()
+                        
+                        # Clean out NaNs for JSON serialization
+                        clean_dict = {k: v for k, v in row_dict.items() if pd.notna(v)}
+                        
+                        record = BrowserRst(
+                            browser_id=browser_id,
+                            job_id=job_id,
+                            result_json=clean_dict
+                        )
+                        session.add(record)
+                        count += 1
+                    session.commit()
+                    return count
+            
+            # === Specific Schema Branch ===
+            if job_input and job_input.save_mode == "overwrite":
+                with self.get_session() as session:
+                    # Depending on how the output table identifies records
+                    if hasattr(output_model, "api_id"):
+                        statement = select(output_model).where(output_model.api_id == browser_id)
+                    elif hasattr(output_model, "tr_id"):
+                        statement = select(output_model).where(output_model.tr_id == browser_id)
+                    else:
+                        statement = select(output_model).where(output_model.api_name == browser_def.browser_name)
+                    
+                    results = session.exec(statement).all()
+                    if results:
+                        for row in results:
+                            session.delete(row)
+                        session.commit()
+                        logging.info(f"Overwrote existing data for {browser_id} ({len(results)} rows deleted)")
+
+            valid_keys = output_model.model_fields.keys() if hasattr(output_model, 'model_fields') else None
+
+            with self.get_session() as session:
+                count = 0
+                for _, row in df.iterrows():
+                    row_dict = row.to_dict()
+                    
+                    model_data = {}
+                    for k, v in row_dict.items():
+                        if pd.notna(v) and (valid_keys is None or k in valid_keys):
+                             model_data[k] = str(v)
+                    
+                    if hasattr(output_model, "api_id"):
+                        model_data["api_id"] = browser_id
+                    elif hasattr(output_model, "tr_id"):
+                        model_data["tr_id"] = browser_id
+                    if hasattr(output_model, "api_name"):
+                        model_data["api_name"] = browser_def.browser_name
+                        
+                    record = output_model(**model_data)
+                    session.add(record)
+                    count += 1
+                session.commit()
+                return count
+        except Exception as e:
+            logging.error(f"Error inserting browser output data: {e}")
+            import traceback
+            logging.error(traceback.format_exc())
+            return 0
+
     def _get_output_model(self, table_name: str):
         """Get output model class by table name"""
         mapping = {
-            "stock_price": StockPrice,
-            "daily_price": DailyPrice,
-            "display_board_top": DisplayBoardTop,
+            "KIS_STOCK_PRICE": StockPrice,
+            "KIS_DAILY_PRICE": DailyPrice,
+            "KRX_ISIN_MST": KrxIsinMst,
+            "BROWSER_RST": BrowserRst
         }
         return mapping.get(table_name)

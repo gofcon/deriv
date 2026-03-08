@@ -21,36 +21,42 @@ class APIManager:
     def __init__(self, db_path: str = None):
         self.db = DatabaseManager(db_path)
     
-    def execute(self, api_name: str, skip_validation: bool = False) -> pd.DataFrame:
+    def execute(self, job_id: str, skip_validation: bool = False) -> pd.DataFrame:
         """
         DB에 저장된 정보로 API 실행
         """
         
-        # 1. API 정의
-        api_def = self.db.get_api_definition(api_name)
-        if not api_def:
-            raise ValueError(f"API 정의 없음: {api_name}")
-        
-        logging.info("="*60)
-        logging.info(f"API 실행: {api_name}")
-        logging.info("="*60)
-        logging.info(f"URL: {api_def.api_url}")
-        logging.info(f"TR_ID: {api_def.tr_id}")
-        
         # 2. 사용자 입력
-        user_input = self.db.get_user_input(api_name)
-        if not user_input:
+        job_input = self.db.get_api_job_mst(job_id)
+        if not job_input:
             raise ValueError(
-                f"사용자 입력 없음: {api_name}\n"
-                f"먼저 입력 설정: python main.py --program {api_name} --set-input --params ..."
+                f"사용자 입력(Job) 없음: {job_id}\n"
             )
         
-        params = user_input.get_params_dict()
+        api_id = job_input.api_id
+        
+        # 1. API 정의
+        api_def = self.db.get_api_mst(api_id)
+        if not api_def:
+            raise ValueError(f"API 정의 없음: {api_id}")
+        
+        logging.info("="*60)
+        logging.info(f"API 실행: {api_id} (Job: {job_id})")
+        logging.info("="*60)
+        logging.info(f"URL: {api_def.api_url}")
+        logging.info(f"API_ID: {api_def.api_id}")
+        
+        raw_params = job_input.params_json if job_input else {}
+        if isinstance(raw_params, str):
+            import json
+            raw_params = json.loads(raw_params) if raw_params else {}
+        params = raw_params
+        
         logging.info(f"파라미터: {json.dumps(params, ensure_ascii=False)}")
         
         # 3. 검증
         if not skip_validation:
-            validation = self.db.validate_user_inputs(api_name)
+            validation = self.db.validate_job_inputs(api_id, job_id)
             
             if not validation.is_valid:
                 logging.error("검증 실패:")
@@ -73,8 +79,8 @@ class APIManager:
             
             res = client.fetch(
                 api_url=api_def.api_url,
-                tr_id=api_def.tr_id,
-                tr_cont=api_def.tr_cont,
+                api_id=api_def.api_id,
+                header_json=api_def.header_json,
                 params=params
             )
             
@@ -122,10 +128,10 @@ class APIManager:
         Returns:
             bool: 모든 입력이 유효하면 True, 하나라도 실패하면 False
         """
-        active_inputs = self.db.list_active_user_inputs(cycle=cycle)
+        active_inputs = self.db.list_active_api_job_msts(cycle=cycle)
         
         if not active_inputs:
-            logging.warning("활성화된 프로그램이 없습니다.")
+            logging.warning("활성화된 프로그램(Job)이 없습니다.")
             return False
             
         logging.info("="*60)
@@ -135,15 +141,15 @@ class APIManager:
         all_valid = True
         
         for ui in active_inputs:
-            validation = self.db.validate_user_inputs(ui.api_name)
+            validation = self.db.validate_job_inputs(ui.api_id, ui.job_id)
             
             if not validation.is_valid:
                 all_valid = False
-                logging.error(f"✗ [{ui.api_name}] 검증 실패:")
+                logging.error(f"✗ [{ui.job_id}] 검증 실패:")
                 for error in validation.errors:
                     logging.error(f"    - {error}")
             else:
-                logging.info(f"✓ [{ui.api_name}] 검증 통과")
+                logging.info(f"✓ [{ui.job_id}] 검증 통과")
                 
             if validation.warnings:
                 for warning in validation.warnings:
@@ -153,7 +159,7 @@ class APIManager:
 
     def execute_active_programs(self, http_client, cycle: str = None) -> None:
         """활성화된 프로그램 실행"""
-        active_inputs = self.db.list_active_user_inputs(cycle=cycle)
+        active_inputs = self.db.list_active_api_job_msts(cycle=cycle)
         
         if not active_inputs:
             return
@@ -170,18 +176,18 @@ class APIManager:
         client = http_client
 
         for ui in active_inputs:
-            # logging.info(f"\n▶ 실행: {ui.api_name}")
-            logging.info(f"▶ 실행: {ui.api_name}")
+            # logging.info(f"\n▶ 실행: {ui.job_id}")
+            logging.info(f"▶ 실행: {ui.job_id}")
             try:
                 # 1. API 정의 조회
-                api_def = self.db.get_api_definition(ui.api_name)
+                api_def = self.db.get_api_mst(ui.api_id)
                 if not api_def:
-                    logging.error(f"  ✗ API 정의 없음")
+                    logging.error(f"  ✗ API 정의 없음: {ui.api_id}")
                     fail_count += 1
                     continue
                 
                 # 2. 파라미터 검증 및 기본값 적용
-                validation = self.db.validate_user_inputs(ui.api_name)
+                validation = self.db.validate_job_inputs(ui.api_id, ui.job_id)
                 if not validation.is_valid:
                     logging.error(f"  ✗ 파라미터 검증 실패")
                     fail_count += 1
@@ -194,8 +200,8 @@ class APIManager:
                 # 3. API 호출
                 res = client.fetch(
                     api_url=api_def.api_url,
-                    tr_id=api_def.tr_id,
-                    tr_cont=api_def.tr_cont,
+                    api_id=api_def.api_id,
+                    header_json=api_def.header_json,
                     params=params
                 )
                 
@@ -216,7 +222,7 @@ class APIManager:
                     print(data)
 
                     # Output 테이블에 저장
-                    saved_count = self.db.insert_output_data(ui.api_name, data)
+                    saved_count = self.db.insert_output_data(ui.api_id, ui.job_id, data)
                     logging.info(f"  ✓ 성공: {len(data)}건 (DB 저장: {saved_count}건)")
                     success_count += 1
                 else:
@@ -232,6 +238,69 @@ class APIManager:
         # logging.info("\n" + "="*80)
         logging.info("="*80)
         logging.info(f"실행 완료: 성공 {success_count}, 실패 {fail_count}")
+        logging.info("="*80)
+
+    def execute_active_browser_programs(self, cycle: str = None) -> None:
+        """활성화된 브라우저 스크래핑 모델 실행"""
+        try:
+            from app.browser_scraper import BrowserScraper
+        except ImportError:
+            logging.error("app/browser_scraper.py 모듈을 찾을 수 없습니다.")
+            return
+            
+        active_browser_jobs = self.db.list_active_browser_job_msts(cycle=cycle)
+        
+        if not active_browser_jobs:
+            return
+            
+        logging.info("="*60)
+        logging.info(f"브라우저 스크래핑 일괄 실행 시작 ({len(active_browser_jobs)}개)")
+        logging.info("="*60)
+        
+        success_count = 0
+        fail_count = 0
+        
+        scraper = BrowserScraper(self.db)
+        
+        for job in active_browser_jobs:
+            logging.info(f"▶ 브라우저 스크래핑 실행: {job.job_id}")
+            try:
+                # 1. 브라우저 스크래핑 실행
+                result_data = scraper.execute_job(job)
+                
+                if result_data:
+                    # 2. 데이터 프레임 변환
+                    # dict인 경우 리스트로 감싸거나, 내부에 리스트가 있는 경우 그대로 사용
+                    is_scalar = True
+                    for v in result_data.values():
+                        if isinstance(v, list):
+                            is_scalar = False
+                            break
+                    
+                    if is_scalar:
+                        df = pd.DataFrame([result_data])
+                    else:
+                        df = pd.DataFrame(result_data)
+                    
+                    logging.info(f"  추출된 데이터: {len(df)}건")
+                    print(df.head())
+                    
+                    # 3. Output 테이블 저장 (browser_id를 기준으로 저장)
+                    saved_count = self.db.insert_browser_output_data(job.browser_id, job.job_id, df)
+                    logging.info(f"  ✓ 성공: {len(df)}건 (DB 저장: {saved_count}건)")
+                    success_count += 1
+                else:
+                    logging.error("  ✗ 브라우저 스크래핑 결과 없음")
+                    fail_count += 1
+                    
+            except Exception as e:
+                logging.error(f"  ✗ 브라우저 스크래핑 실행 중 오류: {e}")
+                import traceback
+                logging.error(traceback.format_exc())
+                fail_count += 1
+                
+        logging.info("="*80)
+        logging.info(f"브라우저 스크래핑 완료: 성공 {success_count}, 실패 {fail_count}")
         logging.info("="*80)
 
 
@@ -287,8 +356,11 @@ def main():
         # 3. HTTP 클라이언트 생성
         http_client = KISHttpClient(config)
             
-        # 4. 실행 (HTTP 클라이언트 주입)
+        # 4. API 실행 (HTTP 클라이언트 주입)
         manager.execute_active_programs(http_client, cycle=args.cycle)
+        
+        # 5. 브라우저 스크래핑 실행
+        manager.execute_active_browser_programs(cycle=args.cycle)
     
     except Exception as e:
         import traceback

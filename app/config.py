@@ -4,6 +4,7 @@ config.py - Application configuration
 
 import os
 from urllib.parse import quote_plus
+import json
 from dotenv import load_dotenv
 
 # Load .env from project root

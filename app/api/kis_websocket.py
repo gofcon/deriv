@@ -148,9 +148,9 @@ def parse_system_response(data: str) -> namedtuple:
     iv = None
     ekey = None
     
-    tr_id = json_data["header"]["tr_id"]
+    api_id = json_data["header"]["tr_id"]
     
-    if tr_id != "PINGPONG":
+    if api_id != "PINGPONG":
         tr_key = json_data["header"]["tr_key"]
         encrypt = json_data["header"]["encrypt"]
     
@@ -165,17 +165,17 @@ def parse_system_response(data: str) -> namedtuple:
         
         is_unsub = tr_msg[:5] == "UNSUB" if tr_msg else False
     else:
-        is_ping_pong = tr_id == "PINGPONG"
+        is_ping_pong = api_id == "PINGPONG"
     
     SystemMessage = namedtuple(
         "SystemMessage",
-        ["is_ok", "tr_id", "tr_key", "is_unsub", "is_ping_pong",
+        ["is_ok", "api_id", "tr_key", "is_unsub", "is_ping_pong",
          "tr_msg", "iv", "ekey", "encrypt"]
     )
     
     return SystemMessage(
         is_ok=is_ok,
-        tr_id=tr_id,
+        api_id=api_id,
         tr_key=tr_key,
         is_unsub=is_unsub,
         is_ping_pong=is_ping_pong,
@@ -238,7 +238,7 @@ class KISWebSocket:
     
     def add_data_mapping(
         self,
-        tr_id: str,
+        api_id: str,
         columns: List[str] = None,
         encrypt: str = None,
         key: str = None,
@@ -248,14 +248,14 @@ class KISWebSocket:
         데이터 매핑 추가
         
         Args:
-            tr_id: 거래 ID
+            api_id: 거래 ID
             columns: 컬럼 리스트
             encrypt: 암호화 여부
             key: 암호화 키
             iv: 초기화 벡터
         """
-        if tr_id not in self.data_map:
-            self.data_map[tr_id] = {
+        if api_id not in self.data_map:
+            self.data_map[api_id] = {
                 "columns": [],
                 "encrypt": False,
                 "key": None,
@@ -263,13 +263,13 @@ class KISWebSocket:
             }
         
         if columns is not None:
-            self.data_map[tr_id]["columns"] = columns
+            self.data_map[api_id]["columns"] = columns
         if encrypt is not None:
-            self.data_map[tr_id]["encrypt"] = encrypt
+            self.data_map[api_id]["encrypt"] = encrypt
         if key is not None:
-            self.data_map[tr_id]["key"] = key
+            self.data_map[api_id]["key"] = key
         if iv is not None:
-            self.data_map[tr_id]["iv"] = iv
+            self.data_map[api_id]["iv"] = iv
     
     async def _subscriber(self, ws: websockets.ClientConnection):
         """메시지 수신 처리"""
@@ -278,7 +278,7 @@ class KISWebSocket:
             
             show_result = False
             df = pd.DataFrame()
-            tr_id = None
+            api_id = None
             
             # 데이터 메시지 (0 또는 1로 시작)
             if raw_message[0] in ["0", "1"]:
@@ -287,8 +287,8 @@ class KISWebSocket:
                 if len(parts) < 4:
                     raise ValueError("Invalid data message format")
                 
-                tr_id = parts[1]
-                data_mapping = self.data_map.get(tr_id, {})
+                api_id = parts[1]
+                data_mapping = self.data_map.get(api_id, {})
                 data = parts[3]
                 
                 # 복호화
@@ -313,11 +313,11 @@ class KISWebSocket:
             # 시스템 메시지
             else:
                 sys_msg = parse_system_response(raw_message)
-                tr_id = sys_msg.tr_id
+                api_id = sys_msg.api_id
                 
                 # 데이터 매핑 업데이트
                 self.add_data_mapping(
-                    tr_id=sys_msg.tr_id,
+                    api_id=sys_msg.api_id,
                     encrypt=sys_msg.encrypt,
                     key=sys_msg.ekey,
                     iv=sys_msg.iv
@@ -334,7 +334,7 @@ class KISWebSocket:
             
             # 결과 콜백
             if show_result and self.on_result is not None:
-                self.on_result(ws, tr_id, df, self.data_map.get(tr_id, {}))
+                self.on_result(ws, api_id, df, self.data_map.get(api_id, {}))
     
     async def _runner(self):
         """WebSocket 연결 및 실행"""
@@ -388,7 +388,7 @@ class KISWebSocket:
         
         # 데이터 매핑 추가 (전역 방식)
         global data_map
-        add_data_map(tr_id=message["body"]["input"]["tr_id"], columns=columns)
+        add_data_map(api_id=message["body"]["input"]["tr_id"], columns=columns)
         
         logging.info(f"Send message: {json.dumps(message)}")
         await ws.send(json.dumps(message))
@@ -459,7 +459,7 @@ def add_open_map(
 
 
 def add_data_map(
-    tr_id: str,
+    api_id: str,
     columns: List[str] = None,
     encrypt: str = None,
     key: str = None,
@@ -468,8 +468,8 @@ def add_data_map(
     """데이터 매핑 추가 (하위 호환)"""
     global data_map
     
-    if tr_id not in data_map:
-        data_map[tr_id] = {
+    if api_id not in data_map:
+        data_map[api_id] = {
             "columns": [],
             "encrypt": False,
             "key": None,
@@ -477,13 +477,13 @@ def add_data_map(
         }
     
     if columns is not None:
-        data_map[tr_id]["columns"] = columns
+        data_map[api_id]["columns"] = columns
     if encrypt is not None:
-        data_map[tr_id]["encrypt"] = encrypt
+        data_map[api_id]["encrypt"] = encrypt
     if key is not None:
-        data_map[tr_id]["key"] = key
+        data_map[api_id]["key"] = key
     if iv is not None:
-        data_map[tr_id]["iv"] = iv
+        data_map[api_id]["iv"] = iv
 
 
 # 하위 호환 함수들
@@ -509,7 +509,7 @@ def aes_cbc_base64_dec(key: str, iv: str, cipher_text: str):
     return aes_cbc_base64_decrypt(key, iv, cipher_text)
 
 
-def data_fetch(tr_id: str, tr_type: str, params: dict, appendHeaders: dict = None) -> dict:
+def data_fetch(api_id: str, tr_type: str, params: dict, appendHeaders: dict = None) -> dict:
     """WebSocket 데이터 요청 생성 (하위 호환)"""
     auth_manager = KISWebSocketAuth()
     headers = auth_manager.get_headers()
@@ -520,7 +520,7 @@ def data_fetch(tr_id: str, tr_type: str, params: dict, appendHeaders: dict = Non
     if appendHeaders:
         headers.update(appendHeaders)
     
-    inp = {"tr_id": tr_id}
+    inp = {"tr_id": api_id}
     inp.update(params)
     
     return {

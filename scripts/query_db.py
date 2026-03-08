@@ -23,7 +23,10 @@ with db.get_session() as session:
     if api_def:
         print(f"Program: {api_def.program_name}")
         print(f"URL: {api_def.api_url}")
-        print(f"TR_ID: {api_def.tr_id}")
+        if hasattr(api_def, "api_id"):
+            print(f"API_ID: {api_def.api_id}")
+        elif hasattr(api_def, "tr_id"):
+            print(f"TR_ID: {api_def.tr_id}")
         
         # Get parameters
         params = session.exec(select(ParameterDefinition).where(ParameterDefinition.api_id == api_def.id)).all()

@@ -9,7 +9,7 @@ def compile_varchar_oracle(element, compiler, **kw):
     This override enforces a default length of 20 for Oracle connections.
     """
     if getattr(element, 'length', None) is None:
-        return "VARCHAR2(20)"
+        return "VARCHAR2(30)"
     else:
         return compiler.visit_VARCHAR(element, **kw)
 

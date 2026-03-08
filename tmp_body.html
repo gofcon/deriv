@@ -1,0 +1,1000 @@
+<!DOCTYPE html><html class=" js flexbox canvas canvastext webgl no-touch geolocation postmessage no-websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers no-applicationcache svg inlinesvg smil svgclippaths" lang="ko"><head>
+<meta http-equiv="X-UA-Compatible" content="IE=8">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta http-equiv="content-language" content="kr">
+<meta http-equiv="content-style-type" content="text/css">
+<meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="cache-control" content="no-cache">
+<meta http-equiv="imagetoolbar" content="no">
+<meta name="copyright" content="(c)2013">
+<meta name="description" content="표준코드시스템">
+<meta name="keywords" content="표준코드시스템">
+<title>KRX 표준코드시스템  (2)</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- <link rel="apple-touch-icon" href="apple-touch-icon.png"/> -->
+<!-- Place favicon.ico in the root directory -->
+<link rel="stylesheet" type="text/css" href="/css/common.css" media="all">
+<!-- link rel="stylesheet" type="text/css" href="/css/jquery-ui.css" media="all" /> -->
+<link rel="stylesheet" type="text/css" href="/css/normalize.css">
+<link rel="stylesheet" type="text/css" href="/css/main.css">
+<!-- link rel="stylesheet" type="text/css" href="/css/jquery-ui.min.css"/> -->
+<link rel="stylesheet" type="text/css" href="/css/jquery.bxslider.css">
+<link rel="stylesheet" type="text/css" href="/css/styleKrx.css">
+<script type="text/javascript" src="/js/jquery.js"></script>
+<script type="text/javascript" src="/js/jquery.ui.js"></script>
+<script type="text/javascript" src="/js/jquery.plugin.js"></script>
+<script type="text/javascript" src="/js/common.js"></script>
+<!-- script type="text/javascript" src="/js/date.js"></script> -->
+<script type="text/javascript" src="/js/function.js?version=20220624"></script>
+<script type="text/javascript" src="/js/calendar.js"></script><style>.css_bar {height:15px;background-image: url(/img/main/calendar_bar.gif);text-valign:middle;}.css_close {color:#FAF261; background-color:#0000AA; border-width:1; border-color:#00CCFF; border-style:solid;cursor:hand;font-weight:bold;height:13pt;text-align:center;}.css_close2 {color:#00CCFF; background-color:#0000AA; border-width:1; border-color:#00CCFF; border-style:solid;cursor:hand;font-weight:bold;height:13pt;text-align:center;}.css_input3 {padding-left:0; padding-bottom:0; color:#999999; background-color:#ffffff; border-width:1; border-color:#E6E6E4; border-style:solid;cursor:hand;text-align:center}.css_input4 {padding-left:0; padding-bottom:0; color:#000000; background-color:#ffffff; border-width:1; border-color:#E6E6E4; border-style:solid;cursor:hand;text-align:center}.css_td {border-width:1;border-style:solid;border-color:#34A9D4;}</style></head><body><div onclick="bShow=true" id="calendar" style="z-index:+999;position:absolute;visibility:hidden;"><table width="159" class="css_td" bgcolor="#ffffff"><tbody><tr class="css_bar"><td align="right"><img src="/img/main/calendar_close.gif" onclick="exitCalendar();" style="cursor:hand">&nbsp;</td></tr><tr bgcolor="#ffffff"><td><table border="0" width="157"><tbody><tr><td style="padding:1px;" align="center"><font color="#ffffff"><b><span id="caption"><table width="153" cellspacing="3">		<tbody><tr>			<td width="10px"></td>			<td width="15px">				<input type="image" src="/img/main/calendar_prev.gif" onclick="javascript:decMonth()" onfocus="this.blur()" title="이전 달(월)로 이동" onmouseover="window.status='이전 달(월)로 이동'" onmouseout="window.status=''">			</td>			<td id="tdYear">				<span id="spanYear" style="width:40px" class="css_input4" onclick="popUpYear()" title="년도 선택" onmouseover="this.className='css_input3';window.status='년도 선택'" onmouseout="this.className='css_input4';window.status=''">				</span>			</td>			<td width="15px"><span id="spanYearBtn" onclick="popUpYear()" title="년도 선택"></span></td>			<td id="tdMonth" width="25px">				<span id="spanMonth" style="width:20px" class="css_input4" onclick="popUpMonth()" title="월 선택" onmouseover="this.className='css_input3';window.status='월 선택'" onmouseout="this.className='css_input4';window.status=''">				</span>			</td>			<td width="15px"><span id="spanMonthBtn" onclick="popUpMonth()" title="월 선택"></span></td>			<td width="15px">				<input type="image" src="/img/main/calendar_next.gif" onclick="javascript:incMonth()" onfocus="this.blur()" title="다음 달(월)로 이동" onmouseover="window.status='다음 달(월)로 이동'" onmouseout="window.status=''">			</td>			<td width="10px"></td>		</tr></tbody></table></span></b></font></td></tr></tbody></table></td></tr><tr><td style="padding:1px" bgcolor="#ffffff"><span id="content2"></span></td></tr></tbody></table></div><div id="selectMonth" style="z-index:+999;position:absolute;visibility:hidden;"></div><div id="selectYear" style="z-index:+999;position:absolute;visibility:hidden;"></div>
+<script type="text/javascript" src="/pluginfree/js/nppfs-1.13.0.js"></script>
+
+<script type="text/javascript" src="/js/vendor/modernizr-2.8.3.min.js"></script>
+
+<!-- 달력변경 추가 --> 
+<link rel="stylesheet" type="text/css" href="/js/jquery/themes-base/jquery-ui.min.css" media="all">
+<!-- script type="text/javascript" src="/js/jquery/jquery.js"></script> -->
+<!-- script type="text/javascript" src="/js/jquery/jquery-ui.min.js"></script> -->
+<script type="text/javascript" src="/js/jquery/jquery.placeholder.js"></script>
+<script type="text/javascript" src="/js/JCommon.js?version=20211001"></script>
+
+<script type="text/javascript">
+//<![CDATA[
+(function($){
+	$(document).ready(function(){
+		$("#cfi_help").click(function(){
+			$("#cfi_help").hide();	//cfi 도움말 팝업 레이어 닫기
+		});
+	});
+})(jQuery);
+//]]>
+
+//cfi 도움말 팝업 레이어 열기
+function cfi_help(e){
+	var cfi = document.getElementById("cfi_help");
+	if( cfi.style.display == "none" ){	//레이어 열기
+		e = e || window.event;
+		var x = e.pageX ? e.pageX:document.documentElement.scrollLeft+event.clientX;
+		var y = e.pageY ? e.pageY:document.documentElement.scrollTop+event.clientY;
+
+		cfi.style.display = "inline-block";
+		cfi.style.left = x + "px";
+		cfi.style.top = y + "px";
+		
+	}else{	//레이어가 열려있는경우
+		$("#cfi_help").hide();	//cfi 도움말 팝업 레이어 닫기
+	}
+}
+</script>
+
+<style type="text/css">
+	.watermark {
+		background: url(/images/watermark_real.png) repeat;
+	}
+</style>
+
+
+
+	<div id="nppfs-loading-modal" style="display:none;"></div>
+	<!-- cfi 도움말 팝업 레이어 시작-->
+	<div id="cfi_help" style="display:none">
+		<div style="height:130px"><br>
+		<span>&nbsp;&nbsp;*CFI란... <br><br>
+		&nbsp;&nbsp;&nbsp;금융상품분류코드(CFI: Classification of Financial Instruments)는 <br><br>
+		&nbsp;&nbsp;&nbsp;금융상품의 세부속성을 알파벳 6자리로 표시한 국제코드(ISO 10962) 입니다.</span>
+		</div>
+	</div>
+	<!-- cfi 도움말 팝업 레이어 끝-->
+
+	
+
+
+
+<script language="JavaScript">
+//<![CDATA[
+(function($){
+	$(document).ready(function(){
+        var sHostNm = window.location.hostname;
+        if( sHostNm == "isin.krx.co.kr" ){
+            $("#logo").attr("src","/img/sub/header/logo.png");     
+        } else {
+            $("#logo").attr("src","/img/sub/header/logoTest.png");
+        }
+        
+        //다운로드 링크 없애기
+        $("#li_download").attr('style',"display:none; ");
+        
+        
+
+// 			//다운로드 출력
+// 			$("#li_download").attr('style',"display:; ");
+// 		}else{
+// 			$("#li_download").attr('style',"display:none; ");
+// 		}
+	});
+})(jQuery);
+//]]>
+
+function fn_logout()
+{
+	document.location.href = "/main/logout.do?method=logout";
+}
+
+</script>
+
+
+
+		
+
+<!-- Add your site or application content here -->
+
+<!-- 로그인전 top -->
+<div class="subHeaderWrap beforesubHeaderWrap clearfix">
+    <div class="clearfix subHeader beforeLogin">
+        <h1 class="subLogo">
+	        <a href="/">
+	        	<img name="logo" id="logo" src="/img/sub/header/logo.png" title="krx 표준코드시스템" alt="krx 표준코드시스템">
+	        </a>
+        </h1>
+    </div>
+</div>
+<!--// 로그인전 top -->
+
+
+<div class="subGnbWrap">
+	
+	<div class="subGnb clearfix">
+	
+		<ul class="sf-menu sf-navbar sf-js-enabled sf-arrows" id="example">
+			<li style="width: 131px"><a href="javascript:menuLink('30002');">표준코드란?</a></li> 
+			<li style="width: 131px"><a href="javascript:menuLink('30005');">코드신청절차</a></li> 
+			<li style="width: 131px"><a href="javascript:menuLink('05200');">발행기관조회</a></li>
+			<li style="width: 131px"><a href="javascript:menuLink('20000');">표준코드조회</a></li>
+			<li style="width: 131px"><a href="javascript:menuGrntFeeLink('50000','N');">수수료안내</a></li>
+			<li style="width: 130px"><a href="javascript:menuLink('30006');">업무서식</a></li> 
+			<li style="width: 130px"><a href="javascript:menuLink('30001');">FAQ</a></li> 
+			<li style="width: 130px"><a href="javascript:menuLink('30000');">공지사항</a></li> 
+		</ul>
+		
+			
+	</div>
+	<div class="sf-menu-subBg"></div>
+</div>
+	
+	<div class="subContainer">
+	<div id="wrapper">
+		<div class="watermark">
+			
+
+
+
+
+
+
+
+
+<script type="text/javascript">
+//menu init
+var dmenus={
+	"bmenu":4
+	,"mmenu":0
+};
+//console.log('start');
+
+$(document).ready(function(){
+	//console.log('ready');
+
+	var pageIndex = "0";
+	//페이징 관련 
+	var pageObj = $('.paging td:contains('+pageIndex+')');
+	var pagingLeng = $('.paging td:contains('+pageIndex+')').length;
+	
+	for ( var i=0; i<pagingLeng; i++ ) {
+		var obj = pageObj[i];
+		var val = $(obj).text();
+		
+		if ( pageIndex!=val ) continue;
+		
+		var font = "<font color='blue'>"+val+"</font>";
+		$(obj).html(font);
+		$(obj).attr("style","font-size:15px;");
+	};
+
+	/*달력셋팅*/
+	$( "#std_cd_grnt_start_dd" ).datepicker( myDateOpts );
+	$( "#std_cd_grnt_end_dd" ).datepicker( myDateOpts );
+
+	//기간 날짜 처리
+	dateSetting();
+	
+	//상품별 조회 항목 변경
+
+
+	$('input[name=isur_nm1]').keypress(function(e){
+		if(e.keyCode == 13){
+			fn_search('1');
+		}
+	});
+		
+	$('input[name=searchRadio]').bind("click",function() {
+		//console.log('searchRadio click!!');
+		$('#curSh').val($(this).val());
+		
+		//페이징 초기화
+		$('.paging').empty();
+		var resetPaging = "<tr><td style='padding-left:5px'><img diabled src='/img/btn/btn-pprev.gif' alt=''></td><td style='padding-left:5px'><img src='/img/btn/btn-prev.gif' alt='' ></td><td class='bg_pagingbar'></td><td>1</td><td style='padding-left:5px'><img src='/img/btn/btn-next.gif' border='0' ></td><td style='padding-left:5px'><img src='/img/btn/btn-nnext.gif' alt='' ></a></td></tr>";
+		$('.paging').append(resetPaging);
+		
+// 		$('#totPage').text("0");
+// 		$('#totPage1').text("(0/1)");
+
+	});
+	
+	$('#isur_nm1').focus();
+	
+	
+	/* 2025.10.14 웹 취약점으로 인한 수정
+	if('' == ''){
+		//날짜 1년 초기화
+		fn_appDate2('std_cd_grnt_start_dd','std_cd_grnt_end_dd', 12);
+	}
+	*/
+	var gubunRadio = "";
+	if(gubunRadio == ''){
+		//날짜 1년 초기화
+		fn_appDate2('std_cd_grnt_start_dd','std_cd_grnt_end_dd', 12);
+	}
+	
+	//다운로드버튼셋팅
+    //var searchGubun = $("input[name='searchRadio']:radio:checked").val();
+    //var dateGubun = $("input[name='searchDateRadio']:radio:checked").val();
+    //if( (searchGubun == "10" || searchGubun == "11" || searchGubun == "16") && dateGubun == "4" ){
+    //	fn_viewDownloadBtn("Y");
+    //}else{
+    //	fn_viewDownloadBtn("N");
+    //}
+
+});
+
+//기간 날짜 처리
+function dateSetting() {
+	//console.log('dateSetting');
+	var curDate = "20260308";
+	var curYY = curDate.substring(0,4);
+	var curMM = curDate.substring(4,6);
+	var curDD = curDate.substring(6,8);
+	//curDD = "1";
+
+	var intCurYY = Number(curYY);
+	var intCurMM = Number(curMM);
+
+	var bfOneYY = "";
+	var bfOneMM = "";
+	//1년전
+	var calMM = intCurMM-12;
+	if ( calMM<0 )
+	{
+		bfOneYY = intCurYY-1;
+		bfOneMM = 12+calMM;
+	} else {
+		bfOneYY = intCurYY;
+		bfOneMM = calMM;
+	}
+
+	var bfThreeYY = "";
+	var bfThreeMM = "";
+	//3개월전
+	var calMM = intCurMM-3;
+	if ( calMM<0 )
+	{
+		bfThreeYY = intCurYY-1;
+		bfThreeMM = 12+calMM;
+	} else {
+		bfThreeYY = intCurYY;
+		bfThreeMM = calMM;
+	}
+
+	
+	var bfSixYY = "";
+	var bfSixMM = "";
+	//6개월전
+	var calMM = intCurMM-6;
+	if ( calMM<0 )
+	{
+		bfSixYY = intCurYY-1;
+		bfSixMM = 12+calMM;
+	} else {
+		bfSixYY = intCurYY;
+		bfSixMM = calMM;
+	}
+
+	var oneDD = new Date(bfOneYY,bfOneMM,curDD);
+	var threeDD = new Date(bfThreeYY,bfThreeMM,curDD);
+	var sixDD = new Date(bfSixYY,bfSixMM,curDD);
+
+	if ( Number(bfOneMM)<10) bfOneMM="0"+bfOneMM;	
+	if ( Number(bfThreeMM)<10) bfThreeMM="0"+bfThreeMM;
+	if ( Number(bfSixMM)<10) bfSixMM="0"+bfSixMM;
+
+	var oneD = ( Number(oneDD.getMonth())<10)?("0"+oneDD.getMonth()):oneDD.getMonth();	
+	var ThD = ( Number(threeDD.getMonth())<10)?("0"+threeDD.getMonth()):threeDD.getMonth();
+	var SxD = ( Number(sixDD.getMonth())<10)?("0"+sixDD.getMonth()):sixDD.getMonth();
+
+	var oneDt = ( Number(oneDD.getDate())<10)?("0"+oneDD.getDate()):oneDD.getDate();	
+	var ThDt = ( Number(threeDD.getDate())<10)?("0"+threeDD.getDate()):threeDD.getDate();
+	var SxDt = ( Number(sixDD.getDate())<10)?("0"+sixDD.getDate()):sixDD.getDate();
+
+	var bfOneDate = oneDD.getFullYear()+oneD+oneDt;
+	var bfThreeDate = threeDD.getFullYear()+ThD+ThDt;
+	var bfSixDate = sixDD.getFullYear()+SxD+SxDt;
+
+	$('#hd_oneDate').val(bfOneDate);
+	$('#hd_threeDate').val(bfThreeDate);
+	$('#hd_sixDate').val(bfSixDate);
+
+}
+
+//상품별 조회 항목 변경
+function cgSearch(idx,check) 
+{
+	//console.log('cgSearch::'+idx+", "+check);
+	var gubun = $("input[name='gubunRadio']:radio:checked").val();
+	
+	$('tr[name=trSearch]').attr("style","display:none;");
+	if(gubun == '1'){
+		$('#curSh').val('1');
+		$('input[name=searchRadio][value='+idx+']').attr("checked",true);
+		$('#id_isur').attr("style","display:;");	//종목명 항목 출력
+		$('#id_std_cd_grnt_dd th').text('코드부여일');
+		$('#isur_nm1').focus();
+	}else if(gubun == '2'){
+		$('#curSh').val('1');
+		$('input[name=searchRadio][value='+idx+']').attr("checked",true);
+		$('#id_com').attr("style","display:;");	//발행기관명 항목 출력
+		$('#id_std_cd_grnt_dd th').text('코드부여일');
+	}else if(gubun == '3'){
+		$('#curSh').val('2');
+		$('input[name=searchRadio][value='+idx+']').attr("checked",true);
+		$('#id_com').attr("style","display:;");	//발행기관명 항목 출력
+		$('#id_type').attr("style","display:;");	//상품선택 항목 출력
+		
+		$('#id_date').attr("style","display:;");	//일자구분 항목 출력
+		$('input[name=searchDateRadio][value=1]').attr("checked",true);
+		$('#id_std_cd_grnt_dd th').text('일자');
+
+//일자별조회제거
+//	}else if(gubun == '4'){ 
+//		$('#curSh').val('1');
+//		$('input[name=searchRadio][value='+idx+']').attr("checked",true);//1로 조회해야 전체조회
+//		$('input[name=searchDateRadio][value='+idx+']').attr("checked",true);
+//		$('#id_date').attr("style","display:;");	//일자구분 항목 출력
+//		$('#id_std_cd_grnt_dd th').text('일자');
+
+	}else{
+		$('#curSh').val('1');
+		$('input[name=searchRadio][value=1]').attr("checked",true);
+		$('#id_isur').attr("style","display:;");	//종목명 항목 출력
+		$('#id_std_cd_grnt_dd th').text('코드부여일');
+	}
+	//코드부여일 검색조건 초기화
+	//$("#std_cd_grnt_start_dd").val('');
+	//$("#std_cd_grnt_end_dd").val('');
+	
+	//라디오버튼초기화
+// 	if ( check=='Y' ) {
+// 		searchData(idx); //조회후 기존 데이터 유지
+// 	} else {
+// 		//날짜 초기화
+// 		var calendarObj = $('.calendar');
+// 		for ( var i=0; i<calendarObj.length; i++ ) {
+// 			var objId = $(calendarObj[i]).prev().attr("id");
+//  			if ( objId!="std_cd_grnt_start_dd" && objId!="std_cd_grnt_end_dd") {
+//  	 		if (gubun == '1' || gubun == '2' || gubun == '3') {
+//  	 			fn_appDate1('std_cd_grnt_start_dd','std_cd_grnt_end_dd', 3);
+//  				$('#std_cd_grnt_start_dd').val($('#hd_threeDate').val());
+//  				$('#std_cd_grnt_end_dd').val($('#hd_curDate').val());
+//  			}else {
+// 				$(calendarObj[i]).prev().val("");			
+//  			}
+
+// 		}
+// 	}
+
+	// elw, els/dls 인경우 엑셀 다운로드 버튼 보이도록..
+    /*if( idx == "10" || idx == "11" || idx == "16" ){
+        document.getElementById("downExcel").style.display = "";
+    } else {
+        document.getElementById("downExcel").style.display = "none";
+    }*/
+    fn_viewDownloadBtn("N");
+}
+
+function fn_viewDownloadBtn(div){
+	// elw, els/dls 인경우 엑셀 다운로드 버튼 보이도록...
+	// 코드부여일 조회 경우만 버튼보이도록...
+	
+    if( div == "Y" ){
+        document.getElementById("downExcel").style.display = "";
+    } else if( div == "N" ){
+        document.getElementById("downExcel").style.display = "none";
+    }
+}
+	
+function fn_Download(){
+	
+	//var dateGubun = $("input[name='searchDateRadio']:radio:checked").val();
+	//if(dateGubun != "4"){
+    //	alert("다운로드는 코드부여일 기준으로 조회하셔야합니다.");
+    //	return;
+	//}
+	
+    
+    	alert("조회 내용이 없습니다.");
+    	return;
+    
+    
+	//코드부여일 조회기간 확인
+	if($("#std_cd_grnt_start_dd").val() == ''){
+		alert('다운로드는 일자를 1년 이내로 설정하여야\n\r사용이 가능합니다.');
+		$("#std_cd_grnt_start_dd").focus();
+		return;
+	}else if($("#std_cd_grnt_end_dd").val() == ''){
+		alert('다운로드는 일자를 1년 이내로 설정하여야\n\r사용이 가능합니다.');
+		$("#std_cd_grnt_end_dd").focus();
+		return;
+	}else{
+		var startD = $("#std_cd_grnt_start_dd").val();
+		var startN = parseInt(startD.substr(4,2),10) - 1;
+		var startT = new Date(startD.substr(0,4), startN, startD.substr(6,2));
+		
+		var endD = $("#std_cd_grnt_end_dd").val();
+		var endN = parseInt(endD.substr(4,2),10) - 1;
+		var endT = new Date(endD.substr(0,4), endN, endD.substr(6,2));
+		var apDate = new Date(endT - 365 * 1000 * 60 * 60 * 24);
+		if(apDate - startT > 0){
+			alert('다운로드는 일자를 1년 이내로 설정하여야\n\r사용이 가능합니다.');
+			$("#std_cd_grnt_start_dd").focus();
+			return;
+		}
+	}
+     
+	alert("다운로드는 데이터에 따라 몇초에서 몇분가량 소요될 수 있습니다.");
+
+//     fn_setSearchData();
+ 	$('#isur_cd').val($('#isur_cd1').val());
+ 	$('#com_nm').val($('#com_nm1').val());
+
+	var frm = document.JLDINF20000;
+    if ( $('#searchRadio10').is(":checked") ){
+        frm.action = "/srch/srch.do?method=srchDownElsdlsList";	
+    } else if ( $('#searchRadio11').is(":checked") ){
+        frm.action = "/srch/srch.do?method=srchDownElwList";
+    } else if ( $('#searchRadio16').is(":checked") ){
+        frm.action = "/srch/srch.do?method=srchDownEtnList";
+    }
+    frm.method = "post";
+	frm.target = "iframeExcel";
+    frm.submit();
+}
+
+//조회 데이터 입력 처리 - 사용안함
+function searchData(idx) {
+	//console.log('searchData::'+idx);
+	/*   2025.10.14 웹 취약점으로 인한 수정
+	var std_cd_grnt_start_dd = "";
+	var std_cd_grnt_end_dd = "";	
+	var searchRadio2 = "2";
+	var searchRadio1 = "";
+	var searchRadio = $('#curSh').val();
+	 
+	var isur_cd = ""; 				
+	var isur_nm = "";
+	var com_nm = "";
+	*/
+	var std_cd_grnt_start_dd = "";
+	var std_cd_grnt_end_dd = "";	
+	var searchRadio2 = "";
+	var searchRadio1 = "";
+	var searchRadio = $('#curSh').val();
+	 
+	var isur_cd = ""; 				
+	var isur_nm = "";
+	var com_nm = "";
+	if (std_cd_grnt_start_dd=='11111111') std_cd_grnt_start_dd = '';
+	if (std_cd_grnt_end_dd=='99999999') std_cd_grnt_end_dd = '';
+	
+	
+	//코드부여일 기본설정
+	if( (std_cd_grnt_start_dd == "" && std_cd_grnt_end_dd == "") && searchRadio1 == "" ){
+		//fn_appDate1('std_cd_grnt_start_dd','std_cd_grnt_end_dd', "1" );
+		var now = new Date();
+		var year = now.getFullYear();
+		var mon = (now.getMonth()+1)>9 ? ''+(now.getMonth()+1) : '0'+(now.getMonth()+1);
+		var day = now.getDate()>9 ? ''+now.getDate() : '0'+now.getDate();
+
+		var toDate = year + mon + day;
+		var n = parseInt(toDate.substr(4,2),10) - 1;
+		var st = new Date(toDate.substr(0,4), n, toDate.substr(6,2));
+
+		var apDate = new Date(st - 30 * 1000 * 60 * 60 * 24);
+		var startDate = apDate.getFullYear() +""+ fnLeg(apDate.getMonth()+1) +""+ fnLeg(apDate.getDate());
+		std_cd_grnt_start_dd	= startDate;
+		std_cd_grnt_end_dd		= toDate;
+		$("#std_cd_grnt_start_dd").val(std_cd_grnt_start_dd);
+		$("#std_cd_grnt_end_dd").val(std_cd_grnt_end_dd);
+	}
+	
+	//발행기관
+	var isur_cd_leng = $('#isur_cd1').length;
+	if (isur_cd_leng > 0) {
+		$('#isur_cd1').val(isur_cd);
+		$('#com_nm1').val(com_nm);
+	}
+	
+	var isur_nm_leng = $('#isur_nm1').length;
+	if (isur_nm_leng>0) $('#isur_nm1').val(isur_nm);
+	
+	$('#std_cd_grnt_start_dd').val(std_cd_grnt_start_dd);
+	$('#std_cd_grnt_end_dd').val(std_cd_grnt_end_dd);
+	
+	// 라디오버튼
+	$('input[name=searchRadio][value='+searchRadio+']').attr("checked",true);
+
+}
+
+//상세보기 팝업
+var _popupWindow;
+function onPopupCode(type, std_cd) {
+	var fm = document.popup_form;
+	
+	var width = 1000;
+	var height = 670;
+	if(type =="2")		    height = 660;	//주권
+	else if(type =="3")		height = 700;	//채권
+	else if(type =="4")		height = 620;	//수익증권
+	else if(type =="5")		height = 650;	//신주인수권증권
+	else if(type =="55")	height = 650;	//신주인수권증서
+	else if(type =="6")		height = 520;	//CD
+	else if(type =="7")		height = 720;	//CP
+	else if(type =="77")	height = 820;	//전자단기사채
+	else if(type =="8")		height = 660;	//유가증권예탁증서(DR)
+	else if(type =="9")		height = 700;	//스트립
+	else if(type =="10")	height = 720;	//ELS
+	else if(type =="11")	height = 700;	//주식워런트 
+	else if(type =="12")	height = 620;	//선물
+	else if(type =="122")	height = 620;	//옵션
+	else if(type =="13")	height = 350;	//지표
+	else if(type =="14")	height = 670;	//일반상품(석유)
+	else if(type =="15")	height = 670;	//일반상품(금)
+	else if(type =="16")	height = 620;	//ETN
+	else if(type =="17")	height = 620;	//배출권 팝업없음
+	else if(type =="18")	height = 620;	//투자계약증권
+	else                    height = 670;	//해당사항없음
+	
+    _popupWindow=window.open('','winPop','toolbar=no, location=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width=' + width + ', height=' + height );    
+ 	_popupWindow.opener=self;
+ 	
+ 	//type 을 각 업무에 맞게 변경 
+	if ( type=="122" ) type="12";
+    if ( type=="101" ) type="10";
+    if ( type=="102" ) type="10";
+    if ( type=="103" ) type="10";
+    if ( type=="104" ) type="10";
+    if ( type=="16" )  type="14";
+    if ( type=="18" )  type="15";
+    
+	$("#stdcd_type").val(type);
+	$("#std_cd").val(std_cd);
+	
+	fm.action = "/srch/srch.do?method=srchPopup"+type;
+	fm.target = 'winPop';
+	fm.submit();
+}
+
+function open_corp_cd(item_id, item_nm){
+    formName = document.JLDINF20000;
+    fn_popupCorpSearch2(formName, item_id, item_nm);
+}
+
+//조회 처리
+function fn_search(idx){
+	//console.log('fn_search::'+idx);
+
+	var gubun = $("input[name='gubunRadio']:radio:checked").val();
+	if(gubun == '1'){
+		if($('#isur_nm1').val() == ''){
+			alert("한글종목명 및 표준코드을 입력하세요.");
+			$("#isur_nm1").focus();
+			return;
+		}
+		if(GetByte($("#isur_nm1").val()) <= 2){
+			alert("한글종목명 및 표준코드을 확인하세요");
+			$("#isur_nm1").focus();
+			return;
+		}
+
+		$('input[name=searchRadio][value=1]').attr("checked",true);
+	 	$('#isur_nm').val($('#isur_nm1').val());
+	}else if(gubun == '2'){
+		if($('#com_nm1').val() == ''){
+			alert("발행기관을 선택하세요.");
+			return;
+		}		
+		
+		$('input[name=searchRadio][value=1]').attr("checked",true);	
+	 	$('#isur_cd').val($('#isur_cd1').val());
+	 	$('#com_nm').val($('#com_nm1').val());
+	}else if(gubun == '3'){
+	 	$('#isur_cd').val($('#isur_cd1').val());
+	 	$('#com_nm').val($('#com_nm1').val());
+	}/*일자별조회제거 else if(gubun == '4'){
+		
+		//기간별조회는 최대 1년까지만 조회가능하도록
+		if($("#std_cd_grnt_start_dd").val() == ''){
+			alert('일자별조회는 일자를 1년 이내로 설정하여야\n\r사용이 가능합니다.');
+			$("#std_cd_grnt_start_dd").focus();
+			return;
+		}else if($("#std_cd_grnt_end_dd").val() == ''){
+			alert('일자별조회는 일자를 1년 이내로 설정하여야\n\r사용이 가능합니다.');
+			$("#std_cd_grnt_end_dd").focus();
+			return;
+		}else{
+			var startD = $("#std_cd_grnt_start_dd").val();
+			var startN = parseInt(startD.substr(4,2),10) - 1;
+			var startT = new Date(startD.substr(0,4), startN, startD.substr(6,2));
+			
+			var endD = $("#std_cd_grnt_end_dd").val();
+			var endN = parseInt(endD.substr(4,2),10) - 1;
+			var endT = new Date(endD.substr(0,4), endN, endD.substr(6,2));
+			var apDate = new Date(endT - 365 * 1000 * 60 * 60 * 24);
+			if(apDate - startT > 0){
+				alert('일자별조회는 일자를 1년 이내로 설정하여야\n\r사용이 가능합니다.');
+				$("#std_cd_grnt_start_dd").focus();
+				return;
+			}
+		}
+	} 일자별조회제거*/
+
+//     fn_setSearchData();
+	var frm = document.JLDINF20000;
+	
+	if ( idx=='1') 	{ $('input[name=pageIndex]').val("1"); }
+
+	frm.action="/srch/srch.do?method=srchList";	
+	frm.target="_self";
+
+	blockLoading();	
+	
+    frm.submit();
+    
+    //다운로드버튼셋팅
+    //var searchGubun = $("input[name='searchRadio']:radio:checked").val();
+    var dateGubun = $("input[name='searchDateRadio']:radio:checked").val();
+    //if( (searchGubun == "10" || searchGubun == "11" || searchGubun == "16") && dateGubun == "4" ){
+    if( dateGubun == "4" ){
+    	fn_viewDownloadBtn("Y");
+    }else{
+    	fn_viewDownloadBtn("N");
+    }
+    
+}
+</script>
+
+
+
+<form id="popup_form" name="popup_form" method="post">
+	<input type="hidden" name="stdcd_type" id="stdcd_type" value="">
+	<input type="hidden" name="std_cd" id="std_cd" value="">
+</form>
+
+<form id="JLDINF20000" name="JLDINF20000" method="post" onsubmit="return false;">
+	<input type="hidden" name="currentPage" value="15">
+	<input type="hidden" id="hd_curDate" value="20260308">
+	<input type="hidden" id="hd_threeDate" value="20260008">		<!-- 3개월전 -->
+	<input type="hidden" id="hd_sixDate" value="20250908">		<!-- 6개월전 -->
+	<input type="hidden" id="hd_oneDate" value="20250308">		<!-- 1년전 -->
+	<input type="hidden" id="curSh" name="curSh" value="1">
+	
+	<input type="hidden" name="item_id" value="">
+	<input type="hidden" name="item_nm" value="">
+	
+	<input type="hidden" id="isur_cd" name="isur_cd" value="">
+	<input type="hidden" id="com_nm" name="com_nm" value="">
+	<input type="hidden" id="isur_nm" name="isur_nm" value="">
+	
+	<div class="contents section" style="min-height: 629px;">
+		<div class="article-header">
+			<h1>표준코드 조회</h1>
+			<ul class="map"><li class="home">Home</li><li>표준코드 조회</li></ul>
+			<div class="clear"></div>
+		</div>
+		<div class="article contents">
+			<style type="text/css">
+				select.short{width:150px;}
+				select.middel{width:300px;}
+				select.long{width:500px;}					
+			</style>
+			<table summary="조회" class="type-00 search">
+				<caption>조회</caption>
+				<colgroup>
+					<col style="width: 180px;">
+					<col style="width: *;">
+					<col style="width: 180px;">
+					<col style="width: *;">
+				</colgroup>
+				<!-- 검색구분 -->
+				<tbody>
+					<tr>
+						<th>검색구분</th>
+						<td class="last" colspan="3">
+							<label><input type="radio" value="1" name="gubunRadio" id="gubunRadio1" checked="" onclick="cgSearch('1','N')">개별종목조회</label>&nbsp;&nbsp;
+							<label><input type="radio" value="2" name="gubunRadio" id="gubunRadio2" onclick="cgSearch('1','N')">발행기관별조회</label>&nbsp;&nbsp;
+							<label><input type="radio" value="3" name="gubunRadio" id="gubunRadio3" onclick="cgSearch('2','N')" style="display: none;"></label>&nbsp;&nbsp;
+						</td>
+					</tr>	
+					
+					
+	
+					<!-- 개별 조회 검색항목 -->
+					<tr class="last" id="id_isur" name="trSearch">
+						<th>한글종목명 및 표준코드</th>
+						<td class="last" colspan="3"><input type="text" id="isur_nm1" name="isur_nm1" value="" class="txt middle" onkeyup="fn_boardCheck(this)">
+						종목명(한글2자), 표준코드(7자) 이상 입력
+
+						
+							
+							
+							
+							
+							
+							
+						
+						
+						</td>
+					</tr>
+
+					<!-- 발행기관별 조회 검색항목 -->
+					<tr class="last" id="id_com" name="trSearch" style="display: none;">
+						<th>발행기관명</th>
+						<td class="last">
+							<input type="text" id="com_nm1" name="com_nm1" value="" class="txt middle" readonly="readonly" style="background-color: #ECECEC; ">
+							<a href="javascript:open_corp_cd('isur_cd1','com_nm1');" class="btn search type-00 vmiddle"><span>검색</span></a>
+						</td>
+						<th>발행기관코드</th>
+						<td class="last">
+							<input type="text" id="isur_cd1" name="isur_cd1" value="" class="txt middle" readonly="readonly" style="background-color: #ECECEC;"> 
+						</td>
+					</tr>
+					
+					<!-- 유가증권별조회 검색항목 -->
+					<tr class="last" id="id_type" name="trSearch" style="display: none;">
+						<th>상품선택
+						<label style="display: none; "><input type="radio" value="1" name="searchRadio" id="searchRadio1" style="display: none; " onclick="cgSearch('1','N')"><strong>전체선택</strong></label><br>
+						</th>
+						<td class="last" style="line-height:180%;" colspan="3">
+						
+							<table>
+								<tbody><tr>
+									<td style="border-top: hidden;"><label><input type="radio" value="2" name="searchRadio" id="searchRadio2" checked="" onclick="cgSearch('2','N')">주권</label></td>
+									<td style="border-top: hidden;"><label><input type="radio" value="3" name="searchRadio" id="searchRadio3" onclick="cgSearch('3','N')">채권</label></td>
+									<td style="border-top: hidden;"><label><input type="radio" value="10" name="searchRadio" id="searchRadio10" onclick="cgSearch('10','N')">ELS/DLS/ELB/DLB</label></td>
+									<td style="border-top: hidden;"><label><input type="radio" value="11" name="searchRadio" id="searchRadio11" onclick="cgSearch('11','N')">주식워런트(ELW)</label></td>
+									<td style="border-top: hidden;"><label><input type="radio" value="16" name="searchRadio" id="searchRadio16" onclick="cgSearch('16','N')">상장지수증권(ETN)</label></td>
+									<td style="border-top: hidden;"><label><input type="radio" value="5" name="searchRadio" id="searchRadio5" onclick="cgSearch('5','N')">신주인수권증권/증서</label></td>
+								</tr>
+								<tr>
+									<td style="border-top: hidden;"><label><input type="radio" value="8" name="searchRadio" id="searchRadio8" onclick="cgSearch('8','N')">유가증권예탁증서(DR)</label></td>
+									<td style="border-top: hidden;"><label><input type="radio" value="9" name="searchRadio" id="searchRadio9" onclick="cgSearch('9','N')">스트립</label></td>								
+									<td style="border-top: hidden;"><label><input type="radio" value="7" name="searchRadio" id="searchRadio7" onclick="cgSearch('7','N')">전자단기사채/CP</label></td>							
+									<td style="border-top: hidden;"><label><input type="radio" value="4" name="searchRadio" id="searchRadio4" onclick="cgSearch('4','N')">수익증권</label></td>
+									<td style="border-top: hidden;"><label><input type="radio" value="6" name="searchRadio" id="searchRadio6" onclick="cgSearch('6','N')">양도성예금증서(CD)</label></td>
+									<td style="border-top: hidden;"><label><input type="radio" value="18" name="searchRadio" id="searchRadio18" onclick="cgSearch('18','N')">투자계약증권</label></td>
+								</tr>
+								<tr>
+									<td style="border-top: hidden;border-bottom: hidden;"><label><input type="radio" value="12" name="searchRadio" id="searchRadio12" onclick="cgSearch('12','N')">선물/옵션</label></td>
+									<td style="border-top: hidden;border-bottom: hidden;"><label><input type="radio" value="13" name="searchRadio" id="searchRadio13" onclick="cgSearch('13','N')">지표</label></td>
+									<td style="border-top: hidden;border-bottom: hidden;"><label><input type="radio" value="14" name="searchRadio" id="searchRadio14" onclick="cgSearch('14','N')">일반상품(석유)</label></td>
+									<td style="border-top: hidden;border-bottom: hidden;"><label><input type="radio" value="15" name="searchRadio" id="searchRadio15" onclick="cgSearch('15','N')">일반상품(금)</label></td>
+									<td style="border-top: hidden;border-bottom: hidden;"><label><input type="radio" value="17" name="searchRadio" id="searchRadio17" onclick="cgSearch('17','N')">배출권</label></td>
+									<td style="border-top: hidden;border-bottom: hidden;"></td>
+								</tr>
+							</tbody></table>
+						</td>
+					</tr>
+
+					<!-- 일자별조회 검색항목 -->
+					<tr class="last" id="id_date" name="trSearch" style="display: none;">
+						<th>일자구분</th>
+						<td class="last" style="line-height:180%;" colspan="3">
+							<label><input type="radio" value="1" name="searchDateRadio" id="searchDateRadio1" onclick="fn_viewDownloadBtn('N')">발행일</label>&nbsp;&nbsp;
+							<label><input type="radio" value="2" name="searchDateRadio" id="searchDateRadio2" onclick="fn_viewDownloadBtn('N')">만기일</label>&nbsp;&nbsp;
+							<label><input type="radio" value="3" name="searchDateRadio" id="searchDateRadio3" onclick="fn_viewDownloadBtn('N')">상장일</label>&nbsp;&nbsp;
+							<label><input type="radio" value="4" name="searchDateRadio" id="searchDateRadio4" onclick="fn_viewDownloadBtn('N')">코드부여일</label>&nbsp;&nbsp;
+						</td>
+					</tr>
+					
+					<!-- 개별/유가증권별 조회 검색항목 -->
+					<tr class="last" id="id_std_cd_grnt_dd">
+						<th> 코드부여일 </th>
+						<td class="last" colspan="3">
+							<div style="display:flex; align-items:center;">
+								<input type="text" id="std_cd_grnt_start_dd" name="std_cd_grnt_start_dd" value="" class="txt input-calendar hasDatepicker" title="날짜입력" onblur="Chk_Date2( this,'코드부여 시작일' )" onfocus="cal_offMask('document.JLDINF20000.std_cd_grnt_start_dd')" onkeyup="chkDate('document.JLDINF20000.std_cd_grnt_start_dd')"><img class="ui-datepicker-trigger" src="/images/common/icn_calendar.gif" alt="달력" title="달력">
+								&nbsp;~&nbsp;
+								<input type="text" id="std_cd_grnt_end_dd" name="std_cd_grnt_end_dd" value="" class="txt input-calendar hasDatepicker" title="날짜입력" onblur="Chk_Date2( this,'코드부여 종료일' )" onfocus="cal_offMask('document.JLDINF20000.std_cd_grnt_end_dd')" onkeyup="chkDate('document.JLDINF20000.std_cd_grnt_end_dd')"><img class="ui-datepicker-trigger" src="/images/common/icn_calendar.gif" alt="달력" title="달력">
+								&nbsp;
+								<a href="#" onclick="fn_appDate2('std_cd_grnt_start_dd','std_cd_grnt_end_dd', 3)" class="btn-sprite type-00 vmiddle"><span>3개월</span></a>&nbsp;
+								<a href="#" onclick="fn_appDate2('std_cd_grnt_start_dd','std_cd_grnt_end_dd', 6)" class="btn-sprite type-00 vmiddle"><span>6개월</span></a>&nbsp;
+								<a href="#" onclick="fn_appDate2('std_cd_grnt_start_dd','std_cd_grnt_end_dd', 12)" class="btn-sprite type-00 vmiddle"><span>&nbsp;1년&nbsp;</span></a>&nbsp;
+								<a href="#" onclick="fn_appDate2('std_cd_grnt_start_dd','std_cd_grnt_end_dd', 36)" class="btn-sprite type-00 vmiddle"><span>&nbsp;3년&nbsp;</span></a>
+							</div>
+						</td>
+					</tr>
+				</tbody>
+				
+			</table>	
+
+			<div class="fright mt5">
+				<span id="downExcel" style="display:none;"><a href="javascript:fn_Download();" class="btn-sprite type-02 vmiddle"><span>다운로드</span></a></span>
+				<a href="javascript:fn_search('1')" class="btn-sprite type-02 vmiddle"><span>조회</span></a>
+			</div>
+			<div class="clear"></div>	
+
+			<div class="mt15"> 
+				<ul class="fleft msg type-00 ">
+					<li>* 표준코드를 클릭하시면 현재 <strong>유가증권 상세정보</strong>를 조회할 수 있습니다.</li>
+				</ul>
+				<ul class="fright page-info type-00">
+				 총 <strong id="totPage">0</strong>건 <span id="totPage1">(0/0)</span>
+				</ul>
+			</div>
+
+	
+			
+		<table summary="목록" class="type-00 list mt5" id="dataTb" name="dataTb">
+			<caption>목록</caption>
+			<colgroup>
+					<col style="width: 100px;">
+					<col style="width: 115px;">
+					<col style="width: *;">
+					<col style="width: *;">
+					<col style="width: 92px;">
+					<col style="width: 92px;">
+					<col style="width: 75px;">
+					<col style="width: 92px;">
+					<col style="width: 92px;">
+				</colgroup>
+			<!-- 전체 조회 리스트 -->
+			<thead id="theadF" name="thead">
+				<tr>
+					<th class="first">상품구분</th><th>표준코드</th><th>한글종목명</th><th>발행기관명</th><th>발행일</th><th>만기일</th><th>상장여부</th><th>상장일</th><th>코드부여일</th>
+				</tr>
+			</thead>
+			<tbody id="tbody" name="tbody">
+			
+				
+					
+					<tr class="first last" name="dataTr">
+						<td colspan="9" class="first txc">검색 결과가 없습니다.</td>
+					</tr>	
+				
+			
+			</tbody>
+		</table>
+		
+		<center>
+		
+		</center>
+		</div>
+	</div>
+</form>
+<div id="dialog-loading" title="자료를 조회중 입니다." class="loading" style="display: none;">
+	<span>
+		<img src="/img/ic_loading3.gif">
+	</span>
+</div>
+<iframe name="iframeExcel" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" width="0" height="0"></iframe>
+		</div>	
+	</div>
+	</div><!-- container -->
+	
+	<div class="quickMenu">
+		<div><img src="/img/sub/quick/quickMenu1.png"></div>
+		<div><a href="javascript:menuLink('30005');" class="qMenu qMenu1">표준코드<br>신청절차</a></div>
+		<div><a href="javascript:menuLink('30001');" class="qMenu qMenu2">FAQ</a></div>
+		<div><a href="javascript:menuLink('30006');" class="qMenu qMenu3">업무서식<br>다운로드</a></div>
+		<div><a href="javascript:menuLink('50000');" class="qMenu qMenu4">수수료<br>안내</a></div>
+		<button><img src="/img/sub/quick/quickMenuOpen.png" title="닫기" alt="닫기"></button>
+	</div>
+	
+	
+
+
+
+<script>
+
+	
+</script>
+
+<form name="formGuide" method="post" action=""></form>
+
+<div class="footerWrap">
+    <div class="subFamsiteWrap">
+        <div class="subFamsiteList clearfix">
+            <h2>관련사이트 바로가기</h2>
+            <ul class="subFamLists">
+                <li><a href="http://www.krx.co.kr" target="_blank">KRX 홈페이지</a></li>
+                <li><a href="http://kind.krx.co.kr" target="_blank">KIND 홈페이지</a></li>
+                <li><a href="http://bonds.krx.co.kr" target="_blank">채권상장시스템</a></li>
+                <li><a href="http://www.kssn.net" target="_blank">한국표준정보망</a></li>
+                <li><a href="http://www.anna-web.com" target="_blank">ANNA 홈페이지</a></li>
+            </ul>
+            <ul class="subRaws">
+                <li><a href="http://info.krx.co.kr/contents/KRX/06/06070600/KRX06070600.jsp" target="_blank" title="이용자유의사항 새창">이용자 유의사항</a></li>
+                <li class="rawPre"><a href="http://info.krx.co.kr/contents/KRX/06/06070100/KRX06070100.jsp" target="_blank" title="개인정보처리방침 새창">개인정보처리방침</a></li>
+                <li class="rawNtc"><a href="http://info.krx.co.kr/contents/KRX/06/06070200/KRX06070200.jsp" target="_blank" title="법적고지 새창">법적고지</a></li>
+                <li class="rawUG"><a href="javascript:fn_popupUserGuideJsp();">이용안내</a></li>
+            </ul>
+        </div>
+    </div>
+	<div class="subFooter clearfix">
+		<h1 class="footerLogo">
+			<img src="/img/footer/logo_krx.png" title="krx 한국거래소" alt="krx 한국거래소">
+		</h1>
+		<div class="footerInfos">
+            <dl class="companyDl2" style="min-width: 550px">
+                <dt>본사: </dt>
+                <dd>부산광역시 남구 문현금융로 40(문현동)</dd>
+                <dt>서울: </dt>
+                <dd>서울특별시 영등포구 여의나루로 76(여의도동)</dd>
+            </dl>
+            <dl class="companyDl">
+                <dt>사업자등록번호: </dt>
+                <dd>602-81-35420</dd>
+                <!--
+                <dt>금융서비스업 대표자 : </dt>
+                <dd>정지원</dd>
+                  -->
+                <dd class="lstdd">통신판매업신고 부산남구 0036호</dd>
+            </dl>
+            <p class="copyright">COPYRIGHT©2016 KOREA EXCHANGE ALL RIGHTS RESERVED.</p>
+		</div>
+	</div>
+</div>
+
+
+	<div class="modal modalLy pop_wrap" id="divTimeOut" name="divTimeOut">
+		<div class="modalDialog">
+			<div class="modalContent">
+				<div class="modalHeader">
+					<h1>자동로그아웃 안내</h1>
+				</div>
+				<div class="modalBody">
+					<div class="iconView">
+						<img src="/img/sub/modal/iconModal3.png" alt="">
+					</div>
+					<p style="font-size: 18px; color: #1f59ae">
+					자동로그아웃 남은시간 : <span id="auto_sec">04:58</span>
+					</p>
+					<p>로그인 후 약 두 시간 동안 사용이 없을 경우, 자동으로 로그아웃됩니다.<br>로그인 시간을 연장하시겠습니까?</p>
+				</div>
+				<div class="btn-group type-00">
+					<a href="javascript:restartTimer();" class="btn-sprite type-10 vmiddle"><span>연장하기</span></a>
+					<a href="javascript:fn_logout();" class="btn-sprite type-10 vmiddle"><span>로그아웃</span></a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modalBackdrop pop_wrap" id="divTimeOutBack" name="divTimeOutBack"></div>
+        
+        
+	<script src="/js/vendor/jquery-1.12.0.min.js"></script>
+	<script src="/js/vendor/jquery-ui.min.js"></script>
+	<script src="/js/vendor/jquery.bxslider.min.js"></script>
+	<script src="/js/vendor/jquery.idTabs.min.js"></script>
+	<script src="/js/plugins.js"></script>
+	<script src="/js/main.js"></script>
+	
+
+
+<div id="ui-datepicker-div" class="ui-datepicker ui-widget ui-widget-content ui-helper-clearfix ui-corner-all"></div></body></html>

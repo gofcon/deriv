@@ -37,7 +37,7 @@ def init_database(drop_tables=False):
     
     # Import all models to register them with SQLModel metadata
     # import app.models  # noqa: F401
-    import app.models_gof as target_models  # noqa: F401
+    import app.models_gofcon as target_models  # noqa: F401
     
     if drop_tables:
         print("기존 테이블 삭제 중...")

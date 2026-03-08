@@ -13,7 +13,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from app.database import DatabaseManager
 
-from logs.log_setup import setup_logging
+from scripts.log_setup import setup_logging
 
 setup_logging()
 
@@ -38,11 +38,13 @@ def import_from_csv(csv_file: str, db_path: str = DEFAULT_DB_PATH) -> None:
         first_row = group.iloc[0]
         
         # API 정의
-        api_def = db.add_api_definition(
-            program_name=program_name,
+        api_def = db.add_api_mst(
+            api_id=first_row['api_id'],
+            api_name=program_name,
+            api_type=first_row.get('api_type', 'HTTP'),
             api_url=first_row['api_url'],
-            tr_id=first_row['tr_id'],
-            tr_cont=first_row.get('tr_cont', '') if pd.notna(first_row.get('tr_cont')) else '',
+            header_json=first_row.get('header_json', {}),
+            request_type="GET", 
             description=first_row.get('api_description') if pd.notna(first_row.get('api_description')) else None
         )
         
@@ -75,8 +77,8 @@ def import_from_csv(csv_file: str, db_path: str = DEFAULT_DB_PATH) -> None:
                 
                 is_required = str(param_required).upper() == 'Y'
                 
-                param_def = db.add_parameter_definition(
-                    program_name=program_name,
+                param_def = db.add_api_param(
+                    api_id=first_row['api_id'],
                     param_name=param_name,
                     is_required=is_required,
                     default_value=param_value if param_value else None,
@@ -106,15 +108,16 @@ def export_to_csv(db_path: str = DEFAULT_DB_PATH, output_file: str = "export.csv
     
     rows = []
     
-    for api in db.list_api_definitions():
-        params = db.get_parameter_definitions(api.program_name)
+    for api in db.list_api_msts():
+        params = db.get_api_params(api.api_id)
         
         for param in params:
             rows.append({
-                'program_name': api.program_name,
+                'program_name': api.api_name,
                 'api_url': api.api_url,
-                'tr_id': api.tr_id,
-                'tr_cont': api.tr_cont,
+                'api_id': api.api_id,
+                'api_type': api.api_type,
+                'header_json': api.header_json,
                 'api_description': api.description,
                 'param_name': param.param_name,
                 'param_value': param.default_value or '',

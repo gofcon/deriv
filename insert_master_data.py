@@ -17,7 +17,7 @@ from typing import List, Dict, Any
 from app.db_mst import MasterDatabaseManager
 from app.config import DB_PATH
 from sqlmodel import SQLModel
-from logs.log_setup import setup_logging
+from scripts.log_setup import setup_logging
 
 # SSL 인증서 검증 비활성화
 ssl._create_default_https_context = ssl._create_unverified_context

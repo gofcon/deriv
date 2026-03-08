@@ -15,7 +15,7 @@ from app.database import DatabaseManager
 from app.config import DB_PATH
 import json
 
-from logs.log_setup import setup_logging
+from scripts.log_setup import setup_logging
 
 setup_logging()
 logger = logging.getLogger(__name__)
@@ -29,7 +29,7 @@ class APIParser(ast.NodeVisitor):
     def __init__(self, db_path=DB_PATH):
         self.db = DatabaseManager(db_path)
         self.api_url = None
-        self.tr_id = None
+        self.api_id = None
         self.description = None
         self.params = []
         
@@ -46,8 +46,8 @@ class APIParser(ast.NodeVisitor):
         for target in node.targets:
              if isinstance(target, ast.Name) and target.id == "tr_id":
                  if isinstance(node.value, ast.Constant):
-                    if not self.tr_id: # 첫 번째 발견만 사용
-                        self.tr_id = node.value.value
+                    if not self.api_id: # 첫 번째 발견만 사용
+                        self.api_id = node.value.value
         
         self.generic_visit(node)
 
@@ -148,7 +148,7 @@ def load_data():
                     parser = APIParser()
                     parser.visit(tree)
                     
-                    if parser.api_url and parser.tr_id:
+                    if parser.api_url and parser.api_id:
                         logger.info(f"Loading {program_name}...")
                         
                         # Output table matching
@@ -156,18 +156,21 @@ def load_data():
 
                         # API 정의 저장
                         desc = parser.description.split("\n")[0] if parser.description else program_name
-                        db.add_api_definition(
-                            program_name=program_name,
+                        db.add_api_mst(
+                            api_id=parser.api_id,
+                            api_name=program_name,
+                            api_type="HTTP",
                             api_url=parser.api_url,
-                            tr_id=parser.tr_id,
+                            header_json={"tr_id": parser.api_id},
+                            request_type="GET", 
                             description=desc,
                             output_table_name=output_table_name
                         )
                         
                         # 파라미터 저장
                         for p in parser.params:
-                            db.add_parameter_definition(
-                                program_name=program_name,
+                            db.add_api_param(
+                                api_id=parser.api_id,
                                 param_name=p["name"],
                                 is_required=p["is_required"],
                                 description=p["description"]

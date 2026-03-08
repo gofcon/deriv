@@ -215,8 +215,8 @@ class KISHttpClient:
     def fetch(
         self,
         api_url: str,
-        tr_id: str,
-        tr_cont: str = "",
+        api_id: str,
+        header_json: dict = None,
         params: Dict[str, Any] = None,
         additional_headers: Dict[str, str] = None,
         method: str = "GET",
@@ -227,8 +227,8 @@ class KISHttpClient:
         
         Args:
             api_url: API 엔드포인트
-            tr_id: 거래 ID
-            tr_cont: 연속 조회 키
+            api_id: 거래 ID
+            header_json: API 전용 헤더 매핑
             params: 요청 파라미터
             additional_headers: 추가 헤더
             method: HTTP 메서드 ("GET" 또는 "POST")
@@ -247,13 +247,14 @@ class KISHttpClient:
         # 헤더 생성
         headers = self.get_base_headers()
         
-        # TR ID 변환 (모의투자)
-        if tr_id[0] in ("T", "J", "C") and self.config.is_paper_trading:
-            tr_id = "V" + tr_id[1:]
-        
-        headers["tr_id"] = tr_id
-        headers["custtype"] = "P"
-        headers["tr_cont"] = tr_cont
+        # 매핑된 헤더들을 병합 (tr_id, tr_cont 등)
+        if header_json:
+            for k, v in header_json.items():
+                headers[k.lower()] = str(v)
+            
+            # TR ID 변환 (모의투자) - 만약 header_json에서 tr_id가 주어졌을 때
+            if "tr_id" in headers and headers["tr_id"][0] in ("T", "J", "C") and self.config.is_paper_trading:
+                headers["tr_id"] = "V" + headers["tr_id"][1:]
         
         # 추가 헤더
         if additional_headers:
@@ -263,7 +264,7 @@ class KISHttpClient:
         if self.debug:
             print("< Sending Request >")
             print(f"URL: {url}")
-            print(f"TR_ID: {tr_id}")
+            print(f"API_ID: {api_id}")
             print(f"Headers: {headers}")
             print(f"Params: {params}")
         

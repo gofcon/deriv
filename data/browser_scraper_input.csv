@@ -1,0 +1,2 @@
+function_name  ,url                 ,method ,selectors                                                      ,behaviors ,output_file         ,human_like
+scrape_browser ,https://example.com ,GET    ,"{""title"": ""title"", ""heading"": ""h1"", ""text"": ""p""}" ,"[]"      ,browser_result.json ,true

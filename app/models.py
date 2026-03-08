@@ -10,101 +10,7 @@ from sqlmodel import Field, SQLModel, Relationship
 import app.oracle_mapping  # noqa: F401
 
 
-
-class APIMst(SQLModel, table=True):
-    """API Master Table"""
-    
-    __tablename__ = "api_mst"
-    
-    # api_name을 PK로 사용 (기존 api_name)
-    api_name: str = Field(primary_key=True, description="API 식별자 (ID)")
-    
-    api_url: str = Field(description="API URL")
-    tr_id: str = Field(description="Transaction ID")
-    tr_cont: str = Field(default="", description="연속 조회 키")
-    request_type: str = Field(default="GET", description="요청 방식 (GET/POST)")
-    
-    description: Optional[str] = Field(default=None, description="API 설명")
-    output_table_name: Optional[str] = Field(default=None, description="Output 테이블 이름")
-   
-    
-    # 관리 필드
-    # is_active: bool = Field(default=True, description="활성화 여부")
-    created_at: datetime = Field(default_factory=datetime.utcnow)
-    updated_at: datetime = Field(default_factory=datetime.utcnow)
-    
-    # 관계 정의
-    # 관계 정의
-    parameters: List["APIParam"] = Relationship(back_populates="api")
-
-
-class APIParam(SQLModel, table=True):
-    """API Parameter Table"""
-    __tablename__ = "api_param"
-    
-    # 기본 필드
-    id: Optional[int] = Field(default=None, primary_key=True)
-    
-    # FK: api_mst.api_name 참조
-    api_name: str = Field(foreign_key="api_mst.api_name", description="API ID (FK)")
-    
-    param_name: str = Field(index=True, description="파라미터 이름")
-    param_type: str = Field(default="string", description="파라미터 타입")
-    
-    # 검증 관련 필드
-    is_required: bool = Field(default=False, description="필수 여부")
-    default_value: Optional[str] = Field(default=None, description="기본값")
-    min_length: Optional[int] = Field(default=None, description="최소 길이")
-    max_length: Optional[int] = Field(default=None, description="최대 길이")
-    allowed_values: Optional[str] = Field(default=None, description="허용값 (콤마 구분)")
-    
-    # 메타 필드
-    description: Optional[str] = Field(default=None, description="파라미터 설명")
-    created_at: datetime = Field(default_factory=datetime.utcnow)
-    
-    # 관계 정의
-    api: APIMst = Relationship(back_populates="parameters")
-
-
-class JobMst(SQLModel, table=True):
-    """Job Master Table"""
-    __tablename__ = "job_mst"
-    
-    id: Optional[int] = Field(default=None, primary_key=True)
-    
-    # 1개 API = 1개 Job (중복 입력 제거)
-    api_name: str = Field(foreign_key="api_mst.api_name", index=True, unique=True, description="API ID (FK)")
-    
-    params_json: str = Field(description="파라미터 JSON 문자열")
-    is_active: bool = Field(default=True, description="활성화 여부")
-    save_mode: str = Field(default="append", description="저장 모드 (append/overwrite)")
-    execution_cycle: str = Field(default="5min", description="실행 주기 (5min/1hour/daily)")
-    
-    description: Optional[str] = Field(default=None, description="입력 설명")
-    created_at: datetime = Field(default_factory=datetime.utcnow)
-    updated_at: datetime = Field(default_factory=datetime.utcnow)
-    
-    def get_params_dict(self) -> Dict[str, str]:
-        """JSON 문자열 → 딕셔너리 변환"""
-        try:
-            return json.loads(self.params_json)  if self.params_json else {}
-        except json.JSONDecodeError:
-            return {}
-    
-    def set_params_dict(self, params: Dict[str, Any]) -> None:
-        """딕셔너리 → JSON 문자열 변환 및 저장"""
-        self.params_json = json.dumps(params, ensure_ascii=False)
-
-
-class ValidationResult(SQLModel):
-    """
-    검증 결과 모델 (테이블 아님, 반환용)
-    """
-    
-    is_valid: bool
-    errors: List[str] = []
-    warnings: List[str] = []
-    validated_params: dict = {}
+# Core modeling logic moved to models_gofcon.py
 
 
 # ===== Output Table Models =====
@@ -112,7 +18,7 @@ class ValidationResult(SQLModel):
 
 class StockPrice(SQLModel, table=True):
     """Output table for stock_price"""
-    __tablename__ = "stock_price"
+    __tablename__ = "kis_stock_price"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -205,7 +111,7 @@ class StockPrice(SQLModel, table=True):
 
 class DailyPrice(SQLModel, table=True):
     """Output table for daily_price"""
-    __tablename__ = "daily_price"
+    __tablename__ = "kis_daily_price"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -230,7 +136,7 @@ class DailyPrice(SQLModel, table=True):
 
 class DisplayBoardTop(SQLModel, table=True):
     """Output table for display_board_top"""
-    __tablename__ = "display_board_top"
+    __tablename__ = "kis_display_board_top"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -254,7 +160,7 @@ class DisplayBoardTop(SQLModel, table=True):
 
 class AvgUnit(SQLModel, table=True):
     """Output table for avg_unit"""
-    __tablename__ = "avg_unit"
+    __tablename__ = "kis_avg_unit"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -304,7 +210,7 @@ class AvgUnit(SQLModel, table=True):
 
 class BondAskingPrice(SQLModel, table=True):
     """Output table for bond_asking_price"""
-    __tablename__ = "bond_asking_price"
+    __tablename__ = "kis_bond_asking_price"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -349,7 +255,7 @@ class BondAskingPrice(SQLModel, table=True):
 
 class BondCcnl(SQLModel, table=True):
     """Output table for bond_ccnl"""
-    __tablename__ = "bond_ccnl"
+    __tablename__ = "kis_bond_ccnl"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -379,7 +285,7 @@ class BondCcnl(SQLModel, table=True):
 
 class BondIndexCcnl(SQLModel, table=True):
     """Output table for bond_index_ccnl"""
-    __tablename__ = "bond_index_ccnl"
+    __tablename__ = "kis_bond_index_ccnl"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -410,7 +316,7 @@ class BondIndexCcnl(SQLModel, table=True):
 
 class Buy(SQLModel, table=True):
     """Output table for buy"""
-    __tablename__ = "buy"
+    __tablename__ = "kis_buy"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -424,7 +330,7 @@ class Buy(SQLModel, table=True):
 
 class InquireAskingPrice(SQLModel, table=True):
     """Output table for inquire_asking_price"""
-    __tablename__ = "inquire_asking_price"
+    __tablename__ = "kis_inquire_asking_price"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -467,7 +373,7 @@ class InquireAskingPrice(SQLModel, table=True):
 
 class InquireBalance(SQLModel, table=True):
     """Output table for inquire_balance"""
-    __tablename__ = "inquire_balance"
+    __tablename__ = "kis_inquire_balance"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -503,7 +409,7 @@ class InquireBalance(SQLModel, table=True):
 
 class InquireCcnl(SQLModel, table=True):
     """Output table for inquire_ccnl"""
-    __tablename__ = "inquire_ccnl"
+    __tablename__ = "kis_inquire_ccnl"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -546,7 +452,7 @@ class InquireCcnl(SQLModel, table=True):
 
 class InquireDailyCcld(SQLModel, table=True):
     """Output table for inquire_daily_ccld"""
-    __tablename__ = "inquire_daily_ccld"
+    __tablename__ = "kis_inquire_daily_ccld"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -577,7 +483,7 @@ class InquireDailyCcld(SQLModel, table=True):
 
 class InquireDailyItemchartprice(SQLModel, table=True):
     """Output table for inquire_daily_itemchartprice"""
-    __tablename__ = "inquire_daily_itemchartprice"
+    __tablename__ = "kis_inquire_daily_itemchartprice"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -624,7 +530,7 @@ class InquireDailyItemchartprice(SQLModel, table=True):
 
 class InquireDailyPrice(SQLModel, table=True):
     """Output table for inquire_daily_price"""
-    __tablename__ = "inquire_daily_price"
+    __tablename__ = "kis_inquire_daily_price"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -649,7 +555,7 @@ class InquireDailyPrice(SQLModel, table=True):
 
 class InquirePrice(SQLModel, table=True):
     """Output table for inquire_price"""
-    __tablename__ = "inquire_price"
+    __tablename__ = "kis_inquire_price"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -692,7 +598,7 @@ class InquirePrice(SQLModel, table=True):
 
 class InquirePsblOrder(SQLModel, table=True):
     """Output table for inquire_psbl_order"""
-    __tablename__ = "inquire_psbl_order"
+    __tablename__ = "kis_inquire_psbl_order"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -715,7 +621,7 @@ class InquirePsblOrder(SQLModel, table=True):
 
 class InquirePsblRvsecncl(SQLModel, table=True):
     """Output table for inquire_psbl_rvsecncl"""
-    __tablename__ = "inquire_psbl_rvsecncl"
+    __tablename__ = "kis_inquire_psbl_rvsecncl"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -747,7 +653,7 @@ class InquirePsblRvsecncl(SQLModel, table=True):
 
 class IssueInfo(SQLModel, table=True):
     """Output table for issue_info"""
-    __tablename__ = "issue_info"
+    __tablename__ = "kis_issue_info"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -844,7 +750,7 @@ class IssueInfo(SQLModel, table=True):
 
 class OrderRvsecncl(SQLModel, table=True):
     """Output table for order_rvsecncl"""
-    __tablename__ = "order_rvsecncl"
+    __tablename__ = "kis_order_rvsecncl"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -858,7 +764,7 @@ class OrderRvsecncl(SQLModel, table=True):
 
 class SearchBondInfo(SQLModel, table=True):
     """Output table for search_bond_info"""
-    __tablename__ = "search_bond_info"
+    __tablename__ = "kis_search_bond_info"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -950,7 +856,7 @@ class SearchBondInfo(SQLModel, table=True):
 
 class Sell(SQLModel, table=True):
     """Output table for sell"""
-    __tablename__ = "sell"
+    __tablename__ = "kis_sell"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -964,7 +870,7 @@ class Sell(SQLModel, table=True):
 
 class CommodityFuturesRealtimeConclusion(SQLModel, table=True):
     """Output table for commodity_futures_realtime_conclusion"""
-    __tablename__ = "commodity_futures_realtime_conclusion"
+    __tablename__ = "kis_commodity_futures_realtime_conclusion"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -1025,7 +931,7 @@ class CommodityFuturesRealtimeConclusion(SQLModel, table=True):
 
 class CommodityFuturesRealtimeQuote(SQLModel, table=True):
     """Output table for commodity_futures_realtime_quote"""
-    __tablename__ = "commodity_futures_realtime_quote"
+    __tablename__ = "kis_commodity_futures_realtime_quote"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -1074,7 +980,7 @@ class CommodityFuturesRealtimeQuote(SQLModel, table=True):
 
 class DisplayBoardCallput(SQLModel, table=True):
     """Output table for display_board_callput"""
-    __tablename__ = "display_board_callput"
+    __tablename__ = "kis_display_board_callput"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -1126,7 +1032,7 @@ class DisplayBoardCallput(SQLModel, table=True):
 
 class DisplayBoardFutures(SQLModel, table=True):
     """Output table for display_board_futures"""
-    __tablename__ = "display_board_futures"
+    __tablename__ = "kis_display_board_futures"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -1157,7 +1063,7 @@ class DisplayBoardFutures(SQLModel, table=True):
 
 class DisplayBoardOptionList(SQLModel, table=True):
     """Output table for display_board_option_list"""
-    __tablename__ = "display_board_option_list"
+    __tablename__ = "kis_display_board_option_list"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -1173,7 +1079,7 @@ class DisplayBoardOptionList(SQLModel, table=True):
 
 class ExpPriceTrend(SQLModel, table=True):
     """Output table for exp_price_trend"""
-    __tablename__ = "exp_price_trend"
+    __tablename__ = "kis_exp_price_trend"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -1198,7 +1104,7 @@ class ExpPriceTrend(SQLModel, table=True):
 
 class FuoptCcnlNotice(SQLModel, table=True):
     """Output table for fuopt_ccnl_notice"""
-    __tablename__ = "fuopt_ccnl_notice"
+    __tablename__ = "kis_fuopt_ccnl_notice"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -1231,7 +1137,7 @@ class FuoptCcnlNotice(SQLModel, table=True):
 
 class FuturesExpCcnl(SQLModel, table=True):
     """Output table for futures_exp_ccnl"""
-    __tablename__ = "futures_exp_ccnl"
+    __tablename__ = "kis_futures_exp_ccnl"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -1250,7 +1156,7 @@ class FuturesExpCcnl(SQLModel, table=True):
 
 class IndexFuturesRealtimeConclusion(SQLModel, table=True):
     """Output table for index_futures_realtime_conclusion"""
-    __tablename__ = "index_futures_realtime_conclusion"
+    __tablename__ = "kis_index_futures_realtime_conclusion"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -1311,7 +1217,7 @@ class IndexFuturesRealtimeConclusion(SQLModel, table=True):
 
 class IndexFuturesRealtimeQuote(SQLModel, table=True):
     """Output table for index_futures_realtime_quote"""
-    __tablename__ = "index_futures_realtime_quote"
+    __tablename__ = "kis_index_futures_realtime_quote"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -1360,7 +1266,7 @@ class IndexFuturesRealtimeQuote(SQLModel, table=True):
 
 class IndexOptionRealtimeConclusion(SQLModel, table=True):
     """Output table for index_option_realtime_conclusion"""
-    __tablename__ = "index_option_realtime_conclusion"
+    __tablename__ = "kis_index_option_realtime_conclusion"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -1429,7 +1335,7 @@ class IndexOptionRealtimeConclusion(SQLModel, table=True):
 
 class IndexOptionRealtimeQuote(SQLModel, table=True):
     """Output table for index_option_realtime_quote"""
-    __tablename__ = "index_option_realtime_quote"
+    __tablename__ = "kis_index_option_realtime_quote"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -1478,7 +1384,7 @@ class IndexOptionRealtimeQuote(SQLModel, table=True):
 
 class InquireBalanceSettlementPl(SQLModel, table=True):
     """Output table for inquire_balance_settlement_pl"""
-    __tablename__ = "inquire_balance_settlement_pl"
+    __tablename__ = "kis_inquire_balance_settlement_pl"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -1513,7 +1419,7 @@ class InquireBalanceSettlementPl(SQLModel, table=True):
 
 class InquireBalanceValuationPl(SQLModel, table=True):
     """Output table for inquire_balance_valuation_pl"""
-    __tablename__ = "inquire_balance_valuation_pl"
+    __tablename__ = "kis_inquire_balance_valuation_pl"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -1569,7 +1475,7 @@ class InquireBalanceValuationPl(SQLModel, table=True):
 
 class InquireCcnlBstime(SQLModel, table=True):
     """Output table for inquire_ccnl_bstime"""
-    __tablename__ = "inquire_ccnl_bstime"
+    __tablename__ = "kis_inquire_ccnl_bstime"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -1594,7 +1500,7 @@ class InquireCcnlBstime(SQLModel, table=True):
 
 class InquireDailyAmountFee(SQLModel, table=True):
     """Output table for inquire_daily_amount_fee"""
-    __tablename__ = "inquire_daily_amount_fee"
+    __tablename__ = "kis_inquire_daily_amount_fee"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -1635,7 +1541,7 @@ class InquireDailyAmountFee(SQLModel, table=True):
 
 class InquireDailyFuopchartprice(SQLModel, table=True):
     """Output table for inquire_daily_fuopchartprice"""
-    __tablename__ = "inquire_daily_fuopchartprice"
+    __tablename__ = "kis_inquire_daily_fuopchartprice"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -1678,7 +1584,7 @@ class InquireDailyFuopchartprice(SQLModel, table=True):
 
 class InquireDeposit(SQLModel, table=True):
     """Output table for inquire_deposit"""
-    __tablename__ = "inquire_deposit"
+    __tablename__ = "kis_inquire_deposit"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -1714,7 +1620,7 @@ class InquireDeposit(SQLModel, table=True):
 
 class InquireNgtBalance(SQLModel, table=True):
     """Output table for inquire_ngt_balance"""
-    __tablename__ = "inquire_ngt_balance"
+    __tablename__ = "kis_inquire_ngt_balance"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -1776,7 +1682,7 @@ class InquireNgtBalance(SQLModel, table=True):
 
 class InquireNgtCcnl(SQLModel, table=True):
     """Output table for inquire_ngt_ccnl"""
-    __tablename__ = "inquire_ngt_ccnl"
+    __tablename__ = "kis_inquire_ngt_ccnl"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -1818,7 +1724,7 @@ class InquireNgtCcnl(SQLModel, table=True):
 
 class InquirePsblNgtOrder(SQLModel, table=True):
     """Output table for inquire_psbl_ngt_order"""
-    __tablename__ = "inquire_psbl_ngt_order"
+    __tablename__ = "kis_inquire_psbl_ngt_order"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -1835,7 +1741,7 @@ class InquirePsblNgtOrder(SQLModel, table=True):
 
 class InquireTimeFuopchartprice(SQLModel, table=True):
     """Output table for inquire_time_fuopchartprice"""
-    __tablename__ = "inquire_time_fuopchartprice"
+    __tablename__ = "kis_inquire_time_fuopchartprice"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -1880,7 +1786,7 @@ class InquireTimeFuopchartprice(SQLModel, table=True):
 
 class KrxNgtFuturesAskingPrice(SQLModel, table=True):
     """Output table for krx_ngt_futures_asking_price"""
-    __tablename__ = "krx_ngt_futures_asking_price"
+    __tablename__ = "kis_krx_ngt_futures_asking_price"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -1929,7 +1835,7 @@ class KrxNgtFuturesAskingPrice(SQLModel, table=True):
 
 class KrxNgtFuturesCcnl(SQLModel, table=True):
     """Output table for krx_ngt_futures_ccnl"""
-    __tablename__ = "krx_ngt_futures_ccnl"
+    __tablename__ = "kis_krx_ngt_futures_ccnl"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -1989,7 +1895,7 @@ class KrxNgtFuturesCcnl(SQLModel, table=True):
 
 class KrxNgtFuturesCcnlNotice(SQLModel, table=True):
     """Output table for krx_ngt_futures_ccnl_notice"""
-    __tablename__ = "krx_ngt_futures_ccnl_notice"
+    __tablename__ = "kis_krx_ngt_futures_ccnl_notice"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -2019,7 +1925,7 @@ class KrxNgtFuturesCcnlNotice(SQLModel, table=True):
 
 class KrxNgtOptionAskingPrice(SQLModel, table=True):
     """Output table for krx_ngt_option_asking_price"""
-    __tablename__ = "krx_ngt_option_asking_price"
+    __tablename__ = "kis_krx_ngt_option_asking_price"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -2068,7 +1974,7 @@ class KrxNgtOptionAskingPrice(SQLModel, table=True):
 
 class KrxNgtOptionCcnl(SQLModel, table=True):
     """Output table for krx_ngt_option_ccnl"""
-    __tablename__ = "krx_ngt_option_ccnl"
+    __tablename__ = "kis_krx_ngt_option_ccnl"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -2135,7 +2041,7 @@ class KrxNgtOptionCcnl(SQLModel, table=True):
 
 class KrxNgtOptionExpCcnl(SQLModel, table=True):
     """Output table for krx_ngt_option_exp_ccnl"""
-    __tablename__ = "krx_ngt_option_exp_ccnl"
+    __tablename__ = "kis_krx_ngt_option_exp_ccnl"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -2154,7 +2060,7 @@ class KrxNgtOptionExpCcnl(SQLModel, table=True):
 
 class KrxNgtOptionNotice(SQLModel, table=True):
     """Output table for krx_ngt_option_notice"""
-    __tablename__ = "krx_ngt_option_notice"
+    __tablename__ = "kis_krx_ngt_option_notice"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -2184,7 +2090,7 @@ class KrxNgtOptionNotice(SQLModel, table=True):
 
 class NgtMarginDetail(SQLModel, table=True):
     """Output table for ngt_margin_detail"""
-    __tablename__ = "ngt_margin_detail"
+    __tablename__ = "kis_ngt_margin_detail"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -2240,7 +2146,7 @@ class NgtMarginDetail(SQLModel, table=True):
 
 class OptionExpCcnl(SQLModel, table=True):
     """Output table for option_exp_ccnl"""
-    __tablename__ = "option_exp_ccnl"
+    __tablename__ = "kis_option_exp_ccnl"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -2258,7 +2164,7 @@ class OptionExpCcnl(SQLModel, table=True):
 
 class Order(SQLModel, table=True):
     """Output table for order"""
-    __tablename__ = "order"
+    __tablename__ = "kis_order"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -2272,7 +2178,7 @@ class Order(SQLModel, table=True):
 
 class StockFuturesRealtimeConclusion(SQLModel, table=True):
     """Output table for stock_futures_realtime_conclusion"""
-    __tablename__ = "stock_futures_realtime_conclusion"
+    __tablename__ = "kis_stock_futures_realtime_conclusion"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -2332,7 +2238,7 @@ class StockFuturesRealtimeConclusion(SQLModel, table=True):
 
 class StockFuturesRealtimeQuote(SQLModel, table=True):
     """Output table for stock_futures_realtime_quote"""
-    __tablename__ = "stock_futures_realtime_quote"
+    __tablename__ = "kis_stock_futures_realtime_quote"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -2411,7 +2317,7 @@ class StockFuturesRealtimeQuote(SQLModel, table=True):
 
 class StockOptionAskingPrice(SQLModel, table=True):
     """Output table for stock_option_asking_price"""
-    __tablename__ = "stock_option_asking_price"
+    __tablename__ = "kis_stock_option_asking_price"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -2490,7 +2396,7 @@ class StockOptionAskingPrice(SQLModel, table=True):
 
 class StockOptionCcnl(SQLModel, table=True):
     """Output table for stock_option_ccnl"""
-    __tablename__ = "stock_option_ccnl"
+    __tablename__ = "kis_stock_option_ccnl"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -2554,7 +2460,7 @@ class StockOptionCcnl(SQLModel, table=True):
 
 class AfterHourBalance(SQLModel, table=True):
     """Output table for after_hour_balance"""
-    __tablename__ = "after_hour_balance"
+    __tablename__ = "kis_after_hour_balance"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -2576,7 +2482,7 @@ class AfterHourBalance(SQLModel, table=True):
 
 class AskingPriceKrx(SQLModel, table=True):
     """Output table for asking_price_krx"""
-    __tablename__ = "asking_price_krx"
+    __tablename__ = "kis_asking_price_krx"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -2646,7 +2552,7 @@ class AskingPriceKrx(SQLModel, table=True):
 
 class AskingPriceNxt(SQLModel, table=True):
     """Output table for asking_price_nxt"""
-    __tablename__ = "asking_price_nxt"
+    __tablename__ = "kis_asking_price_nxt"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -2722,7 +2628,7 @@ class AskingPriceNxt(SQLModel, table=True):
 
 class AskingPriceTotal(SQLModel, table=True):
     """Output table for asking_price_total"""
-    __tablename__ = "asking_price_total"
+    __tablename__ = "kis_asking_price_total"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -2798,7 +2704,7 @@ class AskingPriceTotal(SQLModel, table=True):
 
 class BulkTransNum(SQLModel, table=True):
     """Output table for bulk_trans_num"""
-    __tablename__ = "bulk_trans_num"
+    __tablename__ = "kis_bulk_trans_num"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -2820,7 +2726,7 @@ class BulkTransNum(SQLModel, table=True):
 
 class CaptureUplowprice(SQLModel, table=True):
     """Output table for capture_uplowprice"""
-    __tablename__ = "capture_uplowprice"
+    __tablename__ = "kis_capture_uplowprice"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -2848,7 +2754,7 @@ class CaptureUplowprice(SQLModel, table=True):
 
 class CcnlKrx(SQLModel, table=True):
     """Output table for ccnl_krx"""
-    __tablename__ = "ccnl_krx"
+    __tablename__ = "kis_ccnl_krx"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -2905,7 +2811,7 @@ class CcnlKrx(SQLModel, table=True):
 
 class CcnlNotice(SQLModel, table=True):
     """Output table for ccnl_notice"""
-    __tablename__ = "ccnl_notice"
+    __tablename__ = "kis_ccnl_notice"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -2940,7 +2846,7 @@ class CcnlNotice(SQLModel, table=True):
 
 class CcnlNxt(SQLModel, table=True):
     """Output table for ccnl_nxt"""
-    __tablename__ = "ccnl_nxt"
+    __tablename__ = "kis_ccnl_nxt"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -2997,7 +2903,7 @@ class CcnlNxt(SQLModel, table=True):
 
 class CcnlTotal(SQLModel, table=True):
     """Output table for ccnl_total"""
-    __tablename__ = "ccnl_total"
+    __tablename__ = "kis_ccnl_total"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -3054,7 +2960,7 @@ class CcnlTotal(SQLModel, table=True):
 
 class ChkHoliday(SQLModel, table=True):
     """Output table for chk_holiday"""
-    __tablename__ = "chk_holiday"
+    __tablename__ = "kis_chk_holiday"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -3071,7 +2977,7 @@ class ChkHoliday(SQLModel, table=True):
 
 class CompInterest(SQLModel, table=True):
     """Output table for comp_interest"""
-    __tablename__ = "comp_interest"
+    __tablename__ = "kis_comp_interest"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -3090,7 +2996,7 @@ class CompInterest(SQLModel, table=True):
 
 class CompProgramTradeDaily(SQLModel, table=True):
     """Output table for comp_program_trade_daily"""
-    __tablename__ = "comp_program_trade_daily"
+    __tablename__ = "kis_comp_program_trade_daily"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -3169,7 +3075,7 @@ class CompProgramTradeDaily(SQLModel, table=True):
 
 class CompProgramTradeToday(SQLModel, table=True):
     """Output table for comp_program_trade_today"""
-    __tablename__ = "comp_program_trade_today"
+    __tablename__ = "kis_comp_program_trade_today"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -3195,7 +3101,7 @@ class CompProgramTradeToday(SQLModel, table=True):
 
 class CreditBalance(SQLModel, table=True):
     """Output table for credit_balance"""
-    __tablename__ = "credit_balance"
+    __tablename__ = "kis_credit_balance"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -3224,7 +3130,7 @@ class CreditBalance(SQLModel, table=True):
 
 class CreditByCompany(SQLModel, table=True):
     """Output table for credit_by_company"""
-    __tablename__ = "credit_by_company"
+    __tablename__ = "kis_credit_by_company"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -3238,7 +3144,7 @@ class CreditByCompany(SQLModel, table=True):
 
 class DailyCreditBalance(SQLModel, table=True):
     """Output table for daily_credit_balance"""
-    __tablename__ = "daily_credit_balance"
+    __tablename__ = "kis_daily_credit_balance"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -3275,7 +3181,7 @@ class DailyCreditBalance(SQLModel, table=True):
 
 class DailyLoanTrans(SQLModel, table=True):
     """Output table for daily_loan_trans"""
-    __tablename__ = "daily_loan_trans"
+    __tablename__ = "kis_daily_loan_trans"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -3297,7 +3203,7 @@ class DailyLoanTrans(SQLModel, table=True):
 
 class DailyShortSale(SQLModel, table=True):
     """Output table for daily_short_sale"""
-    __tablename__ = "daily_short_sale"
+    __tablename__ = "kis_daily_short_sale"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -3331,7 +3237,7 @@ class DailyShortSale(SQLModel, table=True):
 
 class Disparity(SQLModel, table=True):
     """Output table for disparity"""
-    __tablename__ = "disparity"
+    __tablename__ = "kis_disparity"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -3355,7 +3261,7 @@ class Disparity(SQLModel, table=True):
 
 class DividendRate(SQLModel, table=True):
     """Output table for dividend_rate"""
-    __tablename__ = "dividend_rate"
+    __tablename__ = "kis_dividend_rate"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -3372,7 +3278,7 @@ class DividendRate(SQLModel, table=True):
 
 class EstimatePerform(SQLModel, table=True):
     """Output table for estimate_perform"""
-    __tablename__ = "estimate_perform"
+    __tablename__ = "kis_estimate_perform"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -3396,7 +3302,7 @@ class EstimatePerform(SQLModel, table=True):
 
 class ExpCcnlKrx(SQLModel, table=True):
     """Output table for exp_ccnl_krx"""
-    __tablename__ = "exp_ccnl_krx"
+    __tablename__ = "kis_exp_ccnl_krx"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -3452,7 +3358,7 @@ class ExpCcnlKrx(SQLModel, table=True):
 
 class ExpCcnlNxt(SQLModel, table=True):
     """Output table for exp_ccnl_nxt"""
-    __tablename__ = "exp_ccnl_nxt"
+    __tablename__ = "kis_exp_ccnl_nxt"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -3509,7 +3415,7 @@ class ExpCcnlNxt(SQLModel, table=True):
 
 class ExpCcnlTotal(SQLModel, table=True):
     """Output table for exp_ccnl_total"""
-    __tablename__ = "exp_ccnl_total"
+    __tablename__ = "kis_exp_ccnl_total"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -3566,7 +3472,7 @@ class ExpCcnlTotal(SQLModel, table=True):
 
 class ExpClosingPrice(SQLModel, table=True):
     """Output table for exp_closing_price"""
-    __tablename__ = "exp_closing_price"
+    __tablename__ = "kis_exp_closing_price"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -3586,7 +3492,7 @@ class ExpClosingPrice(SQLModel, table=True):
 
 class ExpIndexTrend(SQLModel, table=True):
     """Output table for exp_index_trend"""
-    __tablename__ = "exp_index_trend"
+    __tablename__ = "kis_exp_index_trend"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -3604,7 +3510,7 @@ class ExpIndexTrend(SQLModel, table=True):
 
 class ExpTotalIndex(SQLModel, table=True):
     """Output table for exp_total_index"""
-    __tablename__ = "exp_total_index"
+    __tablename__ = "kis_exp_total_index"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -3627,7 +3533,7 @@ class ExpTotalIndex(SQLModel, table=True):
 
 class ExpTransUpdown(SQLModel, table=True):
     """Output table for exp_trans_updown"""
-    __tablename__ = "exp_trans_updown"
+    __tablename__ = "kis_exp_trans_updown"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -3653,7 +3559,7 @@ class ExpTransUpdown(SQLModel, table=True):
 
 class FinanceBalanceSheet(SQLModel, table=True):
     """Output table for finance_balance_sheet"""
-    __tablename__ = "finance_balance_sheet"
+    __tablename__ = "kis_finance_balance_sheet"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -3675,7 +3581,7 @@ class FinanceBalanceSheet(SQLModel, table=True):
 
 class FinanceFinancialRatio(SQLModel, table=True):
     """Output table for finance_financial_ratio"""
-    __tablename__ = "finance_financial_ratio"
+    __tablename__ = "kis_finance_financial_ratio"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -3696,7 +3602,7 @@ class FinanceFinancialRatio(SQLModel, table=True):
 
 class FinanceGrowthRatio(SQLModel, table=True):
     """Output table for finance_growth_ratio"""
-    __tablename__ = "finance_growth_ratio"
+    __tablename__ = "kis_finance_growth_ratio"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -3712,7 +3618,7 @@ class FinanceGrowthRatio(SQLModel, table=True):
 
 class FinanceIncomeStatement(SQLModel, table=True):
     """Output table for finance_income_statement"""
-    __tablename__ = "finance_income_statement"
+    __tablename__ = "kis_finance_income_statement"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -3736,7 +3642,7 @@ class FinanceIncomeStatement(SQLModel, table=True):
 
 class FinanceOtherMajorRatios(SQLModel, table=True):
     """Output table for finance_other_major_ratios"""
-    __tablename__ = "finance_other_major_ratios"
+    __tablename__ = "kis_finance_other_major_ratios"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -3752,7 +3658,7 @@ class FinanceOtherMajorRatios(SQLModel, table=True):
 
 class FinanceProfitRatio(SQLModel, table=True):
     """Output table for finance_profit_ratio"""
-    __tablename__ = "finance_profit_ratio"
+    __tablename__ = "kis_finance_profit_ratio"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -3768,7 +3674,7 @@ class FinanceProfitRatio(SQLModel, table=True):
 
 class FinanceRatio(SQLModel, table=True):
     """Output table for finance_ratio"""
-    __tablename__ = "finance_ratio"
+    __tablename__ = "kis_finance_ratio"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -3806,7 +3712,7 @@ class FinanceRatio(SQLModel, table=True):
 
 class FinanceStabilityRatio(SQLModel, table=True):
     """Output table for finance_stability_ratio"""
-    __tablename__ = "finance_stability_ratio"
+    __tablename__ = "kis_finance_stability_ratio"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -3822,7 +3728,7 @@ class FinanceStabilityRatio(SQLModel, table=True):
 
 class Fluctuation(SQLModel, table=True):
     """Output table for fluctuation"""
-    __tablename__ = "fluctuation"
+    __tablename__ = "kis_fluctuation"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -3857,7 +3763,7 @@ class Fluctuation(SQLModel, table=True):
 
 class ForeignInstitutionTotal(SQLModel, table=True):
     """Output table for foreign_institution_total"""
-    __tablename__ = "foreign_institution_total"
+    __tablename__ = "kis_foreign_institution_total"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -3894,7 +3800,7 @@ class ForeignInstitutionTotal(SQLModel, table=True):
 
 class FrgnmemPchsTrend(SQLModel, table=True):
     """Output table for frgnmem_pchs_trend"""
-    __tablename__ = "frgnmem_pchs_trend"
+    __tablename__ = "kis_frgnmem_pchs_trend"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -3915,7 +3821,7 @@ class FrgnmemPchsTrend(SQLModel, table=True):
 
 class FrgnmemTradeEstimate(SQLModel, table=True):
     """Output table for frgnmem_trade_estimate"""
-    __tablename__ = "frgnmem_trade_estimate"
+    __tablename__ = "kis_frgnmem_trade_estimate"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -3936,7 +3842,7 @@ class FrgnmemTradeEstimate(SQLModel, table=True):
 
 class FrgnmemTradeTrend(SQLModel, table=True):
     """Output table for frgnmem_trade_trend"""
-    __tablename__ = "frgnmem_trade_trend"
+    __tablename__ = "kis_frgnmem_trade_trend"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -3958,7 +3864,7 @@ class FrgnmemTradeTrend(SQLModel, table=True):
 
 class HtsTopView(SQLModel, table=True):
     """Output table for hts_top_view"""
-    __tablename__ = "hts_top_view"
+    __tablename__ = "kis_hts_top_view"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -3972,7 +3878,7 @@ class HtsTopView(SQLModel, table=True):
 
 class IndexCcnl(SQLModel, table=True):
     """Output table for index_ccnl"""
-    __tablename__ = "index_ccnl"
+    __tablename__ = "kis_index_ccnl"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -4013,7 +3919,7 @@ class IndexCcnl(SQLModel, table=True):
 
 class IndexExpCcnl(SQLModel, table=True):
     """Output table for index_exp_ccnl"""
-    __tablename__ = "index_exp_ccnl"
+    __tablename__ = "kis_index_exp_ccnl"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -4054,7 +3960,7 @@ class IndexExpCcnl(SQLModel, table=True):
 
 class IndexProgramTrade(SQLModel, table=True):
     """Output table for index_program_trade"""
-    __tablename__ = "index_program_trade"
+    __tablename__ = "kis_index_program_trade"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -4153,7 +4059,7 @@ class IndexProgramTrade(SQLModel, table=True):
 
 class InquireAccountBalance(SQLModel, table=True):
     """Output table for inquire_account_balance"""
-    __tablename__ = "inquire_account_balance"
+    __tablename__ = "kis_inquire_account_balance"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -4195,7 +4101,7 @@ class InquireAccountBalance(SQLModel, table=True):
 
 class InquireAskingPriceExpCcn(SQLModel, table=True):
     """Output table for inquire_asking_price_exp_ccn"""
-    __tablename__ = "inquire_asking_price_exp_ccn"
+    __tablename__ = "kis_inquire_asking_price_exp_ccn"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -4290,7 +4196,7 @@ class InquireAskingPriceExpCcn(SQLModel, table=True):
 
 class InquireBalanceRlzPl(SQLModel, table=True):
     """Output table for inquire_balance_rlz_pl"""
-    __tablename__ = "inquire_balance_rlz_pl"
+    __tablename__ = "kis_inquire_balance_rlz_pl"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -4352,7 +4258,7 @@ class InquireBalanceRlzPl(SQLModel, table=True):
 
 class InquireCreditPsamount(SQLModel, table=True):
     """Output table for inquire_credit_psamount"""
-    __tablename__ = "inquire_credit_psamount"
+    __tablename__ = "kis_inquire_credit_psamount"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -4375,7 +4281,7 @@ class InquireCreditPsamount(SQLModel, table=True):
 
 class InquireDailyIndexchartprice(SQLModel, table=True):
     """Output table for inquire_daily_indexchartprice"""
-    __tablename__ = "inquire_daily_indexchartprice"
+    __tablename__ = "kis_inquire_daily_indexchartprice"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -4404,7 +4310,7 @@ class InquireDailyIndexchartprice(SQLModel, table=True):
 
 class InquireDailyOvertimeprice(SQLModel, table=True):
     """Output table for inquire_daily_overtimeprice"""
-    __tablename__ = "inquire_daily_overtimeprice"
+    __tablename__ = "kis_inquire_daily_overtimeprice"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -4437,7 +4343,7 @@ class InquireDailyOvertimeprice(SQLModel, table=True):
 
 class InquireDailyTradeVolume(SQLModel, table=True):
     """Output table for inquire_daily_trade_volume"""
-    __tablename__ = "inquire_daily_trade_volume"
+    __tablename__ = "kis_inquire_daily_trade_volume"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -4453,7 +4359,7 @@ class InquireDailyTradeVolume(SQLModel, table=True):
 
 class InquireElwPrice(SQLModel, table=True):
     """Output table for inquire_elw_price"""
-    __tablename__ = "inquire_elw_price"
+    __tablename__ = "kis_inquire_elw_price"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -4502,7 +4408,7 @@ class InquireElwPrice(SQLModel, table=True):
 
 class InquireIndexCategoryPrice(SQLModel, table=True):
     """Output table for inquire_index_category_price"""
-    __tablename__ = "inquire_index_category_price"
+    __tablename__ = "kis_inquire_index_category_price"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -4537,7 +4443,7 @@ class InquireIndexCategoryPrice(SQLModel, table=True):
 
 class InquireIndexDailyPrice(SQLModel, table=True):
     """Output table for inquire_index_daily_price"""
-    __tablename__ = "inquire_index_daily_price"
+    __tablename__ = "kis_inquire_index_daily_price"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -4572,7 +4478,7 @@ class InquireIndexDailyPrice(SQLModel, table=True):
 
 class InquireIndexPrice(SQLModel, table=True):
     """Output table for inquire_index_price"""
-    __tablename__ = "inquire_index_price"
+    __tablename__ = "kis_inquire_index_price"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -4619,7 +4525,7 @@ class InquireIndexPrice(SQLModel, table=True):
 
 class InquireIndexTickprice(SQLModel, table=True):
     """Output table for inquire_index_tickprice"""
-    __tablename__ = "inquire_index_tickprice"
+    __tablename__ = "kis_inquire_index_tickprice"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -4638,7 +4544,7 @@ class InquireIndexTickprice(SQLModel, table=True):
 
 class InquireIndexTimeprice(SQLModel, table=True):
     """Output table for inquire_index_timeprice"""
-    __tablename__ = "inquire_index_timeprice"
+    __tablename__ = "kis_inquire_index_timeprice"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -4657,7 +4563,7 @@ class InquireIndexTimeprice(SQLModel, table=True):
 
 class InquireInvestor(SQLModel, table=True):
     """Output table for inquire_investor"""
-    __tablename__ = "inquire_investor"
+    __tablename__ = "kis_inquire_investor"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -4690,7 +4596,7 @@ class InquireInvestor(SQLModel, table=True):
 
 class InquireInvestorDailyByMarket(SQLModel, table=True):
     """Output table for inquire_investor_daily_by_market"""
-    __tablename__ = "inquire_investor_daily_by_market"
+    __tablename__ = "kis_inquire_investor_daily_by_market"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -4740,7 +4646,7 @@ class InquireInvestorDailyByMarket(SQLModel, table=True):
 
 class InquireInvestorTimeByMarket(SQLModel, table=True):
     """Output table for inquire_investor_time_by_market"""
-    __tablename__ = "inquire_investor_time_by_market"
+    __tablename__ = "kis_inquire_investor_time_by_market"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -4823,7 +4729,7 @@ class InquireInvestorTimeByMarket(SQLModel, table=True):
 
 class InquireMember(SQLModel, table=True):
     """Output table for inquire_member"""
-    __tablename__ = "inquire_member"
+    __tablename__ = "kis_inquire_member"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -4901,7 +4807,7 @@ class InquireMember(SQLModel, table=True):
 
 class InquireMemberDaily(SQLModel, table=True):
     """Output table for inquire_member_daily"""
-    __tablename__ = "inquire_member_daily"
+    __tablename__ = "kis_inquire_member_daily"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -4921,7 +4827,7 @@ class InquireMemberDaily(SQLModel, table=True):
 
 class InquireOvertimeAskingPrice(SQLModel, table=True):
     """Output table for inquire_overtime_asking_price"""
-    __tablename__ = "inquire_overtime_asking_price"
+    __tablename__ = "kis_inquire_overtime_asking_price"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -5006,7 +4912,7 @@ class InquireOvertimeAskingPrice(SQLModel, table=True):
 
 class InquireOvertimePrice(SQLModel, table=True):
     """Output table for inquire_overtime_price"""
-    __tablename__ = "inquire_overtime_price"
+    __tablename__ = "kis_inquire_overtime_price"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -5052,7 +4958,7 @@ class InquireOvertimePrice(SQLModel, table=True):
 
 class InquirePeriodProfit(SQLModel, table=True):
     """Output table for inquire_period_profit"""
-    __tablename__ = "inquire_period_profit"
+    __tablename__ = "kis_inquire_period_profit"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -5083,7 +4989,7 @@ class InquirePeriodProfit(SQLModel, table=True):
 
 class InquirePeriodTradeProfit(SQLModel, table=True):
     """Output table for inquire_period_trade_profit"""
-    __tablename__ = "inquire_period_trade_profit"
+    __tablename__ = "kis_inquire_period_trade_profit"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -5128,7 +5034,7 @@ class InquirePeriodTradeProfit(SQLModel, table=True):
 
 class InquirePrice2(SQLModel, table=True):
     """Output table for inquire_price_2"""
-    __tablename__ = "inquire_price_2"
+    __tablename__ = "kis_inquire_price_2"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -5193,7 +5099,7 @@ class InquirePrice2(SQLModel, table=True):
 
 class InquirePsblSell(SQLModel, table=True):
     """Output table for inquire_psbl_sell"""
-    __tablename__ = "inquire_psbl_sell"
+    __tablename__ = "kis_inquire_psbl_sell"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -5216,7 +5122,7 @@ class InquirePsblSell(SQLModel, table=True):
 
 class InquireTimeDailychartprice(SQLModel, table=True):
     """Output table for inquire_time_dailychartprice"""
-    __tablename__ = "inquire_time_dailychartprice"
+    __tablename__ = "kis_inquire_time_dailychartprice"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -5241,7 +5147,7 @@ class InquireTimeDailychartprice(SQLModel, table=True):
 
 class InquireTimeIndexchartprice(SQLModel, table=True):
     """Output table for inquire_time_indexchartprice"""
-    __tablename__ = "inquire_time_indexchartprice"
+    __tablename__ = "kis_inquire_time_indexchartprice"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -5270,7 +5176,7 @@ class InquireTimeIndexchartprice(SQLModel, table=True):
 
 class InquireTimeItemchartprice(SQLModel, table=True):
     """Output table for inquire_time_itemchartprice"""
-    __tablename__ = "inquire_time_itemchartprice"
+    __tablename__ = "kis_inquire_time_itemchartprice"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -5301,7 +5207,7 @@ class InquireTimeItemchartprice(SQLModel, table=True):
 
 class InquireTimeItemconclusion(SQLModel, table=True):
     """Output table for inquire_time_itemconclusion"""
-    __tablename__ = "inquire_time_itemconclusion"
+    __tablename__ = "kis_inquire_time_itemconclusion"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -5325,7 +5231,7 @@ class InquireTimeItemconclusion(SQLModel, table=True):
 
 class InquireTimeOvertimeconclusion(SQLModel, table=True):
     """Output table for inquire_time_overtimeconclusion"""
-    __tablename__ = "inquire_time_overtimeconclusion"
+    __tablename__ = "kis_inquire_time_overtimeconclusion"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -5363,7 +5269,7 @@ class InquireTimeOvertimeconclusion(SQLModel, table=True):
 
 class InquireViStatus(SQLModel, table=True):
     """Output table for inquire_vi_status"""
-    __tablename__ = "inquire_vi_status"
+    __tablename__ = "kis_inquire_vi_status"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -5388,7 +5294,7 @@ class InquireViStatus(SQLModel, table=True):
 
 class IntgrMargin(SQLModel, table=True):
     """Output table for intgr_margin"""
-    __tablename__ = "intgr_margin"
+    __tablename__ = "kis_intgr_margin"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -5503,7 +5409,7 @@ class IntgrMargin(SQLModel, table=True):
 
 class IntstockGrouplist(SQLModel, table=True):
     """Output table for intstock_grouplist"""
-    __tablename__ = "intstock_grouplist"
+    __tablename__ = "kis_intstock_grouplist"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -5520,7 +5426,7 @@ class IntstockGrouplist(SQLModel, table=True):
 
 class IntstockMultprice(SQLModel, table=True):
     """Output table for intstock_multprice"""
-    __tablename__ = "intstock_multprice"
+    __tablename__ = "kis_intstock_multprice"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -5560,7 +5466,7 @@ class IntstockMultprice(SQLModel, table=True):
 
 class IntstockStocklistByGroup(SQLModel, table=True):
     """Output table for intstock_stocklist_by_group"""
-    __tablename__ = "intstock_stocklist_by_group"
+    __tablename__ = "kis_intstock_stocklist_by_group"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -5581,7 +5487,7 @@ class IntstockStocklistByGroup(SQLModel, table=True):
 
 class InvestorProgramTradeToday(SQLModel, table=True):
     """Output table for investor_program_trade_today"""
-    __tablename__ = "investor_program_trade_today"
+    __tablename__ = "kis_investor_program_trade_today"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -5612,7 +5518,7 @@ class InvestorProgramTradeToday(SQLModel, table=True):
 
 class InvestorTradeByStockDaily(SQLModel, table=True):
     """Output table for investor_trade_by_stock_daily"""
-    __tablename__ = "investor_trade_by_stock_daily"
+    __tablename__ = "kis_investor_trade_by_stock_daily"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -5727,7 +5633,7 @@ class InvestorTradeByStockDaily(SQLModel, table=True):
 
 class InvestorTrendEstimate(SQLModel, table=True):
     """Output table for investor_trend_estimate"""
-    __tablename__ = "investor_trend_estimate"
+    __tablename__ = "kis_investor_trend_estimate"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -5742,7 +5648,7 @@ class InvestorTrendEstimate(SQLModel, table=True):
 
 class InvestOpbysec(SQLModel, table=True):
     """Output table for invest_opbysec"""
-    __tablename__ = "invest_opbysec"
+    __tablename__ = "kis_invest_opbysec"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -5768,7 +5674,7 @@ class InvestOpbysec(SQLModel, table=True):
 
 class InvestOpinion(SQLModel, table=True):
     """Output table for invest_opinion"""
-    __tablename__ = "invest_opinion"
+    __tablename__ = "kis_invest_opinion"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -5790,7 +5696,7 @@ class InvestOpinion(SQLModel, table=True):
 
 class KsdinfoBonusIssue(SQLModel, table=True):
     """Output table for ksdinfo_bonus_issue"""
-    __tablename__ = "ksdinfo_bonus_issue"
+    __tablename__ = "kis_ksdinfo_bonus_issue"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -5811,7 +5717,7 @@ class KsdinfoBonusIssue(SQLModel, table=True):
 
 class KsdinfoCapDcrs(SQLModel, table=True):
     """Output table for ksdinfo_cap_dcrs"""
-    __tablename__ = "ksdinfo_cap_dcrs"
+    __tablename__ = "kis_ksdinfo_cap_dcrs"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -5830,7 +5736,7 @@ class KsdinfoCapDcrs(SQLModel, table=True):
 
 class KsdinfoDividend(SQLModel, table=True):
     """Output table for ksdinfo_dividend"""
-    __tablename__ = "ksdinfo_dividend"
+    __tablename__ = "kis_ksdinfo_dividend"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -5853,7 +5759,7 @@ class KsdinfoDividend(SQLModel, table=True):
 
 class KsdinfoForfeit(SQLModel, table=True):
     """Output table for ksdinfo_forfeit"""
-    __tablename__ = "ksdinfo_forfeit"
+    __tablename__ = "kis_ksdinfo_forfeit"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -5872,7 +5778,7 @@ class KsdinfoForfeit(SQLModel, table=True):
 
 class KsdinfoListInfo(SQLModel, table=True):
     """Output table for ksdinfo_list_info"""
-    __tablename__ = "ksdinfo_list_info"
+    __tablename__ = "kis_ksdinfo_list_info"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -5890,7 +5796,7 @@ class KsdinfoListInfo(SQLModel, table=True):
 
 class KsdinfoMandDeposit(SQLModel, table=True):
     """Output table for ksdinfo_mand_deposit"""
-    __tablename__ = "ksdinfo_mand_deposit"
+    __tablename__ = "kis_ksdinfo_mand_deposit"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -5906,7 +5812,7 @@ class KsdinfoMandDeposit(SQLModel, table=True):
 
 class KsdinfoMergerSplit(SQLModel, table=True):
     """Output table for ksdinfo_merger_split"""
-    __tablename__ = "ksdinfo_merger_split"
+    __tablename__ = "kis_ksdinfo_merger_split"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -5931,7 +5837,7 @@ class KsdinfoMergerSplit(SQLModel, table=True):
 
 class KsdinfoPaidinCapin(SQLModel, table=True):
     """Output table for ksdinfo_paidin_capin"""
-    __tablename__ = "ksdinfo_paidin_capin"
+    __tablename__ = "kis_ksdinfo_paidin_capin"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -5954,7 +5860,7 @@ class KsdinfoPaidinCapin(SQLModel, table=True):
 
 class KsdinfoPubOffer(SQLModel, table=True):
     """Output table for ksdinfo_pub_offer"""
-    __tablename__ = "ksdinfo_pub_offer"
+    __tablename__ = "kis_ksdinfo_pub_offer"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -5977,7 +5883,7 @@ class KsdinfoPubOffer(SQLModel, table=True):
 
 class KsdinfoPurreq(SQLModel, table=True):
     """Output table for ksdinfo_purreq"""
-    __tablename__ = "ksdinfo_purreq"
+    __tablename__ = "kis_ksdinfo_purreq"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -5996,7 +5902,7 @@ class KsdinfoPurreq(SQLModel, table=True):
 
 class KsdinfoRevSplit(SQLModel, table=True):
     """Output table for ksdinfo_rev_split"""
-    __tablename__ = "ksdinfo_rev_split"
+    __tablename__ = "kis_ksdinfo_rev_split"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -6013,7 +5919,7 @@ class KsdinfoRevSplit(SQLModel, table=True):
 
 class KsdinfoSharehldMeet(SQLModel, table=True):
     """Output table for ksdinfo_sharehld_meet"""
-    __tablename__ = "ksdinfo_sharehld_meet"
+    __tablename__ = "kis_ksdinfo_sharehld_meet"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -6030,7 +5936,7 @@ class KsdinfoSharehldMeet(SQLModel, table=True):
 
 class LendableByCompany(SQLModel, table=True):
     """Output table for lendable_by_company"""
-    __tablename__ = "lendable_by_company"
+    __tablename__ = "kis_lendable_by_company"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -6054,7 +5960,7 @@ class LendableByCompany(SQLModel, table=True):
 
 class MarketCap(SQLModel, table=True):
     """Output table for market_cap"""
-    __tablename__ = "market_cap"
+    __tablename__ = "kis_market_cap"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -6087,7 +5993,7 @@ class MarketCap(SQLModel, table=True):
 
 class MarketStatusKrx(SQLModel, table=True):
     """Output table for market_status_krx"""
-    __tablename__ = "market_status_krx"
+    __tablename__ = "kis_market_status_krx"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -6109,7 +6015,7 @@ class MarketStatusKrx(SQLModel, table=True):
 
 class MarketStatusNxt(SQLModel, table=True):
     """Output table for market_status_nxt"""
-    __tablename__ = "market_status_nxt"
+    __tablename__ = "kis_market_status_nxt"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -6131,7 +6037,7 @@ class MarketStatusNxt(SQLModel, table=True):
 
 class MarketStatusTotal(SQLModel, table=True):
     """Output table for market_status_total"""
-    __tablename__ = "market_status_total"
+    __tablename__ = "kis_market_status_total"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -6152,7 +6058,7 @@ class MarketStatusTotal(SQLModel, table=True):
 
 class MarketTime(SQLModel, table=True):
     """Output table for market_time"""
-    __tablename__ = "market_time"
+    __tablename__ = "kis_market_time"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -6178,7 +6084,7 @@ class MarketTime(SQLModel, table=True):
 
 class MarketValue(SQLModel, table=True):
     """Output table for market_value"""
-    __tablename__ = "market_value"
+    __tablename__ = "kis_market_value"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -6209,7 +6115,7 @@ class MarketValue(SQLModel, table=True):
 
 class MemberKrx(SQLModel, table=True):
     """Output table for member_krx"""
-    __tablename__ = "member_krx"
+    __tablename__ = "kis_member_krx"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -6298,7 +6204,7 @@ class MemberKrx(SQLModel, table=True):
 
 class MemberNxt(SQLModel, table=True):
     """Output table for member_nxt"""
-    __tablename__ = "member_nxt"
+    __tablename__ = "kis_member_nxt"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -6387,7 +6293,7 @@ class MemberNxt(SQLModel, table=True):
 
 class MemberTotal(SQLModel, table=True):
     """Output table for member_total"""
-    __tablename__ = "member_total"
+    __tablename__ = "kis_member_total"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -6476,7 +6382,7 @@ class MemberTotal(SQLModel, table=True):
 
 class Mktfunds(SQLModel, table=True):
     """Output table for mktfunds"""
-    __tablename__ = "mktfunds"
+    __tablename__ = "kis_mktfunds"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -6504,7 +6410,7 @@ class Mktfunds(SQLModel, table=True):
 
 class NearNewHighlow(SQLModel, table=True):
     """Output table for near_new_highlow"""
-    __tablename__ = "near_new_highlow"
+    __tablename__ = "kis_near_new_highlow"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -6531,7 +6437,7 @@ class NearNewHighlow(SQLModel, table=True):
 
 class NewsTitle(SQLModel, table=True):
     """Output table for news_title"""
-    __tablename__ = "news_title"
+    __tablename__ = "kis_news_title"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -6554,7 +6460,7 @@ class NewsTitle(SQLModel, table=True):
 
 class OrderCash(SQLModel, table=True):
     """Output table for order_cash"""
-    __tablename__ = "order_cash"
+    __tablename__ = "kis_order_cash"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -6568,7 +6474,7 @@ class OrderCash(SQLModel, table=True):
 
 class OrderCredit(SQLModel, table=True):
     """Output table for order_credit"""
-    __tablename__ = "order_credit"
+    __tablename__ = "kis_order_credit"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -6582,7 +6488,7 @@ class OrderCredit(SQLModel, table=True):
 
 class OrderResv(SQLModel, table=True):
     """Output table for order_resv"""
-    __tablename__ = "order_resv"
+    __tablename__ = "kis_order_resv"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -6596,7 +6502,7 @@ class OrderResv(SQLModel, table=True):
 
 class OrderResvCcnl(SQLModel, table=True):
     """Output table for order_resv_ccnl"""
-    __tablename__ = "order_resv_ccnl"
+    __tablename__ = "kis_order_resv_ccnl"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -6608,7 +6514,7 @@ class OrderResvCcnl(SQLModel, table=True):
 
 class OrderResvRvsecncl(SQLModel, table=True):
     """Output table for order_resv_rvsecncl"""
-    __tablename__ = "order_resv_rvsecncl"
+    __tablename__ = "kis_order_resv_rvsecncl"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -6620,7 +6526,7 @@ class OrderResvRvsecncl(SQLModel, table=True):
 
 class OvertimeAskingPriceKrx(SQLModel, table=True):
     """Output table for overtime_asking_price_krx"""
-    __tablename__ = "overtime_asking_price_krx"
+    __tablename__ = "kis_overtime_asking_price_krx"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -6685,7 +6591,7 @@ class OvertimeAskingPriceKrx(SQLModel, table=True):
 
 class OvertimeCcnlKrx(SQLModel, table=True):
     """Output table for overtime_ccnl_krx"""
-    __tablename__ = "overtime_ccnl_krx"
+    __tablename__ = "kis_overtime_ccnl_krx"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -6739,7 +6645,7 @@ class OvertimeCcnlKrx(SQLModel, table=True):
 
 class OvertimeExpCcnlKrx(SQLModel, table=True):
     """Output table for overtime_exp_ccnl_krx"""
-    __tablename__ = "overtime_exp_ccnl_krx"
+    __tablename__ = "kis_overtime_exp_ccnl_krx"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -6793,7 +6699,7 @@ class OvertimeExpCcnlKrx(SQLModel, table=True):
 
 class OvertimeExpTransFluct(SQLModel, table=True):
     """Output table for overtime_exp_trans_fluct"""
-    __tablename__ = "overtime_exp_trans_fluct"
+    __tablename__ = "kis_overtime_exp_trans_fluct"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -6817,7 +6723,7 @@ class OvertimeExpTransFluct(SQLModel, table=True):
 
 class OvertimeFluctuation(SQLModel, table=True):
     """Output table for overtime_fluctuation"""
-    __tablename__ = "overtime_fluctuation"
+    __tablename__ = "kis_overtime_fluctuation"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -6855,7 +6761,7 @@ class OvertimeFluctuation(SQLModel, table=True):
 
 class OvertimeVolume(SQLModel, table=True):
     """Output table for overtime_volume"""
-    __tablename__ = "overtime_volume"
+    __tablename__ = "kis_overtime_volume"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -6884,7 +6790,7 @@ class OvertimeVolume(SQLModel, table=True):
 
 class PbarTratio(SQLModel, table=True):
     """Output table for pbar_tratio"""
-    __tablename__ = "pbar_tratio"
+    __tablename__ = "kis_pbar_tratio"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -6909,7 +6815,7 @@ class PbarTratio(SQLModel, table=True):
 
 class PensionInquireBalance(SQLModel, table=True):
     """Output table for pension_inquire_balance"""
-    __tablename__ = "pension_inquire_balance"
+    __tablename__ = "kis_pension_inquire_balance"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -6942,7 +6848,7 @@ class PensionInquireBalance(SQLModel, table=True):
 
 class PensionInquireDailyCcld(SQLModel, table=True):
     """Output table for pension_inquire_daily_ccld"""
-    __tablename__ = "pension_inquire_daily_ccld"
+    __tablename__ = "kis_pension_inquire_daily_ccld"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -6969,7 +6875,7 @@ class PensionInquireDailyCcld(SQLModel, table=True):
 
 class PensionInquireDeposit(SQLModel, table=True):
     """Output table for pension_inquire_deposit"""
-    __tablename__ = "pension_inquire_deposit"
+    __tablename__ = "kis_pension_inquire_deposit"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -6984,7 +6890,7 @@ class PensionInquireDeposit(SQLModel, table=True):
 
 class PensionInquirePresentBalance(SQLModel, table=True):
     """Output table for pension_inquire_present_balance"""
-    __tablename__ = "pension_inquire_present_balance"
+    __tablename__ = "kis_pension_inquire_present_balance"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -7014,7 +6920,7 @@ class PensionInquirePresentBalance(SQLModel, table=True):
 
 class PensionInquirePsblOrder(SQLModel, table=True):
     """Output table for pension_inquire_psbl_order"""
-    __tablename__ = "pension_inquire_psbl_order"
+    __tablename__ = "kis_pension_inquire_psbl_order"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -7030,7 +6936,7 @@ class PensionInquirePsblOrder(SQLModel, table=True):
 
 class PeriodRights(SQLModel, table=True):
     """Output table for period_rights"""
-    __tablename__ = "period_rights"
+    __tablename__ = "kis_period_rights"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -7061,7 +6967,7 @@ class PeriodRights(SQLModel, table=True):
 
 class PreferDisparateRatio(SQLModel, table=True):
     """Output table for prefer_disparate_ratio"""
-    __tablename__ = "prefer_disparate_ratio"
+    __tablename__ = "kis_prefer_disparate_ratio"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -7089,7 +6995,7 @@ class PreferDisparateRatio(SQLModel, table=True):
 
 class ProfitAssetIndex(SQLModel, table=True):
     """Output table for profit_asset_index"""
-    __tablename__ = "profit_asset_index"
+    __tablename__ = "kis_profit_asset_index"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -7118,7 +7024,7 @@ class ProfitAssetIndex(SQLModel, table=True):
 
 class ProgramTradeByStock(SQLModel, table=True):
     """Output table for program_trade_by_stock"""
-    __tablename__ = "program_trade_by_stock"
+    __tablename__ = "kis_program_trade_by_stock"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -7143,7 +7049,7 @@ class ProgramTradeByStock(SQLModel, table=True):
 
 class ProgramTradeByStockDaily(SQLModel, table=True):
     """Output table for program_trade_by_stock_daily"""
-    __tablename__ = "program_trade_by_stock_daily"
+    __tablename__ = "kis_program_trade_by_stock_daily"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -7169,7 +7075,7 @@ class ProgramTradeByStockDaily(SQLModel, table=True):
 
 class ProgramTradeKrx(SQLModel, table=True):
     """Output table for program_trade_krx"""
-    __tablename__ = "program_trade_krx"
+    __tablename__ = "kis_program_trade_krx"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -7191,7 +7097,7 @@ class ProgramTradeKrx(SQLModel, table=True):
 
 class ProgramTradeNxt(SQLModel, table=True):
     """Output table for program_trade_nxt"""
-    __tablename__ = "program_trade_nxt"
+    __tablename__ = "kis_program_trade_nxt"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -7213,7 +7119,7 @@ class ProgramTradeNxt(SQLModel, table=True):
 
 class ProgramTradeTotal(SQLModel, table=True):
     """Output table for program_trade_total"""
-    __tablename__ = "program_trade_total"
+    __tablename__ = "kis_program_trade_total"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -7235,7 +7141,7 @@ class ProgramTradeTotal(SQLModel, table=True):
 
 class PsearchResult(SQLModel, table=True):
     """Output table for psearch_result"""
-    __tablename__ = "psearch_result"
+    __tablename__ = "kis_psearch_result"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -7270,7 +7176,7 @@ class PsearchResult(SQLModel, table=True):
 
 class PsearchTitle(SQLModel, table=True):
     """Output table for psearch_title"""
-    __tablename__ = "psearch_title"
+    __tablename__ = "kis_psearch_title"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -7285,7 +7191,7 @@ class PsearchTitle(SQLModel, table=True):
 
 class QuoteBalance(SQLModel, table=True):
     """Output table for quote_balance"""
-    __tablename__ = "quote_balance"
+    __tablename__ = "kis_quote_balance"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -7309,7 +7215,7 @@ class QuoteBalance(SQLModel, table=True):
 
 class SearchInfo(SQLModel, table=True):
     """Output table for search_info"""
-    __tablename__ = "search_info"
+    __tablename__ = "kis_search_info"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -7375,7 +7281,7 @@ class SearchInfo(SQLModel, table=True):
 
 class SearchStockInfo(SQLModel, table=True):
     """Output table for search_stock_info"""
-    __tablename__ = "search_stock_info"
+    __tablename__ = "kis_search_stock_info"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -7453,7 +7359,7 @@ class SearchStockInfo(SQLModel, table=True):
 
 class ShortSale(SQLModel, table=True):
     """Output table for short_sale"""
-    __tablename__ = "short_sale"
+    __tablename__ = "kis_short_sale"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -7479,7 +7385,7 @@ class ShortSale(SQLModel, table=True):
 
 class TopInterestStock(SQLModel, table=True):
     """Output table for top_interest_stock"""
-    __tablename__ = "top_interest_stock"
+    __tablename__ = "kis_top_interest_stock"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -7502,7 +7408,7 @@ class TopInterestStock(SQLModel, table=True):
 
 class TradedByCompany(SQLModel, table=True):
     """Output table for traded_by_company"""
-    __tablename__ = "traded_by_company"
+    __tablename__ = "kis_traded_by_company"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -7525,7 +7431,7 @@ class TradedByCompany(SQLModel, table=True):
 
 class TradprtByamt(SQLModel, table=True):
     """Output table for tradprt_byamt"""
-    __tablename__ = "tradprt_byamt"
+    __tablename__ = "kis_tradprt_byamt"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -7547,7 +7453,7 @@ class TradprtByamt(SQLModel, table=True):
 
 class VolumePower(SQLModel, table=True):
     """Output table for volume_power"""
-    __tablename__ = "volume_power"
+    __tablename__ = "kis_volume_power"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -7581,7 +7487,7 @@ class VolumePower(SQLModel, table=True):
 
 class VolumeRank(SQLModel, table=True):
     """Output table for volume_rank"""
-    __tablename__ = "volume_rank"
+    __tablename__ = "kis_volume_rank"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -7633,7 +7539,7 @@ class VolumeRank(SQLModel, table=True):
 
 class CompareStocks(SQLModel, table=True):
     """Output table for compare_stocks"""
-    __tablename__ = "compare_stocks"
+    __tablename__ = "kis_compare_stocks"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -7646,7 +7552,7 @@ class CompareStocks(SQLModel, table=True):
 
 class CondSearch(SQLModel, table=True):
     """Output table for cond_search"""
-    __tablename__ = "cond_search"
+    __tablename__ = "kis_cond_search"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -7700,7 +7606,7 @@ class CondSearch(SQLModel, table=True):
 
 class ElwAskingPrice(SQLModel, table=True):
     """Output table for elw_asking_price"""
-    __tablename__ = "elw_asking_price"
+    __tablename__ = "kis_elw_asking_price"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -7784,7 +7690,7 @@ class ElwAskingPrice(SQLModel, table=True):
 
 class ElwCcnl(SQLModel, table=True):
     """Output table for elw_ccnl"""
-    __tablename__ = "elw_ccnl"
+    __tablename__ = "kis_elw_ccnl"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -7863,7 +7769,7 @@ class ElwCcnl(SQLModel, table=True):
 
 class ElwExpCcnl(SQLModel, table=True):
     """Output table for elw_exp_ccnl"""
-    __tablename__ = "elw_exp_ccnl"
+    __tablename__ = "kis_elw_exp_ccnl"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -7933,7 +7839,7 @@ class ElwExpCcnl(SQLModel, table=True):
 
 class ExpirationStocks(SQLModel, table=True):
     """Output table for expiration_stocks"""
-    __tablename__ = "expiration_stocks"
+    __tablename__ = "kis_expiration_stocks"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -7965,7 +7871,7 @@ class ExpirationStocks(SQLModel, table=True):
 
 class Indicator(SQLModel, table=True):
     """Output table for indicator"""
-    __tablename__ = "indicator"
+    __tablename__ = "kis_indicator"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -7989,7 +7895,7 @@ class Indicator(SQLModel, table=True):
 
 class IndicatorTrendCcnl(SQLModel, table=True):
     """Output table for indicator_trend_ccnl"""
-    __tablename__ = "indicator_trend_ccnl"
+    __tablename__ = "kis_indicator_trend_ccnl"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -8012,7 +7918,7 @@ class IndicatorTrendCcnl(SQLModel, table=True):
 
 class IndicatorTrendDaily(SQLModel, table=True):
     """Output table for indicator_trend_daily"""
-    __tablename__ = "indicator_trend_daily"
+    __tablename__ = "kis_indicator_trend_daily"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -8038,7 +7944,7 @@ class IndicatorTrendDaily(SQLModel, table=True):
 
 class IndicatorTrendMinute(SQLModel, table=True):
     """Output table for indicator_trend_minute"""
-    __tablename__ = "indicator_trend_minute"
+    __tablename__ = "kis_indicator_trend_minute"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -8062,7 +7968,7 @@ class IndicatorTrendMinute(SQLModel, table=True):
 
 class LpTradeTrend(SQLModel, table=True):
     """Output table for lp_trade_trend"""
-    __tablename__ = "lp_trade_trend"
+    __tablename__ = "kis_lp_trade_trend"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -8090,7 +7996,7 @@ class LpTradeTrend(SQLModel, table=True):
 
 class NewlyListed(SQLModel, table=True):
     """Output table for newly_listed"""
-    __tablename__ = "newly_listed"
+    __tablename__ = "kis_newly_listed"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -8107,7 +8013,7 @@ class NewlyListed(SQLModel, table=True):
 
 class QuickChange(SQLModel, table=True):
     """Output table for quick_change"""
-    __tablename__ = "quick_change"
+    __tablename__ = "kis_quick_change"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -8132,7 +8038,7 @@ class QuickChange(SQLModel, table=True):
 
 class Sensitivity(SQLModel, table=True):
     """Output table for sensitivity"""
-    __tablename__ = "sensitivity"
+    __tablename__ = "kis_sensitivity"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -8158,7 +8064,7 @@ class Sensitivity(SQLModel, table=True):
 
 class SensitivityTrendCcnl(SQLModel, table=True):
     """Output table for sensitivity_trend_ccnl"""
-    __tablename__ = "sensitivity_trend_ccnl"
+    __tablename__ = "kis_sensitivity_trend_ccnl"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -8180,7 +8086,7 @@ class SensitivityTrendCcnl(SQLModel, table=True):
 
 class SensitivityTrendDaily(SQLModel, table=True):
     """Output table for sensitivity_trend_daily"""
-    __tablename__ = "sensitivity_trend_daily"
+    __tablename__ = "kis_sensitivity_trend_daily"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -8202,7 +8108,7 @@ class SensitivityTrendDaily(SQLModel, table=True):
 
 class UdrlAssetList(SQLModel, table=True):
     """Output table for udrl_asset_list"""
-    __tablename__ = "udrl_asset_list"
+    __tablename__ = "kis_udrl_asset_list"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -8219,7 +8125,7 @@ class UdrlAssetList(SQLModel, table=True):
 
 class UdrlAssetPrice(SQLModel, table=True):
     """Output table for udrl_asset_price"""
-    __tablename__ = "udrl_asset_price"
+    __tablename__ = "kis_udrl_asset_price"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -8259,7 +8165,7 @@ class UdrlAssetPrice(SQLModel, table=True):
 
 class UpdownRate(SQLModel, table=True):
     """Output table for updown_rate"""
-    __tablename__ = "updown_rate"
+    __tablename__ = "kis_updown_rate"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -8293,7 +8199,7 @@ class UpdownRate(SQLModel, table=True):
 
 class VolatilityTrendCcnl(SQLModel, table=True):
     """Output table for volatility_trend_ccnl"""
-    __tablename__ = "volatility_trend_ccnl"
+    __tablename__ = "kis_volatility_trend_ccnl"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -8313,7 +8219,7 @@ class VolatilityTrendCcnl(SQLModel, table=True):
 
 class VolatilityTrendDaily(SQLModel, table=True):
     """Output table for volatility_trend_daily"""
-    __tablename__ = "volatility_trend_daily"
+    __tablename__ = "kis_volatility_trend_daily"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -8339,7 +8245,7 @@ class VolatilityTrendDaily(SQLModel, table=True):
 
 class VolatilityTrendMinute(SQLModel, table=True):
     """Output table for volatility_trend_minute"""
-    __tablename__ = "volatility_trend_minute"
+    __tablename__ = "kis_volatility_trend_minute"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -8358,7 +8264,7 @@ class VolatilityTrendMinute(SQLModel, table=True):
 
 class VolatilityTrendTick(SQLModel, table=True):
     """Output table for volatility_trend_tick"""
-    __tablename__ = "volatility_trend_tick"
+    __tablename__ = "kis_volatility_trend_tick"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -8373,7 +8279,7 @@ class VolatilityTrendTick(SQLModel, table=True):
 
 class EtfNavTrend(SQLModel, table=True):
     """Output table for etf_nav_trend"""
-    __tablename__ = "etf_nav_trend"
+    __tablename__ = "kis_etf_nav_trend"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -8394,7 +8300,7 @@ class EtfNavTrend(SQLModel, table=True):
 
 class InquireComponentStockPrice(SQLModel, table=True):
     """Output table for inquire_component_stock_price"""
-    __tablename__ = "inquire_component_stock_price"
+    __tablename__ = "kis_inquire_component_stock_price"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -8431,7 +8337,7 @@ class InquireComponentStockPrice(SQLModel, table=True):
 
 class NavComparisonDailyTrend(SQLModel, table=True):
     """Output table for nav_comparison_daily_trend"""
-    __tablename__ = "nav_comparison_daily_trend"
+    __tablename__ = "kis_nav_comparison_daily_trend"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -8455,7 +8361,7 @@ class NavComparisonDailyTrend(SQLModel, table=True):
 
 class NavComparisonTimeTrend(SQLModel, table=True):
     """Output table for nav_comparison_time_trend"""
-    __tablename__ = "nav_comparison_time_trend"
+    __tablename__ = "kis_nav_comparison_time_trend"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -8479,7 +8385,7 @@ class NavComparisonTimeTrend(SQLModel, table=True):
 
 class NavComparisonTrend(SQLModel, table=True):
     """Output table for nav_comparison_trend"""
-    __tablename__ = "nav_comparison_trend"
+    __tablename__ = "kis_nav_comparison_trend"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -8510,7 +8416,7 @@ class NavComparisonTrend(SQLModel, table=True):
 
 class AskingPrice(SQLModel, table=True):
     """Output table for asking_price"""
-    __tablename__ = "asking_price"
+    __tablename__ = "kis_asking_price"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -8537,7 +8443,7 @@ class AskingPrice(SQLModel, table=True):
 
 class Ccnl(SQLModel, table=True):
     """Output table for ccnl"""
-    __tablename__ = "ccnl"
+    __tablename__ = "kis_ccnl"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -8573,7 +8479,7 @@ class Ccnl(SQLModel, table=True):
 
 class DailyCcnl(SQLModel, table=True):
     """Output table for daily_ccnl"""
-    __tablename__ = "daily_ccnl"
+    __tablename__ = "kis_daily_ccnl"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -8598,7 +8504,7 @@ class DailyCcnl(SQLModel, table=True):
 
 class InquireCcld(SQLModel, table=True):
     """Output table for inquire_ccld"""
-    __tablename__ = "inquire_ccld"
+    __tablename__ = "kis_inquire_ccld"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -8640,7 +8546,7 @@ class InquireCcld(SQLModel, table=True):
 
 class InquireDailyOrder(SQLModel, table=True):
     """Output table for inquire_daily_order"""
-    __tablename__ = "inquire_daily_order"
+    __tablename__ = "kis_inquire_daily_order"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -8678,7 +8584,7 @@ class InquireDailyOrder(SQLModel, table=True):
 
 class InquirePeriodCcld(SQLModel, table=True):
     """Output table for inquire_period_ccld"""
-    __tablename__ = "inquire_period_ccld"
+    __tablename__ = "kis_inquire_period_ccld"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -8706,7 +8612,7 @@ class InquirePeriodCcld(SQLModel, table=True):
 
 class InquirePeriodTrans(SQLModel, table=True):
     """Output table for inquire_period_trans"""
-    __tablename__ = "inquire_period_trans"
+    __tablename__ = "kis_inquire_period_trans"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -8744,7 +8650,7 @@ class InquirePeriodTrans(SQLModel, table=True):
 
 class InquirePsamount(SQLModel, table=True):
     """Output table for inquire_psamount"""
-    __tablename__ = "inquire_psamount"
+    __tablename__ = "kis_inquire_psamount"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -8766,7 +8672,7 @@ class InquirePsamount(SQLModel, table=True):
 
 class InquireTimeFuturechartprice(SQLModel, table=True):
     """Output table for inquire_time_futurechartprice"""
-    __tablename__ = "inquire_time_futurechartprice"
+    __tablename__ = "kis_inquire_time_futurechartprice"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -8791,7 +8697,7 @@ class InquireTimeFuturechartprice(SQLModel, table=True):
 
 class InquireTimeOptchartprice(SQLModel, table=True):
     """Output table for inquire_time_optchartprice"""
-    __tablename__ = "inquire_time_optchartprice"
+    __tablename__ = "kis_inquire_time_optchartprice"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -8816,7 +8722,7 @@ class InquireTimeOptchartprice(SQLModel, table=True):
 
 class InquireUnpd(SQLModel, table=True):
     """Output table for inquire_unpd"""
-    __tablename__ = "inquire_unpd"
+    __tablename__ = "kis_inquire_unpd"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -8842,7 +8748,7 @@ class InquireUnpd(SQLModel, table=True):
 
 class InvestorUnpdTrend(SQLModel, table=True):
     """Output table for investor_unpd_trend"""
-    __tablename__ = "investor_unpd_trend"
+    __tablename__ = "kis_investor_unpd_trend"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -8871,7 +8777,7 @@ class InvestorUnpdTrend(SQLModel, table=True):
 
 class MarginDetail(SQLModel, table=True):
     """Output table for margin_detail"""
-    __tablename__ = "margin_detail"
+    __tablename__ = "kis_margin_detail"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -8931,7 +8837,7 @@ class MarginDetail(SQLModel, table=True):
 
 class MonthlyCcnl(SQLModel, table=True):
     """Output table for monthly_ccnl"""
-    __tablename__ = "monthly_ccnl"
+    __tablename__ = "kis_monthly_ccnl"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -8956,7 +8862,7 @@ class MonthlyCcnl(SQLModel, table=True):
 
 class OptAskingPrice(SQLModel, table=True):
     """Output table for opt_asking_price"""
-    __tablename__ = "opt_asking_price"
+    __tablename__ = "kis_opt_asking_price"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -8983,7 +8889,7 @@ class OptAskingPrice(SQLModel, table=True):
 
 class OptDailyCcnl(SQLModel, table=True):
     """Output table for opt_daily_ccnl"""
-    __tablename__ = "opt_daily_ccnl"
+    __tablename__ = "kis_opt_daily_ccnl"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -9008,7 +8914,7 @@ class OptDailyCcnl(SQLModel, table=True):
 
 class OptDetail(SQLModel, table=True):
     """Output table for opt_detail"""
-    __tablename__ = "opt_detail"
+    __tablename__ = "kis_opt_detail"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -9040,7 +8946,7 @@ class OptDetail(SQLModel, table=True):
 
 class OptMonthlyCcnl(SQLModel, table=True):
     """Output table for opt_monthly_ccnl"""
-    __tablename__ = "opt_monthly_ccnl"
+    __tablename__ = "kis_opt_monthly_ccnl"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -9065,7 +8971,7 @@ class OptMonthlyCcnl(SQLModel, table=True):
 
 class OptPrice(SQLModel, table=True):
     """Output table for opt_price"""
-    __tablename__ = "opt_price"
+    __tablename__ = "kis_opt_price"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -9107,7 +9013,7 @@ class OptPrice(SQLModel, table=True):
 
 class OptTickCcnl(SQLModel, table=True):
     """Output table for opt_tick_ccnl"""
-    __tablename__ = "opt_tick_ccnl"
+    __tablename__ = "kis_opt_tick_ccnl"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -9132,7 +9038,7 @@ class OptTickCcnl(SQLModel, table=True):
 
 class OptWeeklyCcnl(SQLModel, table=True):
     """Output table for opt_weekly_ccnl"""
-    __tablename__ = "opt_weekly_ccnl"
+    __tablename__ = "kis_opt_weekly_ccnl"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -9157,7 +9063,7 @@ class OptWeeklyCcnl(SQLModel, table=True):
 
 class OrderNotice(SQLModel, table=True):
     """Output table for order_notice"""
-    __tablename__ = "order_notice"
+    __tablename__ = "kis_order_notice"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -9200,7 +9106,7 @@ class OrderNotice(SQLModel, table=True):
 
 class SearchContractDetail(SQLModel, table=True):
     """Output table for search_contract_detail"""
-    __tablename__ = "search_contract_detail"
+    __tablename__ = "kis_search_contract_detail"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -9233,7 +9139,7 @@ class SearchContractDetail(SQLModel, table=True):
 
 class SearchOptDetail(SQLModel, table=True):
     """Output table for search_opt_detail"""
-    __tablename__ = "search_opt_detail"
+    __tablename__ = "kis_search_opt_detail"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -9265,7 +9171,7 @@ class SearchOptDetail(SQLModel, table=True):
 
 class StockDetail(SQLModel, table=True):
     """Output table for stock_detail"""
-    __tablename__ = "stock_detail"
+    __tablename__ = "kis_stock_detail"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -9299,7 +9205,7 @@ class StockDetail(SQLModel, table=True):
 
 class TickCcnl(SQLModel, table=True):
     """Output table for tick_ccnl"""
-    __tablename__ = "tick_ccnl"
+    __tablename__ = "kis_tick_ccnl"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -9324,7 +9230,7 @@ class TickCcnl(SQLModel, table=True):
 
 class WeeklyCcnl(SQLModel, table=True):
     """Output table for weekly_ccnl"""
-    __tablename__ = "weekly_ccnl"
+    __tablename__ = "kis_weekly_ccnl"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -9349,7 +9255,7 @@ class WeeklyCcnl(SQLModel, table=True):
 
 class AlgoOrdno(SQLModel, table=True):
     """Output table for algo_ordno"""
-    __tablename__ = "algo_ordno"
+    __tablename__ = "kis_algo_ordno"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -9369,7 +9275,7 @@ class AlgoOrdno(SQLModel, table=True):
 
 class BrknewsTitle(SQLModel, table=True):
     """Output table for brknews_title"""
-    __tablename__ = "brknews_title"
+    __tablename__ = "kis_brknews_title"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -9407,7 +9313,7 @@ class BrknewsTitle(SQLModel, table=True):
 
 class ColableByCompany(SQLModel, table=True):
     """Output table for colable_by_company"""
-    __tablename__ = "colable_by_company"
+    __tablename__ = "kis_colable_by_company"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -9431,7 +9337,7 @@ class ColableByCompany(SQLModel, table=True):
 
 class CountriesHoliday(SQLModel, table=True):
     """Output table for countries_holiday"""
-    __tablename__ = "countries_holiday"
+    __tablename__ = "kis_countries_holiday"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -9449,7 +9355,7 @@ class CountriesHoliday(SQLModel, table=True):
 
 class Dailyprice(SQLModel, table=True):
     """Output table for dailyprice"""
-    __tablename__ = "dailyprice"
+    __tablename__ = "kis_dailyprice"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -9477,7 +9383,7 @@ class Dailyprice(SQLModel, table=True):
 
 class DaytimeOrder(SQLModel, table=True):
     """Output table for daytime_order"""
-    __tablename__ = "daytime_order"
+    __tablename__ = "kis_daytime_order"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -9491,7 +9397,7 @@ class DaytimeOrder(SQLModel, table=True):
 
 class DaytimeOrderRvsecncl(SQLModel, table=True):
     """Output table for daytime_order_rvsecncl"""
-    __tablename__ = "daytime_order_rvsecncl"
+    __tablename__ = "kis_daytime_order_rvsecncl"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -9506,7 +9412,7 @@ class DaytimeOrderRvsecncl(SQLModel, table=True):
 
 class DelayedAskingPriceAsia(SQLModel, table=True):
     """Output table for delayed_asking_price_asia"""
-    __tablename__ = "delayed_asking_price_asia"
+    __tablename__ = "kis_delayed_asking_price_asia"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -9533,7 +9439,7 @@ class DelayedAskingPriceAsia(SQLModel, table=True):
 
 class DelayedCcnl(SQLModel, table=True):
     """Output table for delayed_ccnl"""
-    __tablename__ = "delayed_ccnl"
+    __tablename__ = "kis_delayed_ccnl"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -9569,7 +9475,7 @@ class DelayedCcnl(SQLModel, table=True):
 
 class ForeignMargin(SQLModel, table=True):
     """Output table for foreign_margin"""
-    __tablename__ = "foreign_margin"
+    __tablename__ = "kis_foreign_margin"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -9590,7 +9496,7 @@ class ForeignMargin(SQLModel, table=True):
 
 class IndustryPrice(SQLModel, table=True):
     """Output table for industry_price"""
-    __tablename__ = "industry_price"
+    __tablename__ = "kis_industry_price"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -9604,7 +9510,7 @@ class IndustryPrice(SQLModel, table=True):
 
 class IndustryTheme(SQLModel, table=True):
     """Output table for industry_theme"""
-    __tablename__ = "industry_theme"
+    __tablename__ = "kis_industry_theme"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -9636,7 +9542,7 @@ class IndustryTheme(SQLModel, table=True):
 
 class InquireAlgoCcnl(SQLModel, table=True):
     """Output table for inquire_algo_ccnl"""
-    __tablename__ = "inquire_algo_ccnl"
+    __tablename__ = "kis_inquire_algo_ccnl"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -9662,7 +9568,7 @@ class InquireAlgoCcnl(SQLModel, table=True):
 
 class InquireDailyChartprice(SQLModel, table=True):
     """Output table for inquire_daily_chartprice"""
-    __tablename__ = "inquire_daily_chartprice"
+    __tablename__ = "kis_inquire_daily_chartprice"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -9690,7 +9596,7 @@ class InquireDailyChartprice(SQLModel, table=True):
 
 class InquireNccs(SQLModel, table=True):
     """Output table for inquire_nccs"""
-    __tablename__ = "inquire_nccs"
+    __tablename__ = "kis_inquire_nccs"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -9722,7 +9628,7 @@ class InquireNccs(SQLModel, table=True):
 
 class InquirePaymtStdrBalance(SQLModel, table=True):
     """Output table for inquire_paymt_stdr_balance"""
-    __tablename__ = "inquire_paymt_stdr_balance"
+    __tablename__ = "kis_inquire_paymt_stdr_balance"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -9770,7 +9676,7 @@ class InquirePaymtStdrBalance(SQLModel, table=True):
 
 class InquirePresentBalance(SQLModel, table=True):
     """Output table for inquire_present_balance"""
-    __tablename__ = "inquire_present_balance"
+    __tablename__ = "kis_inquire_present_balance"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -9840,7 +9746,7 @@ class InquirePresentBalance(SQLModel, table=True):
 
 class InquireSearch(SQLModel, table=True):
     """Output table for inquire_search"""
-    __tablename__ = "inquire_search"
+    __tablename__ = "kis_inquire_search"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -9874,7 +9780,7 @@ class InquireSearch(SQLModel, table=True):
 
 class NewHighlow(SQLModel, table=True):
     """Output table for new_highlow"""
-    __tablename__ = "new_highlow"
+    __tablename__ = "kis_new_highlow"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -9908,7 +9814,7 @@ class NewHighlow(SQLModel, table=True):
 
 class OrderResvList(SQLModel, table=True):
     """Output table for order_resv_list"""
-    __tablename__ = "order_resv_list"
+    __tablename__ = "kis_order_resv_list"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -9943,7 +9849,7 @@ class OrderResvList(SQLModel, table=True):
 
 class Price(SQLModel, table=True):
     """Output table for price"""
-    __tablename__ = "price"
+    __tablename__ = "kis_price"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -9965,7 +9871,7 @@ class Price(SQLModel, table=True):
 
 class PriceDetail(SQLModel, table=True):
     """Output table for price_detail"""
-    __tablename__ = "price_detail"
+    __tablename__ = "kis_price_detail"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -10017,7 +9923,7 @@ class PriceDetail(SQLModel, table=True):
 
 class PriceFluct(SQLModel, table=True):
     """Output table for price_fluct"""
-    __tablename__ = "price_fluct"
+    __tablename__ = "kis_price_fluct"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -10050,7 +9956,7 @@ class PriceFluct(SQLModel, table=True):
 
 class QuotInquireCcnl(SQLModel, table=True):
     """Output table for quot_inquire_ccnl"""
-    __tablename__ = "quot_inquire_ccnl"
+    __tablename__ = "kis_quot_inquire_ccnl"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -10072,7 +9978,7 @@ class QuotInquireCcnl(SQLModel, table=True):
 
 class RightsByIce(SQLModel, table=True):
     """Output table for rights_by_ice"""
-    __tablename__ = "rights_by_ice"
+    __tablename__ = "kis_rights_by_ice"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -10095,7 +10001,7 @@ class RightsByIce(SQLModel, table=True):
 
 class TradeGrowth(SQLModel, table=True):
     """Output table for trade_growth"""
-    __tablename__ = "trade_growth"
+    __tablename__ = "kis_trade_growth"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -10129,7 +10035,7 @@ class TradeGrowth(SQLModel, table=True):
 
 class TradePbmn(SQLModel, table=True):
     """Output table for trade_pbmn"""
-    __tablename__ = "trade_pbmn"
+    __tablename__ = "kis_trade_pbmn"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -10161,7 +10067,7 @@ class TradePbmn(SQLModel, table=True):
 
 class TradeTurnover(SQLModel, table=True):
     """Output table for trade_turnover"""
-    __tablename__ = "trade_turnover"
+    __tablename__ = "kis_trade_turnover"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -10196,7 +10102,7 @@ class TradeTurnover(SQLModel, table=True):
 
 class TradeVol(SQLModel, table=True):
     """Output table for trade_vol"""
-    __tablename__ = "trade_vol"
+    __tablename__ = "kis_trade_vol"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -10228,7 +10134,7 @@ class TradeVol(SQLModel, table=True):
 
 class VolumeSurge(SQLModel, table=True):
     """Output table for volume_surge"""
-    __tablename__ = "volume_surge"
+    __tablename__ = "kis_volume_surge"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     api_name: str = Field(index=True)
@@ -10263,7 +10169,7 @@ class VolumeSurge(SQLModel, table=True):
 
 class DomFutureMst(SQLModel, table=True):
     """국내 지수선물옵션 종목 마스터 테이블"""
-    __tablename__ = "dom_future_mst"
+    __tablename__ = "kis_dom_future_mst"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     
@@ -10285,7 +10191,7 @@ class DomFutureMst(SQLModel, table=True):
 
 class OverFutureMst(SQLModel, table=True):
     """해외선물옵션 종목 마스터 테이블"""
-    __tablename__ = "over_future_mst"
+    __tablename__ = "kis_over_future_mst"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     
@@ -10319,7 +10225,7 @@ class OverFutureMst(SQLModel, table=True):
 
 class DomStockFutureMst(SQLModel, table=True):
     """국내 주식선물옵션 종목 마스터 테이블"""
-    __tablename__ = "dom_stock_future_mst"
+    __tablename__ = "kis_dom_stock_future_mst"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     
@@ -10341,7 +10247,7 @@ class DomStockFutureMst(SQLModel, table=True):
 
 class OverStockMst(SQLModel, table=True):
     """해외주식 종목 마스터 테이블"""
-    __tablename__ = "over_stock_mst"
+    __tablename__ = "kis_over_stock_mst"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     
@@ -10378,7 +10284,7 @@ class OverStockMst(SQLModel, table=True):
 
 class DomBondMst(SQLModel, table=True):
     """국내 채권 종목 마스터 테이블"""
-    __tablename__ = "dom_bond_mst"
+    __tablename__ = "kis_dom_bond_mst"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     
@@ -10397,7 +10303,7 @@ class DomBondMst(SQLModel, table=True):
 
 class DomCmeFutureMst(SQLModel, table=True):
     """CME연계 야간선물 종목 마스터 테이블"""
-    __tablename__ = "dom_cme_future_mst"
+    __tablename__ = "kis_dom_cme_future_mst"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     
@@ -10415,7 +10321,7 @@ class DomCmeFutureMst(SQLModel, table=True):
 
 class DomComFutureMst(SQLModel, table=True):
     """상품선물옵션 종목 마스터 테이블"""
-    __tablename__ = "dom_com_future_mst"
+    __tablename__ = "kis_dom_com_future_mst"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     
@@ -10434,7 +10340,7 @@ class DomComFutureMst(SQLModel, table=True):
 
 class DomElwMst(SQLModel, table=True):
     """국내 ELW 종목 마스터 테이블"""
-    __tablename__ = "dom_elw_mst"
+    __tablename__ = "kis_dom_elw_mst"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     
@@ -10465,7 +10371,7 @@ class DomElwMst(SQLModel, table=True):
 
 class DomEurexOptionMst(SQLModel, table=True):
     """EUREX연계 야간옵션 종목 마스터 테이블"""
-    __tablename__ = "dom_eurex_option_mst"
+    __tablename__ = "kis_dom_eurex_option_mst"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     
@@ -10484,7 +10390,7 @@ class DomEurexOptionMst(SQLModel, table=True):
 
 class DomKonexMst(SQLModel, table=True):
     """코넥스 종목 마스터 테이블"""
-    __tablename__ = "dom_konex_mst"
+    __tablename__ = "kis_dom_konex_mst"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     
@@ -10506,7 +10412,7 @@ class DomKonexMst(SQLModel, table=True):
 
 class DomKosdaqMst(SQLModel, table=True):
     """코스닥 종목 마스터 테이블"""
-    __tablename__ = "dom_kosdaq_mst"
+    __tablename__ = "kis_dom_kosdaq_mst"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     
@@ -10532,7 +10438,7 @@ class DomKosdaqMst(SQLModel, table=True):
 
 class DomKospiMst(SQLModel, table=True):
     """코스피 종목 마스터 테이블"""
-    __tablename__ = "dom_kospi_mst"
+    __tablename__ = "kis_dom_kospi_mst"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     
@@ -10558,7 +10464,7 @@ class DomKospiMst(SQLModel, table=True):
 
 class MemberCodeMst(SQLModel, table=True):
     """회원사 코드 마스터 테이블"""
-    __tablename__ = "member_code_mst"
+    __tablename__ = "kis_member_code_mst"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     
@@ -10572,7 +10478,7 @@ class MemberCodeMst(SQLModel, table=True):
 
 class OverIndexMst(SQLModel, table=True):
     """해외주식 지수 마스터 테이블"""
-    __tablename__ = "over_index_mst"
+    __tablename__ = "kis_over_index_mst"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     
@@ -10593,7 +10499,7 @@ class OverIndexMst(SQLModel, table=True):
 
 class SectorMst(SQLModel, table=True):
     """업종 코드 마스터 테이블"""
-    __tablename__ = "sector_mst"
+    __tablename__ = "kis_sector_mst"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     
@@ -10606,7 +10512,7 @@ class SectorMst(SQLModel, table=True):
 
 class ThemeMst(SQLModel, table=True):
     """테마 코드 마스터 테이블"""
-    __tablename__ = "theme_mst"
+    __tablename__ = "kis_theme_mst"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     
@@ -10620,7 +10526,7 @@ class ThemeMst(SQLModel, table=True):
 
 class MetaTableMst(SQLModel, table=True):
     """테이블 메타데이터 (설명) 저장"""
-    __tablename__ = "meta_table_mst"
+    __tablename__ = "kis_meta_table_mst"
     
     table_name: str = Field(primary_key=True, description="테이블 이름")
     description: Optional[str] = Field(default=None, description="테이블 설명")
@@ -10631,7 +10537,7 @@ class MetaTableMst(SQLModel, table=True):
 
 class MetaColumnMst(SQLModel, table=True):
     """컬럼 메타데이터 (설명) 저장"""
-    __tablename__ = "meta_column_mst"
+    __tablename__ = "kis_meta_column_mst"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     table_name: str = Field(index=True, description="테이블 이름")
