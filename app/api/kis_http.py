@@ -48,11 +48,52 @@ class APIResponse:
         return HeaderTuple(**fields)
     
     def _parse_body(self):
-        """응답 바디 파싱"""
+        """응답 바디 파싱 (JSON 및 XML 지원)"""
+        text = self._response.text
+        if not text:
+            return None
+            
+        # 1. JSON 시도
         try:
             json_data = self._response.json()
             BodyTuple = namedtuple("Body", json_data.keys())
             return BodyTuple(**json_data)
+        except Exception:
+            pass
+            
+        # 2. XML 시도 (Seibro 형식 대응)
+        # Seibro 응답 예: <resParam><result rt_cd="0" .../><output1><row .../></output1></resParam>
+        import xml.etree.ElementTree as ET
+        try:
+            root = ET.fromstring(text)
+            data = {}
+            
+            # root의 속성 (resParam)
+            for k, v in root.attrib.items():
+                data[k] = v
+                
+            # 자식 노드들 (result, output1 등)
+            for child in root:
+                tag = child.tag
+                if tag == "result":
+                    # result 노드의 속성 (rt_cd 등)을 최상위로 올림
+                    for k, v in child.attrib.items():
+                        data[k] = v
+                elif "output" in tag:
+                    # 데이터 행들
+                    rows = []
+                    for row in child:
+                        rows.append(row.attrib)
+                    data[tag] = rows
+                else:
+                    # 기타 노드
+                    data[tag] = child.attrib if child.attrib else child.text
+            
+            if not data:
+                return None
+                
+            BodyTuple = namedtuple("Body", data.keys())
+            return BodyTuple(**data)
         except Exception:
             return None
     
@@ -114,7 +155,7 @@ class APIResponseError(APIResponse):
             status_code: HTTP 상태 코드
             error_text: 에러 메시지
         """
-        self.status_code = status_code
+        self._status_code = status_code
         self.error_text = error_text
         self._error_code = str(status_code)
         self._error_message = error_text
@@ -274,10 +315,28 @@ class KISHttpClient:
                 if use_hash:
                     self.set_hash_key(headers, params)
                 
+                # XML 요청 처리 (Content-Type이 application/xml인 경우)
+                content_type = headers.get("content-type", "")
+                if "application/xml" in content_type:
+                    # XML 생성: <reqParam action="..." task="..."><KEY value="VAL"/></reqParam>
+                    # DB에서 파라미터가 대문자로 정규화되어 들어오므로 대소문자 모두 체크
+                    action = params.get("ACTION") or params.get("action", "")
+                    task = params.get("TASK") or params.get("task", "")
+                    
+                    xml_body = f'<reqParam action="{action}" task="{task}">'
+                    for k, v in params.items():
+                        if k.upper() not in ("ACTION", "TASK"):
+                            xml_body += f'<{k} value="{v}"/>'
+                    xml_body += '</reqParam>'
+                    
+                    data = xml_body.encode('utf-8')
+                else:
+                    data = json.dumps(params)
+
                 response = requests.post(
                     url,
                     headers=headers,
-                    data=json.dumps(params)
+                    data=data
                 )
             else:  # GET
                 response = requests.get(

@@ -1,0 +1,27 @@
+﻿d:/Python/deriv/.venv/Sc
+ripts/python.exe :   Fil
+e "<string>", line 12
+위치 줄:1 문자:1
++ d:/Python/deriv/.venv/
+Scripts/python.exe -c "
++ ~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo      
+        : NotSpecified: 
+(  F    ile "<string>", 
+line 1    2:String) [], 
+RemoteEx    ception
+    + FullyQualifiedErro
+rI    d : NativeCommandE
+rror
+ 
+    cur.execute('''SELEC
+T job_id, schedule_id, a
+pi_id, params_json, stat
+us, is_active, save_mode
+, execution_cycle
+                ^
+SyntaxError: unterminate
+d triple-quoted string l
+iteral (detected at line
+ 13)

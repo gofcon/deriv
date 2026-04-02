@@ -24,6 +24,14 @@ ORACLE_DSN = os.getenv("ORACLE_DSN", "")
 TNS_ADMIN = os.getenv("TNS_ADMIN", "")
 WALLET_PASSWORD = os.getenv("WALLET_PASSWORD", "")
 
+# SEIBRO API settings
+SEIBRO_KEY = os.getenv("SEIBRO_KEY", "")
+SEIBRO_OPEN_API_BASE_URL = "http://seibro.or.kr/OpenPlatform/callOpenAPI.jsp"
+
+# DART API settings
+DART_KEY = os.getenv("DART_KEY", "")
+DART_OPEN_API_BASE_URL = "https://opendart.fss.or.kr/api/"
+
 # Log directory
 LOG_DIR = os.path.join(BASE_DIR, "logs")
 

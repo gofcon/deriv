@@ -110,15 +110,15 @@ class APIManager:
 
                 data = pd.DataFrame(data)
 
-                logging.info(f"✓ 성공: {len(data)}건")
+                logging.info(f"[V] 성공: {len(data)}건")
                 return data
             else:
-                logging.error("✗ API 호출 실패")
+                logging.error("[X] API 호출 실패")
                 res.print_error(url=api_def.api_url)
                 return pd.DataFrame()
         
         except Exception as e:
-            logging.error(f"✗ 오류: {e}")
+            logging.error(f"[X] 오류: {e}")
             raise
 
     def validate_all_active_inputs(self, cycle: str = None) -> bool:
@@ -140,23 +140,26 @@ class APIManager:
         all_valid = True
         
         for ui in active_inputs:
+            if ui is None:
+                logging.warning("[!] None Job 엔트리 발견, 건너뜀")
+                continue
             validation = self.db.validate_job_inputs(ui.api_id, ui.job_id)
             
             if not validation.is_valid:
                 all_valid = False
-                logging.error(f"✗ [{ui.job_id}] 검증 실패:")
+                logging.error(f"[X] [{ui.job_id}] 검증 실패:")
                 for error in validation.errors:
                     logging.error(f"    - {error}")
             else:
-                logging.info(f"✓ [{ui.job_id}] 검증 통과")
+                logging.info(f"[V] [{ui.job_id}] 검증 통과")
                 
             if validation.warnings:
                 for warning in validation.warnings:
-                    logging.warning(f"    ⚠ {warning}")
+                    logging.info(f"    [!] {warning}")
         
         return all_valid
 
-    def execute_active_programs(self, http_client, cycle: str = None) -> None:
+    def execute_active_programs(self, http_client, general_http_client, seibro_http_client, seibro_open_http_client, dart_http_client, cycle: str = None) -> None:
         """활성화된 프로그램 실행"""
         active_inputs = self.db.list_active_api_job_msts(cycle=cycle)
         
@@ -170,13 +173,13 @@ class APIManager:
         
         success_count = 0
         fail_count = 0
-        
-        # API 호출 (주입된 http_client 사용)
-        client = http_client
 
         for ui in active_inputs:
-            # logging.info(f"\n▶ 실행: {ui.job_id}")
-            logging.info(f"▶ 실행: {ui.job_id}")
+            if ui is None:
+                logging.info("[!] None Job 엔트리 발견, 건너뜀")
+                continue
+            # logging.info(f"\n[RUN] 실행: {ui.job_id}")
+            logging.info(f"[RUN] 실행: {ui.job_id}")
             try:
                 # 1. API 정의 조회
                 api_def = self.db.get_api_mst(ui.api_id)
@@ -188,7 +191,7 @@ class APIManager:
                 # 2. 파라미터 검증 및 기본값 적용
                 validation = self.db.validate_job_inputs(ui.api_id, ui.job_id)
                 if not validation.is_valid:
-                    logging.error(f"  ✗ 파라미터 검증 실패")
+                    logging.error(f"  [X] 파라미터 검증 실패")
                     fail_count += 1
                     continue
                 
@@ -203,43 +206,127 @@ class APIManager:
                 
                 self.db.update_api_job_status(ui.job_id, "RUNNING")
                 
-                res = client.fetch(
-                    api_url=api_def.api_url,
-                    api_id=api_def.api_id,
-                    header_json=api_def.header_json,
-                    params=resolved_params
-                )
+                # api_type에 따라 클라이언트 선택
+                if api_def.api_type == "legacy":
+                    # KIS 인증은 KIS 작업이 있을 때만 수행
+                    from app.api import kis_auth as ka
+                    auth_manager = ka.KISAuthManager(http_client.config)
+                    auth_manager.authenticate()
+                    client = http_client
+                elif api_def.api_type == "seibro":
+                    client = seibro_http_client
+                elif api_def.api_type == "seibro_open":
+                    client = seibro_open_http_client
+                elif api_def.api_type == "isin":
+                    from app.api.isin_http import IsinHttpClient
+                    client = IsinHttpClient(debug=False)
+                elif api_def.api_type == "dart_open":
+                    client = dart_http_client
+                else:
+                    client = general_http_client
+                
+                # seibro_open은 api_url 없이 base_url + apiId(=api_name) 방식으로 호출
+                if api_def.api_type == "seibro_open":
+                    # 파라미터 중에 APIID가 있으면 이를 우선 사용, 없으면 api_def.api_name 사용
+                    # (apiId는 Seibro URL의 apiId 쿼리 파라미터가 됨)
+                    seibro_api_id = resolved_params.get("APIID", api_def.api_name)
+                    
+                    # 실제 Seibro의 'params' 인자로 전달될 딕셔너리에서 APIID 삭제 (중복 방지)
+                    call_params = {k: v for k, v in resolved_params.items() if k != "APIID"}
+                    
+                    res = client.fetch(
+                        api_id=seibro_api_id,
+                        params=call_params,
+                        header_json=api_def.header_json,
+                        method=api_def.request_type
+                    )
+                else:
+                    res = client.fetch(
+                        api_url=api_def.api_url,
+                        api_id=api_def.api_id,
+                        header_json=api_def.header_json,
+                        params=resolved_params,
+                        method=api_def.request_type
+                    )
                 
                 if res.is_ok():
                     # 데이터 프레임 변환
                     body = res.get_body()
-                    if hasattr(body, 'output1'): 
+                    # logging.info(f"  - body: {body}")
+
+
+                    # isin 타입: dict를 list로 감싸 데이터프레임 변환 가능하게 함
+                    if api_def.api_type == "isin":
+                        if isinstance(body, dict):
+                            data = [body]
+                        else:
+                            data = body
+                    elif api_def.api_type == "dart_open" and hasattr(body, 'group'):
+                        merged_data = {}
+                        for g in body.group:
+                            # g['list'] 또는 g.list 처리
+                            items = g.get('list', []) if isinstance(g, dict) else (getattr(g, 'list', []) if hasattr(g, 'list') else [])
+                            for item in items:
+                                # dict가 아니면 _asdict() 시도
+                                if not isinstance(item, dict) and hasattr(item, '_asdict'):
+                                    item = item._asdict()
+                                
+                                rcept_no = item.get('rcept_no')
+                                if rcept_no:
+                                    if rcept_no not in merged_data:
+                                        merged_data[rcept_no] = item
+                                    else:
+                                        merged_data[rcept_no].update(item)
+                        data = list(merged_data.values())
+                    elif hasattr(body, 'output1'): 
                          data = body.output1
                     elif hasattr(body, 'output'):
                         data = body.output
+                    elif hasattr(body, 'data'):
+                        data = body.data
                     else:
-                        data = body._asdict()
+                        dict_body = body._asdict()
+                        # Fallback: 'res', 'vector', 'output' 등 다른 필드 내부에 리스트가 있는지 확인
+                        data = None
+                        for key in ['res', 'vector', 'output', 'output1', 'data']:
+                            if key in dict_body and isinstance(dict_body[key], dict):
+                                # 중첩된 result/item 확인
+                                nested = dict_body[key]
+                                for subkey in ['result', 'row', 'item', 'data']:
+                                    if subkey in nested and isinstance(nested[subkey], (list, dict)):
+                                        data = nested[subkey]
+                                        break
+                            if data: break
+                        
+                        if not data:
+                            data = dict_body.get('data', dict_body)
+
                     
                     if isinstance(data, dict):
                         data = [data]
                     
+                    # api_id 컬럼 강제 삽입 (DART 전용 모델과의 호환성)
+                    if data:
+                        for entry in data:
+                            if isinstance(entry, dict):
+                                entry['api_id'] = ui.api_id
+
                     data = pd.DataFrame(data)
-                    print(data)
 
                     # Output 테이블에 저장
                     saved_count = self.db.insert_output_data(ui.api_id, ui.job_id, data)
-                    logging.info(f"  ✓ 성공: {len(data)}건 (DB 저장: {saved_count}건)")
+                    logging.info(f"  [V] 성공: {len(data)}건 (DB 저장: {saved_count}건)")
                     
                     self.db.update_api_job_status(ui.job_id, "SUCCESS")
                     success_count += 1
                 else:
                     err_msg = f"API 호출 실패. Status code: {res.get_status_code()}"
-                    logging.error(f"  ✗ {err_msg}")
+                    logging.error(f"  [X] {err_msg}")
                     self.db.update_api_job_status(ui.job_id, "FAIL", err_msg)
                     fail_count += 1
                     
             except Exception as e:
-                logging.error(f"  ✗ 실행 중 오류: {e}")
+                logging.error(f"  [X] 실행 중 오류: {e}")
                 self.db.update_api_job_status(ui.job_id, "FAIL", str(e))
                 fail_count += 1
         
@@ -298,15 +385,15 @@ class APIManager:
                     logging.info(f"    추출된 데이터: {len(df)}건")
                     print(df.head())
                     
-                    # 3. Output 테이블 저장 (browser_id를 기준으로 저장)
+                     # 3. Output 테이블 저장 (browser_id를 기준으로 저장)
                     saved_count = self.db.insert_browser_output_data(job.browser_id, job.job_id, df)
-                    logging.info(f"    ✓ 성공: {len(df)}건 (DB 저장: {saved_count}건)")
+                    logging.info(f"    [V] 성공: {len(df)}건 (DB 저장: {saved_count}건)")
                     
                     self.db.update_browser_job_status(job.job_id, "SUCCESS")
                     success_count += 1
                 else:
                     err_msg = "브라우저 스크래핑 결과 없음"
-                    logging.error(f"    ✗ {err_msg}")
+                    logging.error(f"    [X] {err_msg}")
                     self.db.update_browser_job_status(job.job_id, "FAIL", err_msg)
                     fail_count += 1
                     
@@ -351,6 +438,11 @@ def main():
         # 0. 설정 로드
         from app.api.kis_config import KISConfig
         from app.api.kis_http import KISHttpClient
+        from app.api.general_http import GeneralHttpClient
+        from app.api.seibro_http import SeibroHttpClient
+        from app.api.seibro_open_http import SeibroOpenHttpClient
+        from app.api.dart_http import DartHttpClient
+        from app.config import SEIBRO_KEY, DART_KEY
         
         config = KISConfig()
         
@@ -363,19 +455,25 @@ def main():
             
         logging.info("모든 파라미터 검증 완료. API 실행을 시작합니다.")
         
-        # 2. 인증
-        auth_manager = ka.KISAuthManager(config)
-        try:
-            auth_manager.authenticate()
-        except Exception as e:
-            logging.error(f"인증 실패: {e}")
-            sys.exit(1)
-            
         # 3. HTTP 클라이언트 생성
         http_client = KISHttpClient(config)
+        general_http_client = GeneralHttpClient()
+        seibro_http_client = SeibroHttpClient()
+        seibro_open_http_client = SeibroOpenHttpClient(
+            key=SEIBRO_KEY,
+            base_url="http://seibro.or.kr/OpenPlatform/callOpenAPI.jsp"
+        )
+        dart_http_client = DartHttpClient(key=DART_KEY)
             
         # 4. API 실행 (HTTP 클라이언트 주입)
-        manager.execute_active_programs(http_client, cycle=args.cycle)
+        manager.execute_active_programs(
+            http_client, 
+            general_http_client, 
+            seibro_http_client, 
+            seibro_open_http_client,
+            dart_http_client,
+            cycle=args.cycle
+        )
         
         # 5. 브라우저 스크래핑 실행
         manager.execute_active_browser_programs(cycle=args.cycle)

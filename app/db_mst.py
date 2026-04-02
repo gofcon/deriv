@@ -6,27 +6,50 @@ from contextlib import contextmanager
 from typing import Optional, List, Type
 
 # Import only master models
-from .models import (
-    DomFutureMst,
-    OverFutureMst,
-    DomStockFutureMst,
-    OverStockMst,
-    DomBondMst,
-    DomCmeFutureMst,
-    DomComFutureMst,
-    DomElwMst,
-    DomEurexOptionMst,
-    DomKonexMst,
-    DomKosdaqMst,
-    DomKospiMst,
-    MemberCodeMst,
-    OverIndexMst,
-    SectorMst,
-    ThemeMst,
-    MetaTableMst,  # New
-    MetaColumnMst  # New
-)
-from .config import DB_PATH, get_engine_kwargs
+try:
+    from .models import (
+        DomFutureMst,
+        OverFutureMst,
+        DomStockFutureMst,
+        OverStockMst,
+        DomBondMst,
+        DomCmeFutureMst,
+        DomComFutureMst,
+        DomElwMst,
+        DomEurexOptionMst,
+        DomKonexMst,
+        DomKosdaqMst,
+        DomKospiMst,
+        MemberCodeMst,
+        OverIndexMst,
+        SectorMst,
+        ThemeMst,
+        MetaTableMst,  # New
+        MetaColumnMst  # New
+    )
+    from .config import DB_PATH, get_engine_kwargs
+except ImportError:
+    from models import (
+        DomFutureMst,
+        OverFutureMst,
+        DomStockFutureMst,
+        OverStockMst,
+        DomBondMst,
+        DomCmeFutureMst,
+        DomComFutureMst,
+        DomElwMst,
+        DomEurexOptionMst,
+        DomKonexMst,
+        DomKosdaqMst,
+        DomKospiMst,
+        MemberCodeMst,
+        OverIndexMst,
+        SectorMst,
+        ThemeMst,
+        MetaTableMst,
+        MetaColumnMst
+    )
+    from config import DB_PATH, get_engine_kwargs
 
 class MasterDatabaseManager:
     """마스터 데이터 전용 데이터베이스 매니저"""

@@ -4,7 +4,7 @@ database.py - 데이터베이스 매니저 클래스
 
 import logging
 from typing import Optional, List, Dict, Any
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
 
 from sqlmodel import Session, SQLModel, create_engine, select, or_
 from sqlalchemy.exc import IntegrityError
@@ -23,7 +23,12 @@ from .models_gofcon import (
     StockPrice,
     DailyPrice,
     DisplayBoardTop,
+    ApiRst,
+    SeibroBondKacdList,
+    SeibroBondIsinList
 )
+from .models_dart import DartCorpCode, DartCompany
+
 # from .models import (
 #     ValidationResult,
 #     StockPrice,
@@ -47,18 +52,22 @@ class DatabaseManager:
         if db_path is not None and DB_TYPE == "sqlite":
             url = f"sqlite:///{db_path}"
             
-        self.engine = create_engine(url, **kwargs)
-        # OracleDialect workaround for JSON deserialization
         import json
-        if not hasattr(self.engine.dialect, '_json_deserializer'):
-            self.engine.dialect._json_deserializer = lambda x: json.loads(x) if isinstance(x, (str, bytes, bytearray)) else x
-        if not hasattr(self.engine.dialect, '_json_serializer'):
-            self.engine.dialect._json_serializer = json.dumps
+        self.engine = create_engine(
+            url, 
+            json_serializer=lambda x: json.dumps(x, ensure_ascii=False),
+            json_deserializer=lambda x: json.loads(x) if x else None,
+            **kwargs
+        )
 
     
     def get_session(self) -> Session:
         """세션 생성"""
         return Session(self.engine)
+    
+    def get_kst_now(self) -> datetime:
+        """현재 한국 표준시(GMT+9) 반환"""
+        return datetime.now(timezone(timedelta(hours=9))).replace(tzinfo=None)
     
     # ==================== API Definition 관리 ====================
     
@@ -187,7 +196,7 @@ class DatabaseManager:
                 existing.is_active = is_active
                 existing.save_mode = save_mode
                 existing.execution_cycle = execution_cycle
-                existing.updated_at = datetime.now()
+                existing.updated_at = self.get_kst_now()
                 session.add(existing)
                 session.commit()
                 session.refresh(existing)
@@ -262,7 +271,7 @@ class DatabaseManager:
                 existing.schedule_id = schedule_id
                 existing.status = status
                 existing.base_yymm = base_yymm
-                existing.updated_at = datetime.now()
+                existing.updated_at = self.get_kst_now()
                 session.add(existing)
                 session.commit()
                 session.refresh(existing)
@@ -312,8 +321,13 @@ class DatabaseManager:
             
             if cycle:
                 statement = statement.where(or_(ApiJobMst.execution_cycle == cycle, ApiJobMst.execution_cycle == "once"))
-                
-            return list(session.exec(statement).all())
+            
+            results = [r for r in session.exec(statement).all() if r is not None]
+            # 세션 스코프 내에서 필요한 속성 미리 로드 (detached 방지)
+            for r in results:
+                _ = r.job_id
+                _ = r.api_id
+            return results
             
     def deactivate_api_jobs_by_schedule(self, schedule_id: str) -> None:
         """스케줄 기반으로 생성된 구형 Job 일괄 비활성화"""
@@ -331,7 +345,7 @@ class DatabaseManager:
             job = session.exec(select(ApiJobMst).where(ApiJobMst.job_id == job_id)).first()
             if job:
                 job.status = status
-                job.executed_at = datetime.now()
+                job.executed_at = self.get_kst_now()
                 if error_message:
                     job.error_message = error_message
                 
@@ -447,7 +461,7 @@ class DatabaseManager:
                 existing.is_active = is_active
                 existing.save_mode = save_mode
                 existing.execution_cycle = execution_cycle
-                existing.updated_at = datetime.now()
+                existing.updated_at = self.get_kst_now()
                 session.add(existing)
                 session.commit()
                 session.refresh(existing)
@@ -513,7 +527,7 @@ class DatabaseManager:
                 existing.execution_cycle = execution_cycle
                 existing.schedule_id = schedule_id
                 existing.status = status
-                existing.updated_at = datetime.now()
+                existing.updated_at = self.get_kst_now()
                 session.add(existing)
                 session.commit()
                 session.refresh(existing)
@@ -568,7 +582,7 @@ class DatabaseManager:
             job = session.exec(select(BrowserJobMst).where(BrowserJobMst.job_id == job_id)).first()
             if job:
                 job.status = status
-                job.executed_at = datetime.now()
+                job.executed_at = self.get_kst_now()
                 if error_message:
                     job.error_message = error_message
                 
@@ -700,27 +714,80 @@ class DatabaseManager:
         output_model = self._get_output_model(api_def.output_table_name)
         if not output_model:
             logging.warning(f"Output model not found for table: {api_def.output_table_name}")
+            import json
+            try:
+                with open('kacd_fields_debug.json', 'w', encoding='utf-8') as f:
+                    json.dump(df.head(1).to_dict('records'), f, ensure_ascii=False)
+            except Exception as ex:
+                pass
             return 0
         
         try:
+            # === Generalized JSON Table Branch (ApiRst) ===
+            if api_def.output_table_name and api_def.output_table_name.upper() == "API_RST":
+                if job_input and job_input.save_mode == "overwrite":
+                    with self.get_session() as session:
+                        statement = select(ApiRst).where(ApiRst.job_id == job_id)
+                        results = session.exec(statement).all()
+                        if results:
+                            for row in results:
+                                session.delete(row)
+                            session.commit()
+                            logging.info(f"Overwrote existing general API data for {job_id} ({len(results)} rows deleted)")
+
+                with self.get_session() as session:
+                    count = 0
+                    for _, row in df.iterrows():
+                        row_dict = row.to_dict()
+                        clean_dict = {}
+                        for k, v in row_dict.items():
+                            try:
+                                if pd.notna(v):
+                                    clean_dict[k] = v
+                            except ValueError:
+                                # v is array-like or list, so it's not null in this context
+                                clean_dict[k] = v
+                        
+                        record = ApiRst(
+                            api_id=api_id,
+                            job_id=job_id,
+                            result_json=clean_dict,
+                            updated_at=self.get_kst_now()
+                        )
+                        session.add(record)
+                        count += 1
+                    session.commit()
+                    return count
+            
+            # === Specific Schema Branch ===
             # Overwrite 모드인 경우 기존 데이터 삭제
             if job_input and job_input.save_mode == "overwrite":
                 with self.get_session() as session:
                     # Depending on how the output table identifies records, 
                     # usually it was linked by api_name. Assuming it's now api_id.
-                    if hasattr(output_model, "api_id"):
+                    if hasattr(output_model, "job_id"):
+                        statement = select(output_model).where(output_model.job_id == job_id)
+                    elif hasattr(output_model, "api_id"):
                         statement = select(output_model).where(output_model.api_id == api_id)
-                    elif hasattr(output_model, "tr_id"):
-                        statement = select(output_model).where(output_model.tr_id == api_id)
-                    else:
+                        
+                        # 전용 로직: corp_code가 있고 파라미터에 존재하면 필터 추가 (DART 기업개황 등)
+                        if hasattr(output_model, "corp_code") and job_input and job_input.params_json:
+                            p_json = job_input.params_json
+                            corp_code_val = p_json.get('CORP_CODE') or p_json.get('corp_code')
+                            if corp_code_val:
+                                statement = statement.where(output_model.corp_code == str(corp_code_val))
+                    elif hasattr(output_model, "api_name"):
                         statement = select(output_model).where(output_model.api_name == api_def.api_name)
+                    else:
+                        statement = None
                     
-                    results = session.exec(statement).all()
-                    if results:
-                        for row in results:
-                            session.delete(row)
-                        session.commit()
-                        logging.info(f"Overwrote existing data for {api_id} ({len(results)} rows deleted)")
+                    if statement is not None:
+                        results = session.exec(statement).all()
+                        if results:
+                            for row in results:
+                                session.delete(row)
+                            session.commit()
+                            logging.info(f"Overwrote existing data for {api_id} ({len(results)} rows deleted)")
 
 
             # valid keys caching
@@ -735,19 +802,59 @@ class DatabaseManager:
                     
                     # Convert all values to strings as per model definition
                     model_data = {}
+                    def safe_json_str(val):
+                        if isinstance(val, (dict, list)):
+                            import json
+                            return json.dumps(val, ensure_ascii=False)
+                        return str(val)
+
+                    # For specific KIS APIs, handle full json payload as a field if record_json exists
+                    if valid_keys and 'record_json' in valid_keys:
+                        model_data['record_json'] = safe_json_str(row_dict)
+
                     for k, v in row_dict.items():
-                        if pd.notna(v) and (valid_keys is None or k in valid_keys):
-                             model_data[k] = str(v)
+                        try:
+                            is_na = pd.isna(v)
+                            if hasattr(is_na, 'all'): # array-like
+                                is_na = False
+                        except ValueError:
+                            is_na = False
+                            
+                        if not is_na:
+                            # Seibro API 필드 매핑 
+                            check_k = k
+                            if check_k == "KOR_SECN_NM": check_k = "bond_kor_nm"
+                            if check_k == "ISSU_DT": check_k = "issue_dt"
+
+                            if valid_keys is None or check_k in valid_keys:
+                                model_data[check_k] = safe_json_str(v)
+                            elif valid_keys is None or check_k.lower() in valid_keys:
+                                model_data[check_k.lower()] = safe_json_str(v)
+
                     
-                    # Create record with api_id and api_name depending on model
+                    # Create record with api_id, job_id, api_name depending on model
                     if hasattr(output_model, "api_id"):
                         model_data["api_id"] = api_id
                     elif hasattr(output_model, "tr_id"): # Fallback for old models if any
                         model_data["tr_id"] = api_id
                     if hasattr(output_model, "api_name"):
                         model_data["api_name"] = api_def.api_name
+                    if hasattr(output_model, "job_id"):
+                        model_data["job_id"] = job_id
+                        
+                    # 기본 키(Primary Key) 누락 여부 최종 확인
+                    # SQLModel(Pydantic v2)에서는 지정되지 않은 경우 PydanticUndefined가 반환되므로 명시적으로 True인지 확인해야 함.
+                    pk_fields = [k for k, f in output_model.model_fields.items() if getattr(f, 'primary_key', None) is True]
+                    missing_pks = [pk for pk in pk_fields if pk not in model_data or model_data[pk] is None]
+                    
+                    if missing_pks:
+                        logging.error(f"  ✗ [DB Error] 기본 키({missing_pks}) 누락으로 데이터 적재 건너뜀 (Job: {job_id})")
+                        continue
                         
                     record = output_model(**model_data)
+                    # 명시적으로 updated_at이 필드에 있다면 KST 주입
+                    if hasattr(record, "updated_at"):
+                        record.updated_at = self.get_kst_now()
                     session.add(record)
                     count += 1
                 session.commit()
@@ -823,14 +930,29 @@ class DatabaseManager:
             valid_keys = output_model.model_fields.keys() if hasattr(output_model, 'model_fields') else None
 
             with self.get_session() as session:
+                def safe_json_str(val):
+                    if isinstance(val, (dict, list)):
+                        import json
+                        return json.dumps(val, ensure_ascii=False)
+                    return str(val)
+
                 count = 0
                 for _, row in df.iterrows():
                     row_dict = row.to_dict()
                     
                     model_data = {}
                     for k, v in row_dict.items():
-                        if pd.notna(v) and (valid_keys is None or k in valid_keys):
-                             model_data[k] = str(v)
+                        try:
+                            is_na = pd.isna(v)
+                            if hasattr(is_na, 'all'): # array-like
+                                is_na = False
+                        except ValueError:
+                            is_na = False
+                            
+                        if not is_na and (valid_keys is None or k in valid_keys):
+                             model_data[k] = safe_json_str(v)
+                        elif not is_na and (valid_keys is None or k.lower() in valid_keys):
+                             model_data[k.lower()] = safe_json_str(v)
                     
                     if hasattr(output_model, "api_id"):
                         model_data["api_id"] = browser_id
@@ -856,6 +978,11 @@ class DatabaseManager:
             "KIS_STOCK_PRICE": StockPrice,
             "KIS_DAILY_PRICE": DailyPrice,
             "KRX_ISIN_MST": KrxIsinMst,
-            "BROWSER_RST": BrowserRst
+            "BROWSER_RST": BrowserRst,
+            "API_RST": ApiRst,
+            "SEIBRO_BOND_KACD_LIST": SeibroBondKacdList,
+            "SEIBRO_BOND_ISIN_LIST": SeibroBondIsinList,
+            "DART_CORP_CODE": DartCorpCode,
+            "DART_COMPANY": DartCompany
         }
-        return mapping.get(table_name)
+        return mapping.get(table_name.upper() if table_name else None)
